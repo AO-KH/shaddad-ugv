@@ -1,0 +1,285 @@
+{
+ "updated": "2026-11-24 23:01",
+ "about": "Open items the lead keeps for the dashboard. Edit freely; the page reads this file on every refresh.",
+ "items": [
+  {
+   "id": "t07",
+   "item": "T-07: embedded software verification and the software design description",
+   "area": "Software",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-22",
+   "next": "Done on Nov 23. At the review (about 09:05) the owner approved NASL-SHD-SDD-002 v1.0 (337 pages) and NASL-SHD-ER-007 v1.0 (37 pages), both re-issued as Approved, and took the six decisions of ER-007 section 10 as recommended: D117 (the ESC command time-out fix, card G2-MCU), D118 (K1 stays closed 1.5 s after a hardware E-stop; G2-MCU, checked on G2-PWR), D119 (the five BMS changes stay on G2-PWR), D120 (S4 stays a known failure until R-06 on G2-GNC), D121 (D31 resolved; S1's RTF check goes to T-02) and D122 (the five erroring tests go to their class owners). Recorded in docs/architecture.md, STATUS 18 and 60 to 64 (open until their cards land), the documents register and the cards; the task cards are NASL-SHD-PLN-001 v1.6 (150 pages). Follow-ups at the owner's request (Nov 23 and 24): the dashboard's test tile reads the team's test logs, and the 22 document lines that still said code generation was blocked now carry D121, the old words kept as the record (architecture sections 7, 12, 13 and 14; the build plan; the electronics, drive and integration specs; hw_bringup; STATUS 212). Left: S3's RTF check is hard-coded BLOCKED in scripts/scenarios/scn_S3_endurance.m line 71 and no card names that change (S1's is on T-02); the scenario scripts' headers and the drive's T17 test message still give the old reason; the drive's T17 speed test has not been rerun since the compiler came; REQ-008's tPER05_TebVfh note waits for the next REQ-008 revision. Briefs and ledger in work/team/t07/."
+  },
+  {
+   "id": "sac",
+   "item": "Smart App Control turned off for the SIL tests of T-07",
+   "area": "Environment",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-22",
+   "next": "Off since about 23:09 on Nov 22 (the owner): Defender reports SmartAppControlState Off, the CI policy value is 0, and a newly built program starts on the first try. SIL and accelerator mode run on this PC; STATUS item 20 was closed in T-07 step 15 (2026-11-23), and risk RSK-023 with it."
+  },
+  {
+   "id": "g1-01",
+   "item": "G1-01: the re-baselined requirements, approved and closed",
+   "area": "Requirements",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-16",
+   "next": "Approved Nov 18 ('Approve part 2'): NASL-SHD-REQ-008 v2.0 (Reports tab), 210 requirements (121 functional, 89 technical, 114 safety, no safety TBD), the specs, ICD, STATUS, decisions D84 to D113 and the risk register re-baselined; report NASL-SHD-ER-006. For G1-05: the RIDs in REQ-008 section 8, 8 non-safety TBDs, decisions 14, 17 and 19, the supplier data."
+  },
+  {
+   "id": "g1-04req",
+   "item": "Supplier request (G1-04): the draft is ready for you to send",
+   "area": "Project",
+   "state": "Your call",
+   "kind": "you",
+   "since": "2026-11-18",
+   "next": "Drafted Nov 18 under D96: work/team/g1-04/supplier_request_draft.md. It asks XMachines for the ESC manual and protocol, the BMS frames and thresholds, the pack's charge and storage data, the charger, the controller boards, the safety devices, the motor datasheets (with the 1 kW unit of D95) and the radios. Check it, sign it and send it; the fallback is a bench CAN capture."
+  },
+  {
+   "id": "cr004",
+   "item": "CR-004: the charter after the planned 1 kW motors and the mission energy",
+   "area": "Project",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-18",
+   "next": "Approved Nov 18 ('Option 1: both'): the charter v1.4 (then v1.5, editorial) and the plan v1.5; N-16 reworded in the register."
+  },
+  {
+   "id": "op01",
+   "item": "Simulink Fault Analyzer licence (OP-01)",
+   "area": "Safety",
+   "state": "Your call",
+   "kind": "you",
+   "since": "2026-11-16",
+   "next": "Installed but not licensed. It is needed for the Safety Analysis Manager copy of the hazard log and for the FMEA and fault trees (G3-FME) and the fault-injection campaign (T-06). Decide by Nov 23; without it the records stay as structured files with their PDFs."
+  },
+  {
+   "id": "safety",
+   "item": "G1-07: hazard analysis and safety plan",
+   "area": "Safety",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-16",
+   "next": "Done Nov 16: the safety plan SAF-001 and the hazard log HAZ-001 approved at v1.2 (D80), with the greenhouse rule (D79): 12 safety goals, every one at PL d. None is met by the robot as built yet; escalations E-01 to E-08 are worked on the safety concept (G2-FSC) and the supplier data (G1-04). OP-01, the licence, is yours by Nov 23."
+  },
+  {
+   "id": "cr002",
+   "item": "CR-002: the plan after G0",
+   "area": "Project",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-16",
+   "next": "Approved Nov 16 (\"Approve option 1\"; decision D78): cards v1.4 (69 cards: 10 new, 3 proposed for later, 20 changed, 7 gate criteria), plan v1.3, the functional safety engineer in the team (own session). Started: G1-07, the hazard analysis and safety plan. Next: G1-08 version control once the descent runs end; T-01 to T-03 now in G1; G1-10 the schedule."
+  },
+  {
+   "id": "derate",
+   "item": "BMS-warning torque derate change",
+   "area": "Electronics",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-10-29",
+   "next": "Done Nov 12 (decision D65): BMS warnings inform and no longer derate; the BMS limits act only through DCL / CCL. Checked: unit tests (T-EL-11 hardened: no derate on BMS_WARN, the IMU-fault derate 0.25 still reaches the drive), 45 degC row test 9 rows at 0.85 m/s (was 6 at 0.65), 55 degC 0.89 m/s, 30 degC unchanged, phase1 quick PASS, Fast tier only the 4 known; reviewed: keep. Follow-up: STATUS open problem 16a, regen with a hot pack."
+  },
+  {
+   "id": "layout",
+   "item": "Model layout clean-up plan",
+   "area": "All models",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-10-29",
+   "next": "Finished Nov 12. Every class of the full test run shows only known failures (t_pack_bms rerun: the same status for every test as before the work). Report: work/layout/report.md. Open choices are in the items below."
+  },
+  {
+   "id": "crossgoal",
+   "item": "Total crossings: the plan's 90 % goal",
+   "area": "All models",
+   "state": "Your call",
+   "kind": "info",
+   "since": "2026-11-07",
+   "next": "54,485 to 17,460 (68 % fewer; 42 of them the new top level), each crossing that stays listed with its reason; the goal was 5,422. Accept as is, or ask for a crossing-minimisation pass in the layout engine."
+  },
+  {
+   "id": "reportfigs",
+   "item": "Stale figures and texts in docs/report",
+   "area": "Docs",
+   "state": "Your call",
+   "kind": "info",
+   "since": "2026-11-07",
+   "next": "15 figures and texts in the written report show the old layout (list: work/layout/report.md section 8). They were left alone on purpose; refresh them in a report session if you want. Since D65 (Nov 12) also stale: docs/report/chapters/ch06_electronics.json:77-78 (bit 11 still \"DCL < 50 A, C (0.5)\") and the BMS-warning derate sentence in ch04_power.json near line 35."
+  },
+  {
+   "id": "toplayout",
+   "item": "Interconnected top-level layout",
+   "area": "All models",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-08",
+   "next": "Finished Nov 12. Direct links between the 11 blocks, 42 crossings, every other count 0. All checks as expected: t_layout 58/58, interfaces 0, loops 0, the 8 compare runs bit-identical with the same warnings, sweeps 0 new failures, Fast only the 4 known, inventory 17,460, docs/icd.md regenerated. Report: work/layout/report.md section 9."
+  },
+  {
+   "id": "agentic",
+   "item": "Agentic workflow with the MATLAB and Simulink toolkits",
+   "area": "All models",
+   "state": "Your call",
+   "kind": "info",
+   "since": "2026-11-12",
+   "next": "Built and tried Nov 12: 13 agents (.claude/agents) on the two toolkits, all three workflows on real work. Test-and-fix: the Fast tier run and sorted. Change: the BMS-warning derate (D65), checked and reviewed. Requirements: T-PWR-03, 8 Gherkin scenarios pass with model_test in your MATLAB, 6 of 10 requirements Implemented. Open for you: T-PWR-03.g (test or builder change), clearing 7 variables an agent left in your workspace. Lessons are in tools/agentic/AGENT_RULES.md and the skills."
+  },
+  {
+   "id": "mfplan",
+   "item": "Turn large subsystems into MATLAB Functions",
+   "area": "All models",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-01",
+   "next": "Done Nov 14-15 apart from Task 4 (report ATR-mfplan): the three collision monitors and drive_esc Feedback/Torque_Limiter are four MATLAB Functions (mon_sep_rect, mon_sep_circle, esc_feedback, esc_torque_limit), 240 to 65 blocks, 169 to 18 line crossings. Bit-identical: mf_equiv per subsystem, the I2t probe, and 12 compare runs (457 signals, 0 differences). Fast tier 0 new failures, 0 algebraic loops, 0 interface mismatches. Each block holds a word-for-word copy of its .m (R2026b JIT bug): after editing one, rerun build_sim_monitors or build_drive({'esc'}). Task 4 (GNC managers) waits for the Companion build (item companion) and your go-ahead."
+  },
+  {
+   "id": "review",
+   "item": "Review of every section, then the whole system",
+   "area": "All models",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-14",
+   "next": "Done Nov 15: 87 ranked improvement areas (PDF NASL-SHD-ER-003). All 20 of its decisions are settled: 1, 3, 10 (D71, D72, D81); Nov 17 2, 5, 9, 12, 15, 18 (D84-D89); Nov 18 4, 6, 7, 8, 11, 13, 16, 20 (D94-D102); Nov 21 14, 17, 19 (D114-D116). Card G1-03 closed."
+  },
+  {
+   "id": "critfix",
+   "item": "Critical fixes R-01 to R-05",
+   "area": "All models",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-15",
+   "next": "Done Nov 15 (PDF NASL-SHD-ER-004, Reports > Engineering reports): R-01 soft stops park on the brakes with STOP_FAIL as the STO backup (D71); R-02 lost scan -> protective stop and SENSOR_LOST hold (D72); R-03 implement off for the rest of a hold (D72); R-05 frozen IMU and IMU loss as a nav fault (D73); R-34. 0 new test failures (528 tests, 66 not passing). R-04 confirmed: the sealed pack cannot charge in the hot sun (your decision 4). Open: the descent (item descent), S4 lane-end walls until R-06, STATUS 18-28."
+  },
+  {
+   "id": "descent",
+   "item": "Regen-limited descent: pitch-over and speed cap",
+   "area": "Drive / MCU / GNC",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-15",
+   "next": "Done Nov 16 (PDF NASL-SHD-ER-005): the always-on descent cap, verified in the system per CR-001: every brakes-locked stop meets the park criterion (CR-003), the no-implement 20 deg descent included; the IMU bound at 0.75 deg (D83); 0 new test failures; the independent review fixed. Follow-ups on G2-MCU (the full-stick nuisance trip, a smoothed cap), G2-GNC (AUTO descent, the slope limit per implement), G2-NAV (the IMU bound on the robot), G2-FSC."
+  },
+  {
+   "id": "lifecycle",
+   "item": "Engineering management system: the framework and Shaddad in it",
+   "area": "Project",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-15",
+   "next": "G0 passed with actions on Nov 16 (gate review report NASL-SHD-GRR-001; decisions D76 and D77): the charter v1.1 approved, the handbook v1.1 and the plan v1.2 accepted. Open on card G1-01, before G1-05: the risk register review (RID-G0-08) and architecture section 12 (RID-G0-12). Still to do: the earlier engineering reports reissued by roles. Next phase: G1, starting with card G1-01."
+  },
+  {
+   "id": "s4",
+   "item": "S4 greenhouse run paused on implement-ready",
+   "area": "GNC",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-04",
+   "next": "Cause found Nov 12 (log analyst): the scenario set-up leaves the RC implement switch at 1 (OFF); the MCU starts the mower only at >= 2, so implement_ready never comes. Hidden on 10-23 by a false PERSON stop that the 10-27 narrower LiDAR field removed. Your fix: switch 2 in S3 and S4, applied Nov 12 by the integration engineer. Full rerun done Nov 13 (26.8 h on the clock because the computer slept, about 2 h awake): the implement-ready wait is gone (a 1.8 s blade hold at each start), but testS4 still fails, as it did before the fix: coverage 0.16, no mission_done, XTE RMS 0.068 m and max 0.24 m, because of the two S4 items below. Reviewer Nov 13: keep (S5 and S7 unchanged; the spec row, the bus and the ICD agree). The baseline note for testS4 is updated. Nov 14: the S4 fixes (D66-D69) make the mission complete: see item s4xte for the one criterion left."
+  },
+  {
+   "id": "s4navdeg",
+   "item": "S4: NAV_DEGRADED pauses all through the rows",
+   "area": "Sensors / GNC",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-12",
+   "next": "Fixed Nov 14 (D68 with kRvel = kR, and D69 for T7). Full S4: no NAV_DEGRADED pause in the whole mission; T7 sigmas across max 0.061 m in the rows and 0.070 m in the turns (threshold 0.15), along max 0.090 m (0.25). The lead's kRvel test: normal GNSS speed weighting gives along-aisle 0.065 m RMS, NEES 1.08. Open points: STATUS 16d. Reports: work/agentic/s4fix/nav2/report.md, t7/report.md."
+  },
+  {
+   "id": "s4replan",
+   "item": "S4: the rejoin replanner finds no path",
+   "area": "GNC",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-13",
+   "next": "Fixed and reviewed Nov 14 (decision D67): a resume 30 deg or more off the lane pivots in place first (the S4 rejoin replay pivots 5.2 s and drives on); a failed LOCAL rejoin plan falls back to GLOBAL, never for a bypass or a paused bypass. You accepted (Nov 14) two limits for the simulation for now, for the improvement list of the review phase (STATUS 16c): the pivot has no clearance check (wall lanes clear the wall only within 0.066 m of the lane centre; nothing detects a blocked pivot), and the GLOBAL fallback can U-turn about 3 m into the next lane."
+  },
+  {
+   "id": "s4pivot",
+   "item": "The MCU's yaw loop turns the robot while it is paused",
+   "area": "Electronics",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-13",
+   "next": "Fixed and reviewed Nov 14 (decision D66): the MCU yaw PI resets at commanded standstill, and the gyro re-bias needs commanded standstill too. New test T-EL-43 (61 s pause after a turn): heading change 17.06 deg before, 0.000 after; MCU single tests 0 new failures; 30 degC row test unchanged; layout allowance of Yaw_PI raised by 3 crossings with reasons. Real robot (STATUS 16b): regenerate and flash once the STM32 tools are in; the companion must send exactly 0 in a pause; check a 2-5 min paused hold. Report: work/agentic/s4fix/mcu/report.md. Nov 14: D66 exposed the ESC parking issue in item s4park."
+  },
+  {
+   "id": "s4park",
+   "item": "Since D66 a stop of 2 s or more ends AUTO missions",
+   "area": "GNC / MCU / Drive",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-14",
+   "next": "Fixed and reviewed Nov 14 (decision D67): T36 waits 0.5 s of drive_ready loss, so the 0.1 s ESC unpark no longer pauses missions; RC loss still pauses at once. 70 s closed-loop S4: 0 OPERATOR pauses through three unparks, 14.3 m driven; the whole t_gnc_mission class has 0 new failures. Report: work/agentic/s4fix/gnc/report.md."
+  },
+  {
+   "id": "s4xte",
+   "item": "S4: cross-track overshoot when a row starts",
+   "area": "GNC",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-14",
+   "next": "Settled Nov 18 by D100 (review decision 13): S4's maximum cross-track error is judged over the whole row, the entry included (0.15 m), with RMS 0.05 m. The turn-to-row and transit-to-row handover fix goes to card G2-GNC; the spec is brought in line in G1-01 part 2."
+  },
+  {
+   "id": "s4limits",
+   "item": "S4 pass limits: the spec and the code differ",
+   "area": "Integration",
+   "state": "Done",
+   "kind": "info",
+   "since": "2026-11-13",
+   "next": "Settled Nov 18 by D100: section 12's set is right (truth XTE RMS 0.05 m and maximum 0.15 m over the whole row, coverage on the inset floor). The integration spec follows it in G1-01 part 2; the bus naming differences go to the ICD clean-up of part 2 (step 15)."
+  },
+  {
+   "id": "decklift",
+   "item": "Deck-lift output at its limit in AUTO",
+   "area": "Electronics",
+   "state": "Found",
+   "kind": "info",
+   "since": "2026-11-12",
+   "next": "In every S4 run since 10-23 the deck-lift PWM (mcu_out10.pwm_duty(2)) sits at its 0.6 limit from 13.10 s, and the implement draws about 90 W with the blade off. For mcu (the lift loop) or structure (the lift potentiometer). Not analysed yet."
+  },
+  {
+   "id": "companion",
+   "item": "Companion code build fails at HybridAStar",
+   "area": "GNC",
+   "state": "Proposed",
+   "kind": "info",
+   "since": "2026-10-31",
+   "next": "build_targets('Companion') fails parsing Shaddad_GNC/GlobalReplanner/Replan/HybridAStar. Found during the layout work, not caused by it. Proposed as its own session. It also gates Task 4 of the MATLAB Function plan (the GNC managers)."
+  },
+  {
+   "id": "stm32",
+   "item": "STM32 board builds",
+   "area": "Electronics",
+   "state": "Blocked",
+   "kind": "wait",
+   "since": "2026-10-23",
+   "next": "STM32CubeMX, STM32CubeCLT and the GNU Arm tools are not installed, so VC_TARGET 1 cannot compile. Simulink and Embedded Coder are installed now."
+  },
+  {
+   "id": "memory",
+   "item": "Memory on this computer",
+   "area": "Computer",
+   "state": "Tip",
+   "kind": "info",
+   "since": "2026-11-07",
+   "next": "Each system compile grows MATLAB by 0.5-1 GB; past about 9 GB the PC pages and runs 4-5x slower. Close other big apps during long runs."
+  },
+  {
+   "id": "awake",
+   "item": "Keep the computer awake during long runs",
+   "area": "Computer",
+   "state": "Tip",
+   "kind": "info",
+   "since": "2026-11-06",
+   "next": "Batch runs freeze while it sleeps and resume when it wakes. Leave it on with the lid open."
+  }
+ ]
+}

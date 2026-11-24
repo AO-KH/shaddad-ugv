@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarnessInformation>
+  <Harness>
+    <P Name="Name">component_25A9DAD05D06421B_final_harness</P>
+    <P Name="Description"/>
+    <P Name="CreatedBy">aomar</P>
+    <P Name="CreatedOn">Thu Nov 12 16:15:29 2026</P>
+    <P Name="ModifiedBy">aomar</P>
+    <P Name="LastSaved">Thu Nov 12 16:15:33 2026</P>
+    <P Name="Owner">235</P>
+    <P Name="OwnerType">SS_HARNESS</P>
+    <P Name="OwnerPath">BMS_Core/ModeManager/BMS_ModeManager</P>
+    <P Name="Directory"/>
+    <P Name="FileName">component_25A9DAD05D06421B_final_harness.slx</P>
+    <P Name="SavedVersion">26.2</P>
+    <P Name="HarnessUUID">9d56ab25-6c60-47fc-8a6b-cf19acce81d9</P>
+    <P Name="HarnessConnectionsMap">0,1,2,3,4,5,6,7,8,9,10|0,1,2,3,4,5,6,7,8,9,10,11|0,0,0,0||</P>
+    <P Name="VerificationMode">0</P>
+    <P Name="HarnessOwnerCheckSum">0,0,0,0</P>
+    <P Name="RebuildOnOpen">false</P>
+    <P Name="RebuildModelData">false</P>
+    <P Name="Graphical">false</P>
+    <P Name="DriveFcnCallWithTS">true</P>
+    <P Name="ScheduleInitTermReset">false</P>
+    <P Name="AutoShapeInputs">false</P>
+    <P Name="SLDVCompatible">no</P>
+    <P Name="SynchronizationMode">1</P>
+    <P Name="IsImported">false</P>
+    <P Name="PostRebuildCB"/>
+    <P Name="IsCodeContext">false</P>
+    <P Name="SchedulerBlock">1</P>
+    <P Name="SourceTypeString">Signal Editor</P>
+    <P Name="SinkTypeString">Outport</P>
+    <P Name="CustomSourcePath"/>
+    <P Name="CustomSinkPath"/>
+    <P Name="BlockSIDs">25|61|0|0|0|0|0</P>
+    <P Name="ExistingBuildFolder"/>
+    <P Name="FunctionInterfaceName"/>
+    <P Name="SysArchSUTModel"/>
+  </Harness>
+  <ModelMetadata>
+    <P Name="ModelUUID">b496c23f-f342-4099-b441-dbb5aeaed1c5</P>
+    <P Name="OwnerBDName">Shaddad_BMS</P>
+  </ModelMetadata>
+</HarnessInformation>

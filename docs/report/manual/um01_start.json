@@ -1,0 +1,66 @@
+{
+ "id": "um01_start",
+ "title": "Before You Start",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "This manual explains how to run the Shaddad UGV digital twin, the MATLAB/Simulink/Simscape model of NASL's tracked agricultural platform, in **Phase 1**: driving the robot by remote control, either with a scripted plan or live with a PS5 controller or an RC transmitter, with a 3-D view of the robot. The run includes the full chain from the transmitter through the STM32 firmware, the motor controllers and motors to the tracks, powered by the 48 V battery and BMS."
+  },
+  {
+   "type": "h2",
+   "text": "Quick start"
+  },
+  {
+   "type": "p",
+   "text": "Six commands cover the normal workflow:"
+  },
+  {
+   "type": "code",
+   "text": "openProject('C:\\Users\\aomar\\Desktop\\Robot project\\Shaddad_UGV.prj');   % load data, print the startup report\nres = phase1_test_drive();      % scripted RC drive: summary, figure, replay (about 5 min)\nres = phase1_live_drive();      % drive live with a PS5 controller or RC transmitter, 3-D view\nplot_run(res);                  % plot every signal of the run (six pages)\nr1  = run_scenario('S1');       % RC acceptance scenario, 120 s simulated (about 5-6 min)\nrt  = run_regression('Fast');   % fast regression checks (about 1-3 min)"
+  },
+  {
+   "type": "h2",
+   "text": "What you need"
+  },
+  {
+   "type": "table",
+   "id": "tab_req",
+   "caption": "Requirements",
+   "header": [
+    "Item",
+    "Requirement"
+   ],
+   "widths": [
+    26,
+    74
+   ],
+   "rows": [
+    [
+     "MATLAB",
+     "R2026b with Simulink"
+    ],
+    [
+     "Required products",
+     "Simscape, Simscape Electrical, Simscape Battery, Motor Control Blockset, Communications Toolbox, DSP System Toolbox (with Signal Processing Toolbox), Aerospace Blockset, Robotics System Toolbox, Navigation Toolbox, Sensor Fusion and Tracking Toolbox, Control System Toolbox, Model Predictive Control Toolbox, Embedded Coder, STM32 Microcontroller Blockset, ROS Toolbox"
+    ],
+    [
+     "Live drive",
+     "Simulink 3D Animation (Simulation 3D Joystick block); a PS5 controller (USB or Bluetooth) or an RC transmitter with a USB joystick mode"
+    ],
+    [
+     "Optional",
+     "Simulink Coder (code generation for the STM32), STM32CubeMX/CubeCLT and GNU Arm (board builds), MinGW-w64 compiler (Accelerator mode)"
+    ],
+    [
+     "PC",
+     "Windows 11, 16 GB RAM minimum"
+    ]
+   ]
+  },
+  {
+   "type": "note",
+   "kind": "warning",
+   "text": "MATLAB memory grows by about 0.5-1 GB with every full-system compile. Check it with `m = memory; m.MemUsedMATLAB/1e9` and restart MATLAB before it reaches about 9 GB, otherwise the simulation slows down 4-5 times."
+  }
+ ]
+}

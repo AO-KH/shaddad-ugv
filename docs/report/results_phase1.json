@@ -1,0 +1,1061 @@
+{
+  "title": "Shaddad UGV Phase 1 (RC) scenario results",
+  "generated": "2026-10-23 21:04:41",
+  "matlab": "26.2.0.3386108 (R2026b)",
+  "simulation_mode": "Normal (Accelerator MEX files are blocked by Windows Application Control on this PC)",
+  "summary": {
+    "scenarios": 9,
+    "criteria_total": 71,
+    "criteria_pass": 64,
+    "criteria_fail": 6,
+    "criteria_blocked": 1,
+    "scenarios_all_pass": [
+      "S0",
+      "S6c",
+      "S6d",
+      "S8a"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "S0",
+      "file": "work/results/S0_20261023_204711.mat",
+      "date": "2026-10-23 20:47:11",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 10,
+      "t_end": 10,
+      "rtf": 0.32,
+      "wall_s": 148,
+      "exec_s": 31.3,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S0.drift",
+          "status": "PASS",
+          "value": 0,
+          "op": "<",
+          "limit": 0.001,
+          "unit": "m",
+          "desc": "position drift |pos(t) - pos(0)|"
+        },
+        {
+          "id": "S0.dsoc",
+          "status": "PASS",
+          "value": 1.6E-5,
+          "op": "<",
+          "limit": 0.0001,
+          "unit": "1",
+          "desc": "|SOC(T) - SOC(0)|"
+        },
+        {
+          "id": "S0.finite",
+          "status": "PASS",
+          "value": 1,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "no NaN / Inf (truth, power truth, kpi.stop_reason ~= 5)"
+        },
+        {
+          "id": "S0.do0",
+          "status": "PASS",
+          "value": 0.02,
+          "op": "<=",
+          "limit": 0.05,
+          "unit": "s",
+          "desc": "DO0 MCU_SAFETY_OK high"
+        },
+        {
+          "id": "S0.do1",
+          "status": "PASS",
+          "value": 0.05,
+          "op": "in",
+          "limit": [
+            0.048,
+            0.052
+          ],
+          "unit": "s",
+          "desc": "DO1 SAFETY_RESET_REQ pulse width"
+        },
+        {
+          "id": "S0.safety_ok",
+          "status": "PASS",
+          "value": 0.061,
+          "op": "<=",
+          "limit": 0.2,
+          "unit": "s",
+          "desc": "Safety_OK true"
+        },
+        {
+          "id": "S0.safety_hv_ok",
+          "status": "PASS",
+          "value": 0.061,
+          "op": "<=",
+          "limit": 0.2,
+          "unit": "s",
+          "desc": "Safety_HV_OK true"
+        },
+        {
+          "id": "S0.hv_ready",
+          "status": "PASS",
+          "value": 0.5,
+          "op": "<=",
+          "limit": 1,
+          "unit": "s",
+          "desc": "BMS HV_Ready true"
+        },
+        {
+          "id": "S0.standby",
+          "status": "PASS",
+          "value": 1.01,
+          "op": "<=",
+          "limit": 1.5,
+          "unit": "s",
+          "desc": "MCU mode STANDBY reached"
+        },
+        {
+          "id": "S0.standby_end",
+          "status": "PASS",
+          "value": 2,
+          "op": "==",
+          "limit": 2,
+          "unit": "",
+          "desc": "MCU mode at 10 s (2 = STANDBY)"
+        },
+        {
+          "id": "S0.classA",
+          "status": "PASS",
+          "value": 0,
+          "op": "==",
+          "limit": 0,
+          "unit": "",
+          "desc": "class-A fault bits at 10 s (fault_word AND maskA)"
+        }
+      ],
+      "passed": 11,
+      "failed": 0,
+      "blocked": 0,
+      "total": 11,
+      "pass": true,
+      "notes": "Power-up and automatic safety-relay re-arm: all 11 criteria pass (DO0 at 0.02 s, 50 ms DO1 pulse, Safety_OK 0.061 s, HV_Ready 0.5 s, STANDBY 1.01 s). Re-run for this report."
+    },
+    {
+      "id": "S1",
+      "file": "work/results/S1_20261023_072525.mat",
+      "date": "2026-10-23 07:25:25",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 120,
+      "t_end": 120,
+      "rtf": 0.468,
+      "wall_s": 323,
+      "exec_s": 256.4,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S1.rise",
+          "status": "PASS",
+          "value": 1.51,
+          "op": "<=",
+          "limit": 2,
+          "unit": "s",
+          "desc": "90 % speed rise time (target 1.199 m/s)"
+        },
+        {
+          "id": "S1.overshoot",
+          "status": "PASS",
+          "value": -0.005932,
+          "op": "<=",
+          "limit": 0.05,
+          "unit": "1",
+          "desc": "speed overshoot"
+        },
+        {
+          "id": "S1.ss_err",
+          "status": "PASS",
+          "value": 0.00724,
+          "op": "<=",
+          "limit": 0.03,
+          "unit": "m/s",
+          "desc": "steady speed error, mean |v - v_target| over 20-30 s"
+        },
+        {
+          "id": "S1.yaw_track",
+          "status": "PASS",
+          "value": 0.049058,
+          "op": "<=",
+          "limit": 0.1,
+          "unit": "1",
+          "desc": "max |r - w_ref|/|w_ref| over 32-45 s (0.1 s mean)"
+        },
+        {
+          "id": "S1.yaw_sign",
+          "status": "PASS",
+          "value": -0.350422,
+          "op": "<",
+          "limit": 0,
+          "unit": "rad/s",
+          "desc": "mean yaw rate for steer +0.5 (must be < 0)"
+        },
+        {
+          "id": "S1.lat_tx_drv",
+          "status": "PASS",
+          "value": 0.028,
+          "op": "<=",
+          "limit": 0.03,
+          "unit": "s",
+          "desc": "TX frame emission -> DRV_CMD frame (MCU Task_10 output)"
+        },
+        {
+          "id": "S1.lat_stick_esc",
+          "status": "PASS",
+          "value": 0.05,
+          "op": "<=",
+          "limit": 0.065,
+          "unit": "s",
+          "desc": "ScenarioIn stick -> ESC speed reference (DRV_CMD + 10 ms ESC RT)"
+        },
+        {
+          "id": "S1.stop_dist",
+          "status": "PASS",
+          "value": 0.844497,
+          "op": "<=",
+          "limit": 0.95,
+          "unit": "m",
+          "desc": "stop distance after throttle release from 1.2 m/s"
+        },
+        {
+          "id": "S1.rev_speed",
+          "status": "PASS",
+          "value": 0.003807,
+          "op": "<=",
+          "limit": 0.05,
+          "unit": "m/s",
+          "desc": "reverse speed at 75 s (target -0.601 m/s)"
+        },
+        {
+          "id": "S1.eps_el",
+          "status": "PASS",
+          "value": 0,
+          "op": "<=",
+          "limit": 0.01,
+          "unit": "1",
+          "desc": "electrical energy-audit residual (T-INT-08)"
+        },
+        {
+          "id": "S1.eps_mech",
+          "status": "PASS",
+          "value": 4.4E-5,
+          "op": "<=",
+          "limit": 0.01,
+          "unit": "1",
+          "desc": "mechanical energy-audit residual (T-INT-08)"
+        },
+        {
+          "id": "S1.no_coll",
+          "status": "PASS",
+          "value": 0,
+          "op": "==",
+          "limit": 0,
+          "unit": "",
+          "desc": "collisions"
+        },
+        {
+          "id": "S1.rtf",
+          "status": "BLOCKED",
+          "value": [],
+          "op": ">=",
+          "limit": 5,
+          "unit": "",
+          "desc": "RTF >= 5 in accelerator (top + Model blocks)"
+        }
+      ],
+      "passed": 12,
+      "failed": 0,
+      "blocked": 1,
+      "total": 13,
+      "pass": true,
+      "notes": "12 of 13 criteria pass; S1.rtf is BLOCKED, not failed: the RTF >= 5 target needs Accelerator mode, whose MEX files are blocked by Windows Application Control on this PC, so all runs use Normal mode (measured RTF in this record). Latest post-fix result (not re-run for this report)."
+    },
+    {
+      "id": "S2",
+      "file": "work/results/S2_20261023_202915.mat",
+      "date": "2026-10-23 20:29:15",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 84,
+      "t_end": 84,
+      "rtf": 0.134,
+      "wall_s": 733.6,
+      "exec_s": 628.2,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S2.moving",
+          "status": "PASS",
+          "value": 18.856724,
+          "op": ">=",
+          "limit": 15,
+          "unit": "m",
+          "desc": "precondition: x reached past mid-ramp before the stop"
+        },
+        {
+          "id": "S2.v_mean",
+          "status": "FAIL",
+          "value": 0.744078,
+          "op": ">=",
+          "limit": 0.75,
+          "unit": "m/s",
+          "desc": "mean speed on the ramp (steady moving phases)"
+        },
+        {
+          "id": "S2.slip",
+          "status": "PASS",
+          "value": 0.081071,
+          "op": "<=",
+          "limit": 0.25,
+          "unit": "1",
+          "desc": "max |track slip| on the ramp (steady moving phases)"
+        },
+        {
+          "id": "S2.I_peak",
+          "status": "PASS",
+          "value": 59.61196,
+          "op": "<=",
+          "limit": 150,
+          "unit": "A",
+          "desc": "peak |I_pack| (1 ms running maximum)"
+        },
+        {
+          "id": "S2.rollback",
+          "status": "PASS",
+          "value": 0.023086,
+          "op": "<=",
+          "limit": 0.05,
+          "unit": "m",
+          "desc": "roll-back during the 30 s hold"
+        },
+        {
+          "id": "S2.dT_wind",
+          "status": "PASS",
+          "value": 3.872953,
+          "op": "<=",
+          "limit": 20,
+          "unit": "K",
+          "desc": "winding temperature rise"
+        },
+        {
+          "id": "S2.no_trip",
+          "status": "PASS",
+          "value": 1,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "BMS fault level < 3, HV_Ready kept, no ESC FAULT / QUICK_STOP, no MCU FAULT"
+        },
+        {
+          "id": "S2.no_tilt",
+          "status": "FAIL",
+          "value": 0,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "TILT_WARN (b14) / TILT_STOP (b15) never set"
+        },
+        {
+          "id": "S2.tau_mean",
+          "status": "PASS",
+          "value": 178.514484,
+          "op": "<=",
+          "limit": 280,
+          "unit": "N*m",
+          "desc": "gearbox output torque, max 10 s moving mean of |tau_spr|"
+        },
+        {
+          "id": "S2.tau_peak",
+          "status": "PASS",
+          "value": 221.466943,
+          "op": "<=",
+          "limit": 380,
+          "unit": "N*m",
+          "desc": "gearbox output torque peak |tau_spr|"
+        },
+        {
+          "id": "S2.pitch",
+          "status": "FAIL",
+          "value": -0.038565,
+          "op": "in",
+          "limit": [
+            -0.02,
+            0.02
+          ],
+          "unit": "rad",
+          "desc": "T-INT-04: mean pitch on the ramp + 0.349 (nose up negative)"
+        }
+      ],
+      "passed": 8,
+      "failed": 3,
+      "blocked": 0,
+      "total": 11,
+      "pass": false,
+      "notes": "8 of 11 pass. S2.no_tilt FAIL: on the 20 deg ramp with the full sprayer the MCU tilt estimate reached 26.3 deg (truth 23.7 deg), above the 22 deg TILT_WARN threshold, from 19.6 s; TILT_WARN is class C (derate 0.5), so tau_lim_mot fell from 16 to 8 N m (no trip, the climb continued). S2.pitch FAIL: mean body pitch on the ramp is 2.2 deg steeper than the 20 deg ramp (-0.388 vs -0.349 +/- 0.02 rad), which also drives the tilt warning. S2.v_mean FAIL (0.744 < 0.75 m/s): the MCU closes the loop on track (belt) speed, mean 0.800 m/s on the ramp, while the ground speed is 0.742 m/s, i.e. about 7 % longitudinal track slip on the slope. Roll-back 0.023 m, gearbox torque 221 N m peak, no BMS / ESC trip. Re-run for this report."
+    },
+    {
+      "id": "S6a",
+      "file": "work/results/S6a_20261023_203449.mat",
+      "date": "2026-10-23 20:34:49",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 34,
+      "t_end": 34,
+      "rtf": 0.362,
+      "wall_s": 199.9,
+      "exec_s": 93.9,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S6a.v0",
+          "status": "PASS",
+          "value": 0.99353,
+          "op": ">=",
+          "limit": 0.899610903360905,
+          "unit": "m/s",
+          "desc": "speed 0.1 s before the loss (target 1.00 m/s)"
+        },
+        {
+          "id": "S6a.ctrl_stop",
+          "status": "PASS",
+          "value": 0.12,
+          "op": "<=",
+          "limit": 0.13,
+          "unit": "s",
+          "desc": "CTRL_STOP after the loss onset (D37 <= 0.13 s)"
+        },
+        {
+          "id": "S6a.decel",
+          "status": "FAIL",
+          "value": 1.151722,
+          "op": "<=",
+          "limit": 1.05,
+          "unit": "m/s^2",
+          "desc": "max deceleration, 100 ms moving average"
+        },
+        {
+          "id": "S6a.standstill",
+          "status": "PASS",
+          "value": 1.1,
+          "op": "<=",
+          "limit": 1.5,
+          "unit": "s",
+          "desc": "standstill after detection"
+        },
+        {
+          "id": "S6a.no_estop",
+          "status": "PASS",
+          "value": 1,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "ESTOP never entered (D34)"
+        },
+        {
+          "id": "S6a.no_resume",
+          "status": "PASS",
+          "value": 4.2E-5,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "m/s",
+          "desc": "max |v| after the link returns until arm off -> on"
+        },
+        {
+          "id": "S6a.resume",
+          "status": "PASS",
+          "value": 0.993068,
+          "op": ">=",
+          "limit": 0.49978383520050274,
+          "unit": "m/s",
+          "desc": "speed 2.5 s after re-arm + throttle (target 1.00 m/s)"
+        }
+      ],
+      "passed": 6,
+      "failed": 1,
+      "blocked": 0,
+      "total": 7,
+      "pass": false,
+      "notes": "6 of 7 pass. RF link loss at 20 s: CTRL_STOP after 0.12 s, standstill 1.1 s, no ESTOP, no motion after the link returned until the arm switch was cycled, drive resumed after re-arm. S6a.decel FAIL: the 100 ms moving-average deceleration peaks at 1.15 m/s^2 (limit 1.05) while the mean 90-10 % deceleration is 1.02 m/s^2, i.e. a short overshoot over the 1.0 m/s^2 class-B profile. Re-run for this report."
+    },
+    {
+      "id": "S6b",
+      "file": "work/results/S6b_20261023_203938.mat",
+      "date": "2026-10-23 20:39:38",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 34,
+      "t_end": 34,
+      "rtf": 0.313,
+      "wall_s": 218.5,
+      "exec_s": 108.6,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S6b.v0",
+          "status": "PASS",
+          "value": 0.99353,
+          "op": ">=",
+          "limit": 0.899610903360905,
+          "unit": "m/s",
+          "desc": "speed 0.1 s before the loss (target 1.00 m/s)"
+        },
+        {
+          "id": "S6b.ctrl_stop",
+          "status": "PASS",
+          "value": 0.09,
+          "op": "<=",
+          "limit": 0.13,
+          "unit": "s",
+          "desc": "CTRL_STOP after the loss onset (D37 <= 0.13 s)"
+        },
+        {
+          "id": "S6b.decel",
+          "status": "FAIL",
+          "value": 1.151451,
+          "op": "<=",
+          "limit": 1.05,
+          "unit": "m/s^2",
+          "desc": "max deceleration, 100 ms moving average"
+        },
+        {
+          "id": "S6b.standstill",
+          "status": "PASS",
+          "value": 1.1,
+          "op": "<=",
+          "limit": 1.5,
+          "unit": "s",
+          "desc": "standstill after detection"
+        },
+        {
+          "id": "S6b.no_estop",
+          "status": "PASS",
+          "value": 1,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "ESTOP never entered (D34)"
+        },
+        {
+          "id": "S6b.no_resume",
+          "status": "PASS",
+          "value": 1.7E-5,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "m/s",
+          "desc": "max |v| after the link returns until arm off -> on"
+        },
+        {
+          "id": "S6b.resume",
+          "status": "PASS",
+          "value": 0.993071,
+          "op": ">=",
+          "limit": 0.49978383520050274,
+          "unit": "m/s",
+          "desc": "speed 2.5 s after re-arm + throttle (target 1.00 m/s)"
+        }
+      ],
+      "passed": 6,
+      "failed": 1,
+      "blocked": 0,
+      "total": 7,
+      "pass": false,
+      "notes": "6 of 7 pass. SBUS line silent at 20 s: CTRL_STOP after 0.09 s, standstill 1.1 s, no ESTOP, no resume until re-arm. S6b.decel FAIL: 100 ms moving-average peak 1.15 m/s^2 (limit 1.05), mean 90-10 % deceleration 1.02 m/s^2 - same short overshoot as S6a. Re-run for this report."
+    },
+    {
+      "id": "S6c",
+      "file": "work/results/S6c_20261023_075445.mat",
+      "date": "2026-10-23 07:54:45",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 27,
+      "t_end": 27,
+      "rtf": 0.538,
+      "wall_s": 83.7,
+      "exec_s": 50.1,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S6c.v0",
+          "status": "PASS",
+          "value": 0.993447,
+          "op": ">=",
+          "limit": 0.899610903360905,
+          "unit": "m/s",
+          "desc": "speed during the byte errors at 20 s (target 1.00 m/s)"
+        },
+        {
+          "id": "S6c.v_glitch",
+          "status": "PASS",
+          "value": 0,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "1",
+          "desc": "max |v_target - nominal| / v_max_man during the byte errors"
+        },
+        {
+          "id": "S6c.w_glitch",
+          "status": "PASS",
+          "value": 0,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "1",
+          "desc": "max |w_target - nominal| / w_max_man during the byte errors"
+        },
+        {
+          "id": "S6c.ch_glitch",
+          "status": "PASS",
+          "value": 0,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "1",
+          "desc": "max |rc_ch_norm(1:2) - nominal| (stick channels, FS 1)"
+        },
+        {
+          "id": "S6c.rejected",
+          "status": "PASS",
+          "value": 302,
+          "op": ">",
+          "limit": 0,
+          "unit": "frames",
+          "desc": "corrupted frames rejected (sbus_bad increase)"
+        },
+        {
+          "id": "S6c.manual",
+          "status": "PASS",
+          "value": 1,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "MCU stays MANUAL during the byte errors"
+        }
+      ],
+      "passed": 6,
+      "failed": 0,
+      "blocked": 0,
+      "total": 6,
+      "pass": true,
+      "notes": "1 % SBUS byte errors 10-25 s: 788 frames accepted, 302 rejected (28 %); link never lost, MCU stays MANUAL at 1.0 m/s; all 6 criteria pass. Latest post-fix result (not re-run)."
+    },
+    {
+      "id": "S6d",
+      "file": "work/results/S6d_20261023_075617.mat",
+      "date": "2026-10-23 07:56:17",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 27,
+      "t_end": 27,
+      "rtf": 0.546,
+      "wall_s": 82.5,
+      "exec_s": 49.5,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S6d.ch_glitch",
+          "status": "PASS",
+          "value": 0,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "1",
+          "desc": "max |rc_ch_norm(1:2) - nominal| (stick channels, FS 1)"
+        },
+        {
+          "id": "S6d.rejected",
+          "status": "PASS",
+          "value": 937,
+          "op": ">",
+          "limit": 0,
+          "unit": "frames",
+          "desc": "corrupted frames rejected (sbus_bad increase)"
+        },
+        {
+          "id": "S6d.ctrl_stop",
+          "status": "PASS",
+          "value": 0,
+          "op": "<=",
+          "limit": 0.2,
+          "unit": "s",
+          "desc": "CTRL_STOP after RC_LINK_LOST (telem.rc_link_ok false)"
+        },
+        {
+          "id": "S6d.no_estop",
+          "status": "PASS",
+          "value": 1,
+          "op": "true",
+          "limit": 1,
+          "unit": "",
+          "desc": "ESTOP never entered (D34)"
+        }
+      ],
+      "passed": 4,
+      "failed": 0,
+      "blocked": 0,
+      "total": 4,
+      "pass": true,
+      "notes": "5 % SBUS byte errors 10-25 s: 218 accepted, 937 rejected (81 %); RC_LINK_LOST, CTRL_STOP and standstill, no ESTOP; all 4 criteria pass. Latest post-fix result (not re-run)."
+    },
+    {
+      "id": "S8a",
+      "file": "work/results/S8a_20261023_075310.mat",
+      "date": "2026-10-23 07:53:10",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 24,
+      "t_end": 24,
+      "rtf": 0.538,
+      "wall_s": 111.2,
+      "exec_s": 44.6,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S8a.v0",
+          "status": "PASS",
+          "value": 1.191717,
+          "op": ">=",
+          "limit": 1.0790481218475836,
+          "unit": "m/s",
+          "desc": "speed 0.1 s before the E-stop (target 1.20 m/s)"
+        },
+        {
+          "id": "S8a.sto",
+          "status": "PASS",
+          "value": 0.015,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "s",
+          "desc": "STO (Safety_OK false) after the plant-side hmi edge"
+        },
+        {
+          "id": "S8a.hw_estop",
+          "status": "PASS",
+          "value": 0.008,
+          "op": "<=",
+          "limit": 0.011,
+          "unit": "s",
+          "desc": "fault bit HW_ESTOP after the DI change at the MCU (di_word b0)"
+        },
+        {
+          "id": "S8a.stop_dist",
+          "status": "PASS",
+          "value": 0.213036,
+          "op": "<=",
+          "limit": 0.6,
+          "unit": "m",
+          "desc": "stop distance from the plant-side hmi edge"
+        },
+        {
+          "id": "S8a.no_restart",
+          "status": "PASS",
+          "value": 0.000723,
+          "op": "<=",
+          "limit": 0.02,
+          "unit": "m/s",
+          "desc": "max |v| from ESTOP entry + 2 s until reset + re-arm (20 s)"
+        },
+        {
+          "id": "S8a.resume",
+          "status": "PASS",
+          "value": 1.190163,
+          "op": ">=",
+          "limit": 0.59947117880421308,
+          "unit": "m/s",
+          "desc": "speed 2.5 s after re-arm + throttle (target 1.20 m/s)"
+        }
+      ],
+      "passed": 6,
+      "failed": 0,
+      "blocked": 0,
+      "total": 6,
+      "pass": true,
+      "notes": "Front hardware E-stop at 10 s: STO 15 ms after the plant-side button edge, stop distance 0.21 m, ESTOP until reset at 17 s, STANDBY, re-arm at 20 s and drive again; all 6 criteria pass. Latest post-fix result (not re-run)."
+    },
+    {
+      "id": "S8b",
+      "file": "work/results/S8b_20261023_204334.mat",
+      "date": "2026-10-23 20:43:34",
+      "mode": "normal",
+      "solver": "fixed",
+      "stop_time": 18,
+      "t_end": 18,
+      "rtf": 0.344,
+      "wall_s": 164.2,
+      "exec_s": 52.3,
+      "sim_ok": true,
+      "criteria": [
+        {
+          "id": "S8b.v0",
+          "status": "PASS",
+          "value": 1.191717,
+          "op": ">=",
+          "limit": 1.0790481218475836,
+          "unit": "m/s",
+          "desc": "speed 0.1 s before the E-stop (target 1.20 m/s)"
+        },
+        {
+          "id": "S8b.decel_mean",
+          "status": "FAIL",
+          "value": 2.118518,
+          "op": "in",
+          "limit": [
+            1.9,
+            2.1
+          ],
+          "unit": "m/s^2",
+          "desc": "mean deceleration over the constant-deceleration phase (90 % -> 10 %)"
+        },
+        {
+          "id": "S8b.decel_peak",
+          "status": "PASS",
+          "value": 2.274369,
+          "op": "<=",
+          "limit": 2.4,
+          "unit": "m/s^2",
+          "desc": "deceleration, 100 ms moving-average peak"
+        },
+        {
+          "id": "S8b.stop_dist",
+          "status": "PASS",
+          "value": 0.592076,
+          "op": "<=",
+          "limit": 0.7,
+          "unit": "m",
+          "desc": "stop distance from the CH12 switch (ScenarioIn edge)"
+        },
+        {
+          "id": "S8b.latched",
+          "status": "PASS",
+          "value": 8,
+          "op": "==",
+          "limit": 8,
+          "unit": "",
+          "desc": "ESTOP latched after CH12 returns to RUN (mode at 17.9 s)"
+        },
+        {
+          "id": "S8b.estop_entered",
+          "status": "PASS",
+          "value": 0.07,
+          "op": "<=",
+          "limit": 0.2,
+          "unit": "s",
+          "desc": "ESTOP entered after the CH12 switch"
+        }
+      ],
+      "passed": 5,
+      "failed": 1,
+      "blocked": 0,
+      "total": 6,
+      "pass": false,
+      "notes": "Remote E-stop CH12 at 10 s from 1.2 m/s: ESTOP after 0.07 s, peak deceleration 2.27 m/s^2, stop distance 0.59 m, latched after CH12 returns to RUN. S8b.decel_mean FAIL: 2.118 m/s^2 vs 2.0 +/- 0.1 (0.9 % above the upper bound). 5 of 6 pass. Re-run for this report."
+    }
+  ],
+  "D1": {
+    "id": "D1",
+    "file": "work/results/D1_20261023_201131.mat",
+    "date": "2026-10-23 20:11:31",
+    "command": "phase1_test_drive('Replay', false)",
+    "stop_time": 64,
+    "rtf": 0.437,
+    "wall_s": 250.6,
+    "exec_s": 146.3,
+    "mode": "normal",
+    "plan_t_v_w": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        0.8,
+        0
+      ],
+      [
+        14,
+        0.8,
+        0.3
+      ],
+      [
+        24,
+        1.2,
+        0
+      ],
+      [
+        34,
+        0.5,
+        -0.4
+      ],
+      [
+        44,
+        0,
+        0.5
+      ],
+      [
+        50,
+        -0.4,
+        0
+      ],
+      [
+        56,
+        0,
+        0
+      ]
+    ],
+    "modes_timeline": [
+      {
+        "t": 0,
+        "mode": "BOOT"
+      },
+      {
+        "t": 0.01,
+        "mode": "SELFTEST"
+      },
+      {
+        "t": 1.01,
+        "mode": "STANDBY"
+      },
+      {
+        "t": 2.04,
+        "mode": "MANUAL"
+      }
+    ],
+    "distance_m": 34.8,
+    "max_speed_mps": 1.192,
+    "max_yaw_rate_radps": 0.553,
+    "segments": [
+      {
+        "t0": 0,
+        "t1": 4,
+        "v_cmd": 0,
+        "w_cmd": 0,
+        "v_target_mcu": 0,
+        "w_target_mcu": 0,
+        "v_actual": -0,
+        "w_actual": -0.0021,
+        "window": [
+          2,
+          3.95
+        ]
+      },
+      {
+        "t0": 4,
+        "t1": 14,
+        "v_cmd": 0.8,
+        "w_cmd": 0,
+        "v_target_mcu": 0.8008,
+        "w_target_mcu": -0,
+        "v_actual": 0.7961,
+        "w_actual": -0.0057,
+        "window": [
+          9,
+          13.95
+        ]
+      },
+      {
+        "t0": 14,
+        "t1": 24,
+        "v_cmd": 0.8,
+        "w_cmd": 0.3,
+        "v_target_mcu": 0.8008,
+        "w_target_mcu": 0.3,
+        "v_actual": 0.7821,
+        "w_actual": 0.2927,
+        "window": [
+          19,
+          23.95
+        ]
+      },
+      {
+        "t0": 24,
+        "t1": 34,
+        "v_cmd": 1.2,
+        "w_cmd": 0,
+        "v_target_mcu": 1.1987,
+        "w_target_mcu": -0,
+        "v_actual": 1.1917,
+        "w_actual": -0.0056,
+        "window": [
+          29,
+          33.95
+        ]
+      },
+      {
+        "t0": 34,
+        "t1": 44,
+        "v_cmd": 0.5,
+        "w_cmd": -0.4,
+        "v_target_mcu": 0.5005,
+        "w_target_mcu": -0.3994,
+        "v_actual": 0.4756,
+        "w_actual": -0.4034,
+        "window": [
+          39,
+          43.95
+        ]
+      },
+      {
+        "t0": 44,
+        "t1": 50,
+        "v_cmd": 0,
+        "w_cmd": 0.5,
+        "v_target_mcu": 0,
+        "w_target_mcu": 0.5004,
+        "v_actual": 0.0001,
+        "w_actual": 0.4952,
+        "window": [
+          47,
+          49.95
+        ]
+      },
+      {
+        "t0": 50,
+        "t1": 56,
+        "v_cmd": -0.4,
+        "w_cmd": 0,
+        "v_target_mcu": -0.4006,
+        "w_target_mcu": -0,
+        "v_actual": -0.3979,
+        "w_actual": -0.0113,
+        "window": [
+          53,
+          55.95
+        ]
+      },
+      {
+        "t0": 56,
+        "t1": 64,
+        "v_cmd": 0,
+        "w_cmd": 0,
+        "v_target_mcu": 0,
+        "w_target_mcu": -0,
+        "v_actual": -0.0003,
+        "w_actual": -0.0058,
+        "window": [
+          60,
+          63.95
+        ]
+      }
+    ],
+    "soc_start_pct": 95.854,
+    "soc_end_pct": 95.789,
+    "energy_out_Wh": 10.33,
+    "peak_current_A": 25.5,
+    "sbus_frames_ok": 4571,
+    "sbus_frames_rejected": 0,
+    "link_lost_after_arming": false,
+    "collisions": 0,
+    "max_torque_limit_Nm": 16,
+    "end_position_m": [
+      -1.28,
+      7.64
+    ],
+    "criteria": "none (free test drive, scn_D1 returns no pass/fail criteria)",
+    "notes": "Default demo plan; drives straight, left arc, faster straight, right arc, pivot turn, reverse, stop. MCU stays in MANUAL from 2.04 s to the end. Bird's-eye replay title shows |e_pos| = 7.75 m: this compares truth with the navigation estimate, which is not computed in Phase 1 (GNC_Stub), so it has no meaning here."
+  }
+}

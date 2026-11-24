@@ -1,0 +1,331 @@
+{
+ "about": "The standard success criteria of every gate (NASL-EMS-HBK-001 section 4.4, version 1.1). Generated from the handbook by framework/tools/extract_gate_criteria.py: do not edit by hand. class M = mandatory (met, or waived by the owner with a reason), D = desirable. A project copies these into its gates, adds its own criteria, and scores each one: met, partly, not met, waived, n/a.",
+ "source": "framework/handbook/engineering_handbook.md",
+ "handbook_version": "1.1",
+ "scores": [
+  "met",
+  "partly",
+  "not met",
+  "waived",
+  "n/a",
+  "not assessed"
+ ],
+ "decisions": {
+  "go": "every mandatory criterion met or waived; no Critical or Major RID open",
+  "go with actions": "every mandatory criterion met or waived; Major or Minor RIDs open, each on a card with a date; none touches safety",
+  "delta review": "one or more mandatory criteria not met, closable within the phase",
+  "no-go": "a basic problem: stay in the phase and re-plan"
+ },
+ "gates": {
+  "G0": [
+   {
+    "id": "G0-SC1",
+    "criterion": "The need, the goals and the constraints are written",
+    "evidence": "the project charter",
+    "threshold": "approved by the owner",
+    "class": "M"
+   },
+   {
+    "id": "G0-SC2",
+    "criterion": "The stakeholders and their needs are listed",
+    "evidence": "the stakeholder list",
+    "threshold": "each need has a source",
+    "class": "M"
+   },
+   {
+    "id": "G0-SC3",
+    "criterion": "An operating concept describes how the product is used",
+    "evidence": "the ConOps",
+    "threshold": "scenarios for the main uses",
+    "class": "M"
+   },
+   {
+    "id": "G0-SC4",
+    "criterion": "The life cycle is tailored, the WBS and the first cards exist",
+    "evidence": "the project plan; the cards",
+    "threshold": "every phase-1 card has entry and exit criteria",
+    "class": "M"
+   },
+   {
+    "id": "G0-SC5",
+    "criterion": "The top risks are known",
+    "evidence": "the risk register",
+    "threshold": "each High risk has an owner",
+    "class": "D"
+   }
+  ],
+  "G1": [
+   {
+    "id": "G1-SC1",
+    "criterion": "Every stakeholder need traces to system requirements",
+    "evidence": "the trace in the requirements register",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC2",
+    "criterion": "Every requirement meets the quality rules (section 7.2)",
+    "evidence": "the reviewer's check",
+    "threshold": "0 open quality defects",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC3",
+    "criterion": "Every requirement has a verification method and a planned verification",
+    "evidence": "the verification matrix",
+    "threshold": "100 % (or recorded as unverifiable, with a reason)",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC4",
+    "criterion": "Every requirement is allocated to subsystems",
+    "evidence": "the allocation in the register",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC5",
+    "criterion": "The functional architecture and the interface document exist and match the model",
+    "evidence": "the architecture; the interface document; an automatic check",
+    "threshold": "0 contradictions",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC6",
+    "criterion": "No TBD on a safety requirement; every other TBD has an owner and a date",
+    "evidence": "the register",
+    "threshold": "0 safety TBDs",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC7",
+    "criterion": "Every High risk has a mitigation card",
+    "evidence": "the risk register; the cards",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G1-SC8",
+    "criterion": "All G1 cards done; no Critical or Major finding open",
+    "evidence": "the cards; the findings list",
+    "threshold": "100 %; 0",
+    "class": "M"
+   }
+  ],
+  "G2": [
+   {
+    "id": "G2-SC1",
+    "criterion": "The design meets every allocated requirement on paper",
+    "evidence": "the compliance matrix",
+    "threshold": "100 % compliant, or each gap dispositioned",
+    "class": "M"
+   },
+   {
+    "id": "G2-SC2",
+    "criterion": "The budgets close with the margin set in the project plan",
+    "evidence": "the budgets: mass, power, energy, thermal, timing",
+    "threshold": "margin ≥ the plan's value",
+    "class": "M"
+   },
+   {
+    "id": "G2-SC3",
+    "criterion": "The interfaces to other subsystems are agreed",
+    "evidence": "the interface rows, approved by both sides",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G2-SC4",
+    "criterion": "The key trade studies are done and recorded",
+    "evidence": "the decision records",
+    "threshold": "each with options and reasons",
+    "class": "M"
+   },
+   {
+    "id": "G2-SC5",
+    "criterion": "Model or prototype results show feasibility for the riskiest requirements",
+    "evidence": "the analysis or test reports",
+    "threshold": "each risky requirement shown",
+    "class": "D"
+   },
+   {
+    "id": "G2-SC6",
+    "criterion": "Every High risk of the subsystem has a mitigation card",
+    "evidence": "the risk register",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G2-SC7",
+    "criterion": "All the subsystem's G2 cards done; no Critical finding open",
+    "evidence": "the cards; the findings",
+    "threshold": "100 %; 0",
+    "class": "M"
+   }
+  ],
+  "G3": [
+   {
+    "id": "G3-SC1",
+    "criterion": "The detailed design is complete",
+    "evidence": "the builders, models and parameters; the design description",
+    "threshold": "no open TBD that affects an interface",
+    "class": "M"
+   },
+   {
+    "id": "G3-SC2",
+    "criterion": "Every required analysis is closed",
+    "evidence": "the analysis reports",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G3-SC3",
+    "criterion": "The qualification test plan names the test of every requirement",
+    "evidence": "the test plan; the matrix",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G3-SC4",
+    "criterion": "Every High and Mid review item is closed or waived",
+    "evidence": "the findings list",
+    "threshold": "0 open without a disposition",
+    "class": "M"
+   },
+   {
+    "id": "G3-SC5",
+    "criterion": "The subsystem's tests pass against a fresh test baseline",
+    "evidence": "the test run sorted against the baseline",
+    "threshold": "0 new failures; each known failure dispositioned",
+    "class": "M"
+   },
+   {
+    "id": "G3-SC6",
+    "criterion": "The build approach and the configuration (versions) are identified",
+    "evidence": "the build-to baseline record",
+    "threshold": "complete",
+    "class": "M"
+   }
+  ],
+  "G4": [
+   {
+    "id": "G4-SC1",
+    "criterion": "An approved procedure exists for every test of the campaign",
+    "evidence": "the test procedures",
+    "threshold": "100 %, approved by the owner",
+    "class": "M"
+   },
+   {
+    "id": "G4-SC2",
+    "criterion": "The test article is identified and matches the baseline",
+    "evidence": "the configuration record",
+    "threshold": "versions match",
+    "class": "M"
+   },
+   {
+    "id": "G4-SC3",
+    "criterion": "The equipment and environment are ready",
+    "evidence": "a check list",
+    "threshold": "all items ready, calibrated where needed",
+    "class": "M"
+   },
+   {
+    "id": "G4-SC4",
+    "criterion": "A safety plan exists for hardware and field tests",
+    "evidence": "the safety plan",
+    "threshold": "approved by the owner",
+    "class": "M"
+   },
+   {
+    "id": "G4-SC5",
+    "criterion": "Every test has pass/fail criteria and data recording",
+    "evidence": "the procedures",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G4-SC6",
+    "criterion": "The regression checks are green; known failures dispositioned",
+    "evidence": "the test baseline",
+    "threshold": "0 new failures",
+    "class": "M"
+   },
+   {
+    "id": "G4-SC7",
+    "criterion": "The open findings of the CDR do not block the campaign",
+    "evidence": "the findings list",
+    "threshold": "0 blocking",
+    "class": "M"
+   }
+  ],
+  "G5": [
+   {
+    "id": "G5-SC1",
+    "criterion": "Every requirement is verified",
+    "evidence": "the closed verification matrix",
+    "threshold": "100 % passed, or a deviation or waiver approved",
+    "class": "M"
+   },
+   {
+    "id": "G5-SC2",
+    "criterion": "A test report is released for every campaign",
+    "evidence": "the test reports",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G5-SC3",
+    "criterion": "Every nonconformance is dispositioned",
+    "evidence": "the nonconformance register",
+    "threshold": "0 open",
+    "class": "M"
+   },
+   {
+    "id": "G5-SC4",
+    "criterion": "The owner accepts the operational scenarios (validation)",
+    "evidence": "the validation record",
+    "threshold": "accepted",
+    "class": "M"
+   }
+  ],
+  "G6": [
+   {
+    "id": "G6-SC1",
+    "criterion": "Manufacturing documents, suppliers and processes ready",
+    "evidence": "the production plan",
+    "threshold": "complete",
+    "class": "M"
+   }
+  ],
+  "G7": [
+   {
+    "id": "G7-SC1",
+    "criterion": "The as-built item matches the documents",
+    "evidence": "the audit checklist",
+    "threshold": "0 unexplained differences",
+    "class": "M"
+   },
+   {
+    "id": "G7-SC2",
+    "criterion": "The software version description is complete",
+    "evidence": "the SVD",
+    "threshold": "every model, firmware and package with its version",
+    "class": "M"
+   },
+   {
+    "id": "G7-SC3",
+    "criterion": "Every controlled document is released at its final version",
+    "evidence": "the document index",
+    "threshold": "100 %",
+    "class": "M"
+   },
+   {
+    "id": "G7-SC4",
+    "criterion": "The lessons learned are recorded",
+    "evidence": "the lessons learned report",
+    "threshold": "done",
+    "class": "D"
+   }
+  ]
+ }
+}

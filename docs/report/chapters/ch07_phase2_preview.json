@@ -1,0 +1,86 @@
+{
+  "id": "ch07_phase2_preview",
+  "title": "Sensors, Fusion and GNC (Phase 2 Preview)",
+  "front": false,
+  "blocks": [
+    {"type": "note", "kind": "warning", "text": "**Outside the scope of this report.** This chapter previews the Phase 2 (autonomy) parts of the model, so that an engineer new to the project knows that they exist and how they are switched on. Phase 2 is not demonstrated or accepted in this report. Every Phase 1 result in this report was produced with `VC_PHASE = 1`. In that configuration the companion computer is replaced by `GNC_Stub`, which sends no COMP_CMD frames, so AUTO can never be armed."},
+    {"type": "p", "text": "Phase 2 adds a companion computer. It localises the robot, detects obstacles and runs missions autonomously. It drives the robot through the same MCU, ESC, drive and power chain that Phase 1 demonstrates. {fig:F18_architecture.png} shows this companion block greyed out. The build scripts generate the Phase 2 models in the same way as the rest of the project. `Shaddad_System` compiles with `VC_PHASE = 2` with 0 algebraic loops (`AlgebraicLoopMsg = error`), and the S4 and S5 runs after the fix pass of 2026-10-23 use this configuration. In the acceptance run before the fix pass, the update took 61.9 s in a fresh MATLAB session."},
+
+    {"type": "h2", "text": "What Already Exists in the Model"},
+    {"type": "p", "text": "{tab:tab_p2_parts} lists the Phase 2 building blocks, the files that hold them and their content."},
+    {"type": "table", "id": "tab_p2_parts", "caption": "Phase 2 building blocks in the Shaddad_UGV project",
+     "header": ["Layer", "Where", "Content"],
+     "rows": [
+       ["Sensor plant", "`Shaddad_SensorModels` (Subsystem Reference in `Shaddad_System`)", "IMU 200 Hz, dual-antenna RTK GNSS 10 Hz, LiDAR 10 Hz and an abstract vision-sprayer detector (details below)."],
+       ["Encoders and odometry", "ESC encoders; `sens_odom_compute` in MCU Task_10", "4096 counts/rev on each motor shaft (122,230 counts/m). The counts arrive in DRV_FB3, and the MCU forwards track speeds in MCU_ODOM."],
+       ["Navigation", "`models/Shaddad_NavFusion.slx`", "IMU Filter (roll/pitch), ecompass (initial heading), 11-state EKF, gating and navigation mode manager. Output: `Bus_NavState` at 0.01 s."],
+       ["Perception", "`models/Shaddad_Perception.slx`", "Scan filter, rolling occupancy map in TEB format, obstacle list, 8 sector minima, protective field, row detection and scan-to-map localisation. Output: `Bus_Perception` at 0.1 s."],
+       ["GNC", "`models/Shaddad_GNC.slx` and `subsystems/gnc/gnc_*.slx`", "Mission manager, path server and analyser, trackers, speed governor, local avoidance, Hybrid A* replanner, implement manager and command shaping. Base rate 0.05 s."],
+       ["Packaging", "`models/Shaddad_Companion.slx`", "`Companion_IO` (CAN-FD codecs; ROS 2 IO for HW) and the Model blocks NavFusion, Perception and GNC."]
+     ],
+     "widths": [16, 30, 54]},
+    {"type": "p", "text": "The sensor plant models these sensors:"},
+    {"type": "bullets", "items": [
+      "**IMU**, ICM-20948 class, 200 Hz: `mspsensorlib/IMU` with lever arm, vibration and DLPF.",
+      "**GNSS**, dual-antenna RTK, ZED-F9P class, 10 Hz: three `mspsensorlib/GPS` noise sets, a fix-state chain driven by sky view, and 80 ms latency.",
+      "**LiDAR**, Ouster OS1-32 class, 10 Hz: `VC_LIDAR = 1` selects FAST2D ray casting, and `VC_LIDAR = 2` selects FULL3D with the UAV Scenario Lidar.",
+      "**Vision-sprayer detector**: an abstract detection model."
+    ]},
+    {"type": "p", "text": "The sensor plant is also active in Phase 1. The IMU feeds the MCU yaw-rate loop and tilt monitor. The GNSS and LiDAR outputs end at the terminators inside `GNC_Stub`."},
+
+    {"type": "h3", "text": "Navigation Fusion"},
+    {"type": "p", "text": "The EKF runs on the companion at 0.01 s. It has 11 states: East/North/Up position, yaw, forward speed, lateral skid velocity, gyro yaw-rate bias, accelerometer bias, left and right track slip, and the effective track-gauge factor chi. The filter is a MATLAB System block (`subsystems/sensors/sens_nav_ekf.m`) that wraps the toolbox `extendedKalmanFilter`. The library EKF block was not used, because a Resettable Subsystem does not re-initialise its Data Store Memory. `sens_nav_gate` gates each correction with a chi-square test (p = 0.999). After repeated rejections, it force-accepts the measurement with an inflated R."},
+    {"type": "p", "text": "{tab:tab_p2_ekf} lists the measurement channels of the EKF and the rate at which each correction is applied."},
+    {"type": "table", "id": "tab_p2_ekf", "caption": "Measurement channels of the navigation EKF",
+     "header": ["Ch", "Measurement", "Rate"],
+     "rows": [
+       ["1", "GNSS antenna position (latency compensated)", "10 Hz"],
+       ["2", "GNSS antenna velocity", "10 Hz"],
+       ["3", "Heading from the dual antenna (ecompass at standstill for initialisation)", "10 Hz"],
+       ["4", "Left/right track speeds (odometry)", "20 Hz (MCU_ODOM sent at 100 Hz)"],
+       ["5", "LiDAR scan-to-map pose (`matchScansGrid`)", "5 Hz"]
+     ],
+     "widths": [8, 62, 30]},
+    {"type": "p", "text": "The mode manager `sens_nav_mode` has the states INIT, ALIGN, RUN_GNSS, RUN_LIDAR, DEAD_RECKONING and FAULT. RUN_LIDAR is used in the greenhouse, or when a prior map exists and there is no RTK fix. The manager declares the filter aligned when the position sigma is below 0.15 m and the yaw sigma is below 2°. It drops `navValid` after 10 s without an accepted absolute update."},
+
+    {"type": "h3", "text": "Guidance and Mission Management"},
+    {"type": "bullets", "items": [
+      "**Mission compiler** `scripts/gnc_compileMission.m` (runs offline). It turns a JSON field map from `scripts/missions/` (`greenhouse_std`, `palm_demo`, `solar_demo`) into `Bus_MissionPlan`. Coverage lanes come from `uavCoverageSpace` and `uavCoveragePlanner`. The compiler adds skip-row ordering, Dubins headland turns (`dubinsConnection`), transits and a dock approach. The plan is stored in `P.gnc.mission`, and a Constant block inside `Shaddad_GNC` reads it.",
+      "**Path serving.** Two Path Smoother Spline blocks and a Velocity Profiler prepare each segment. `gnc_pathAnalyzer` computes the cross-track error, heading error and progress.",
+      "**Trackers.** Pure Pursuit handles transit, headland turns, return-to-home and rejoin. On rows the tracker is Adaptive MPC (`VC_ROW_TRACKER = 1`, the default, with object `mpcRowObj` from `scripts/gnc_designMPC.m`) or Stanley (`VC_ROW_TRACKER = 2`). A pivot ALIGN law runs when the heading error exceeds 45°.",
+      "**Speed governor and command shaping.** The speed command is the minimum of the profile and the curvature, obstacle, tracking-error, tilt, navigation-accuracy, SOC and mode limits. It is rate-limited to 0.5 m/s² acceleration and 1.0 m/s² deceleration. The output stays inside the track-speed envelope |v| + |omega| chi B/2 ≤ 2.0 m/s and the MCU AUTO limits (1.5 m/s forward, 0.5 m/s reverse, 1.2 rad/s).",
+      "**Obstacle handling.** OBSTACLE_HOLD is entered when the path-tube corridor (0.1 s) sees an obstacle closer than 1.5 m, when the Vector Field Histogram finds no free direction for 0.2 s, or when Perception sets `person_near` (protective field). If the robot was on a row and the segment allows a bypass, it starts one after 10 s in HOLD: a local Hybrid A* detour, followed by a Timed Elastic Band (`VC_TEB = 1`) or VFH-steered pursuit (`VC_TEB = 0`). Hybrid A* (`gnc_globalReplanner`, triggered, 1 s rate) also plans the return-to-home and rejoin paths.",
+      "**Mission manager** `gnc_missionFSM`. It is a MATLAB Function, because Stateflow is not installed. Its states are IDLE, MANUAL, AUTO_MISSION, PAUSE, OBSTACLE_HOLD, RETURN_TO_HOME and FAULT. The AUTO sub-modes are ALIGN, TRANSIT, ROW, TURN, BYPASS, REJOIN, RTH_PLANNING, RTH_TRANSIT, DOCK_APPROACH and DOCKED. The manager also supervises navigation integrity, the geofence, tilt and stuck detection, and starts the SOC-based return to the dock.",
+      "**Implement manager.** It sets mower, tiller and sprayer commands from the segment type and mode. Spray flow is proportional to speed."
+    ]},
+
+    {"type": "h2", "text": "How Phase 2 Is Switched On"},
+    {"type": "p", "text": "Autonomous driving needs three things: the Phase 2 variant, a compiled mission, and a two-sided handshake between the MCU and the GNC (decision D20). The handshake keeps the MCU in charge."},
+    {"type": "numbered", "items": [
+      "**Variant.** `VC_PHASE = 2` selects the `Companion` choice of `GNC_Variant` (Model block `Shaddad_Companion`) in place of `GNC_Stub`. The Phase 2 scenarios set this variable themselves through `SimulationInput` and leave the base workspace unchanged.",
+      "**Mission.** `scn_auto_setup` compiles the mission with `gnc_compileMission`, assigns it to `P.gnc.mission`, designs `mpcRowObj` and places the robot at the mission home pose.",
+      "**MCU side.** With CH5 in AUTO (`sw_mode` 3) and an arm edge, the MCU goes from STANDBY to AUTO_START. This needs a valid RC link, the arm request, BMS `HV_Ready`, DI SAFETY_OK, fresh companion frames (`comp_ok`), `gnc_ready` (navigation OK, plan valid, no GNC fault), no class-B fault and the lid closed. AUTO_START sounds a 3 s buzzer warning and then enters AUTO.",
+      "**drive_ready.** The MCU sets `Bus_McuStatus.drive_ready` when it is in AUTO, both ESCs are ready and HV is ready, and sends it to the companion in MCU_STATUS (CAN-FD). This signal was never true until the fix of 2026-10-23 wired `Mode_Manager` to `Is_auto` in `build_shaddad_mcu.m`.",
+      "**GNC side.** On mission command START (CH13, the dashboard or the scenario table), the mission manager goes from IDLE to AUTO_MISSION. The conditions are RC in AUTO, `nav_ok`, a valid plan, SOC > 0.35 and `drive_ready`. The GNC then sets `cmd_valid`, and the MCU follows COMP_CMD."
+    ]},
+    {"type": "note", "kind": "info", "text": "The MCU remains the final mode authority in AUTO. CH5 MANUAL, stick override, the CH12 remote E-stop and every supervisor fault win over GNC commands. RC link loss gives a class-B controlled stop, because `rc_required_in_auto = true`. A companion timeout of 0.20 s gives CTRL_STOP. The hardware E-stop chain works independently of all software."},
+    {"type": "code", "text": "% Phase 2 scenarios set VC_PHASE = 2 themselves (SimulationInput)\nr5 = run_scenario('S5', 'Mode', 'normal');                       % palm patrol, box + pedestrian\nr4 = run_scenario('S4', 'Mode', 'normal');                       % greenhouse coverage (23 min sim.)\nr7 = run_scenario('S7farm', 'StopTime', 70, 'Mode', 'normal');   % palm aisle, GNSS outage 20-50 s\nshaddad_replay_birdseye(r5.file);\n\n% compile check of the Phase 2 configuration only\nload_system('Shaddad_System');\nVC_PHASE = 2; set_param('Shaddad_System', 'SimulationCommand', 'update');\nVC_PHASE = 1;"},
+
+    {"type": "h2", "text": "Current Status"},
+    {"type": "p", "text": "{tab:tab_p2_status} summarises the Phase 2 runs in Normal mode. S5 and S4 were run after the fix pass of 2026-10-23. The S7 figures come from the acceptance probe, which had the two motion fixes applied in memory. `docs/STATUS.md` records no S7 result after the fix pass."},
+    {"type": "table", "id": "tab_p2_status", "caption": "Phase 2 scenario status (not part of the Phase 1 acceptance)",
+     "header": ["Scenario", "Result", "Key numbers", "Open issue"],
+     "rows": [
+       ["S5 palm patrol, full run", "Mission completes", "5 aisles; `mission_done` at 648 s; XTE RMS 0.019 m; 0 collisions", "Obstacle bypass late and too close"],
+       ["S4 greenhouse, first 120 s", "Blocked", "OBSTACLE_HOLD (PERSON) at 25.6 s; coverage 0; 0 collisions", "Protective field fires on static walls"],
+       ["S7farm GNSS outage, 70 s", "Stops", "PAUSE (NAV_DEGRADED) at 24.2 s; 3.7 m driven (needs ≥ 20 m)", "Pause policy; optimistic covariance"]
+     ],
+     "widths": [20, 15, 37, 28]},
+    {"type": "bullets", "items": [
+      "**S5.** The route time is 1.06 x nominal. The bypass fails three criteria: box clearance 0.40 m (needs ≥ 0.5 m), braking starts 6.1 s after the box enters the corridor (needs ≤ 0.5 s), and the rejoin takes 6.2 m (needs ≤ 3 m). The pedestrian never came closer than 32.7 m, so its timing in the scenario needs retuning.",
+      "**S4.** The mission manager reaches AUTO_MISSION. At the greenhouse entrance the `person_near` trigger of OBSTACLE_HOLD fires, and the manager then toggles between HOLD and AUTO. The cause is the protective field, which fires on static walls; it needs static-map masking or a footprint-aware field. Scan matching accepts 89.8 % of the scans.",
+      "**S7farm.** The GNSS outage starts at 20 s, and the robot pauses about 4 s later and never resumes. The navigation results inside the outage pass: position error 0.10 m, heading error 0.68° and XTE 0.025 m. Two navigation criteria fail, because the covariance is optimistic: NEES in bound 78.7 % (needs ≥ 90 %), and the position error 5 s after RTK returns is 0.238 m (needs < 0.05 m). The navigation-degraded pause policy also needs rework, because S7 requires driving through the outage on dead reckoning."
+    ]},
+    {"type": "p", "text": "Other open Phase 2 items: the MPC row tracker shows yaw oscillation (2.15° RMS against 1.5°) and pass overlap (23 % against 15 %). The `mspsensorlib` IMU System object cannot save SimState, so long missions cannot restart from an operating point. Long missions are also slow on this PC (Normal-mode RTF about 0.1-0.45), because Windows Application Control blocks the Accelerator MEX files. Companion code generation and ROS 2 deployment remain BLOCKED until Simulink Coder is installed."}
+  ]
+}

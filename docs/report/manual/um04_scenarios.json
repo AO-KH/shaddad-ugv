@@ -1,0 +1,76 @@
+{
+ "id": "um04_scenarios",
+ "title": "Run the Test Scenarios",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "`run_scenario` runs a predefined test with pass/fail criteria and prints a criteria table (PASS, FAIL or BLOCKED)."
+  },
+  {
+   "type": "code",
+   "text": "r = run_scenario('S1');                    % RC drive, saved to work/results\nr = run_scenario('S1', 'StopTime', 20);    % shorter run\nr = run_scenario('S6c');                   % trailing letter = variant\nr = run_scenario('S8', 'Variant', 'a', 'Viz', 1);   % live bird's-eye view\nR = run_all_scenarios({'S0', 'S1', 'S6c'});         % several scenarios"
+  },
+  {
+   "type": "table",
+   "id": "tab_scn",
+   "caption": "Phase 1 scenarios and latest results (2026-10-23, Normal mode)",
+   "header": [
+    "ID",
+    "What it tests",
+    "Result"
+   ],
+   "widths": [
+    9,
+    63,
+    28
+   ],
+   "rows": [
+    [
+     "S0",
+     "Power-up and safety re-arm timing",
+     "PASS 11/11"
+    ],
+    [
+     "S1",
+     "RC drive: speed step, steering, stop distance, reverse, RC latency",
+     "PASS 12/13 (1 BLOCKED)"
+    ],
+    [
+     "S2",
+     "20 deg ramp with a full sprayer: climb, hold, restart",
+     "8/11"
+    ],
+    [
+     "S6a / S6b",
+     "Radio link lost / silent SBUS line: controlled stop",
+     "6/7 each"
+    ],
+    [
+     "S6c",
+     "1 % corrupted SBUS bytes: frames rejected, keeps driving",
+     "PASS 6/6"
+    ],
+    [
+     "S6d",
+     "5 % corrupted bytes: link loss, controlled stop",
+     "PASS 4/4"
+    ],
+    [
+     "S8a",
+     "Front hardware E-stop, reset and restart",
+     "PASS 6/6"
+    ],
+    [
+     "S8b",
+     "Remote E-stop (CH12), latched",
+     "5/6"
+    ]
+   ]
+  },
+  {
+   "type": "note",
+   "kind": "info",
+   "text": "BLOCKED means the criterion cannot be checked on this PC (S1 real-time-speed target needs Accelerator mode). The remaining failures are near-misses of stopping-deceleration limits (S6a/b, S8b) and the S2 tilt derating on the steep ramp."
+  }
+ ]
+}

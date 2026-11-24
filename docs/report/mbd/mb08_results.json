@@ -1,0 +1,28 @@
+{
+ "id": "mb08_results",
+ "title": "Simulation of the Real Robot",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "Test drive D1 (`phase1_test_drive`, run `D1_20261027_212927` of the final Full suite) drives the four-motor model by remote control on farm soil: straight at 0.8 m/s, a left arc, straight at 1.2 m/s, a right arc at 0.5 m/s, a pivot turn, a reverse at 0.4 m/s, then stop. It covers 34.7 m in 64 s and takes 7.0 Wh from the pack (201 Wh/km). The two figures below show the main signals of the run; `plot_run(res)` plots all of them on six pages (user manual, section 6)."
+  },
+  {
+   "type": "figure",
+   "file": "M42_d1_motion.png",
+   "caption": "Test drive D1 on the four-motor model, motion: (a) forward speed and (b) yaw rate against the command, (c) path coloured by speed, (d) torque of each motor against the 3.18 N m continuous rating."
+  },
+  {
+   "type": "p",
+   "text": "The robot follows each speed step along the ramp of the MCU reference without overshoot. The yaw rate follows the turn commands: it overshoots by about 13 % at the start of the arcs and by about 20 % at the start of the pivot turn, and settles on the command within about 3 s ({fig:M42_d1_motion.png}). The gyro reading of the MCU lies on the true yaw rate. Each motor needs about 0.3 N m when driving straight and at most about 1.1 N m on the outer track of a turn, a third of the 3.18 N m continuous rating of the 1.0 kW unit."
+  },
+  {
+   "type": "figure",
+   "file": "M43_d1_energy.png",
+   "caption": "Test drive D1 on the four-motor model, battery and energy: (a) pack voltage and current, (b) pack and traction power, (c) state of charge, (d) the 13 cell-group voltages."
+  },
+  {
+   "type": "p",
+   "text": "The pack stays at 53.2-53.4 V and delivers at most 14.9 A, about 800 W, while the robot accelerates to 1.2 m/s; driving straight at 1.2 m/s takes about 570 W ({fig:M43_d1_energy.png}). The 13 group voltages stay within 21 mV of each other, and the BMS estimate of the state of charge stays within 0.11 % of the true value. In the power-system log the main contactor K1 closes 0.4 s after start, after the precharge through K2, all safety flags stay true, and the motor windings warm from 45.0 to 46.1 degC."
+  }
+ ]
+}

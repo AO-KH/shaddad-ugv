@@ -1,0 +1,147 @@
+{
+ "full": {
+  "summary": "The Full suite ran on 27 October 2026 on the real-robot model: **17 of 23 cases PASS**, 2 FAIL, 4 KNOWN, 0 ERROR. The failing checks are explained in the next section.",
+  "verdict": "FAIL",
+  "caption": "Phase 1 Full suite on the real-robot model (report `work/reports/phase1_full_20261027_204314`)",
+  "rows": [
+   [
+    "S0",
+    "Power-up and safety re-arm",
+    "PASS",
+    "11 pass"
+   ],
+   [
+    "S1",
+    "RC (SBUS) driving: speed, steering, stop distance, reverse, latency",
+    "PASS",
+    "12 pass, 1 blocked"
+   ],
+   [
+    "S6c",
+    "Corrupted SBUS bytes (1 %): frames rejected, robot keeps driving",
+    "PASS",
+    "6 pass"
+   ],
+   [
+    "S8a",
+    "Front hardware E-stop, reset and restart",
+    "PASS",
+    "6 pass"
+   ],
+   [
+    "U_rc_link",
+    "RC link: transmitter, SBUS encoder, radio, UART timing",
+    "PASS",
+    "13 pass"
+   ],
+   [
+    "U_elec_plant",
+    "Electronics plant: DI/ADC, watchdog, CAN networks",
+    "PASS",
+    "15 pass"
+   ],
+   [
+    "S2",
+    "Slope: 20 deg ramp with full sprayer, hold and restart",
+    "KNOWN",
+    "10 pass, 1 known"
+   ],
+   [
+    "S6a",
+    "Radio link lost: controlled stop, re-arm",
+    "KNOWN",
+    "6 pass, 1 known"
+   ],
+   [
+    "S6b",
+    "Silent SBUS line: controlled stop, re-arm",
+    "KNOWN",
+    "6 pass, 1 known"
+   ],
+   [
+    "S6d",
+    "Corrupted SBUS bytes (5 %): link loss, controlled stop",
+    "PASS",
+    "4 pass"
+   ],
+   [
+    "S8b",
+    "Remote E-stop (CH12): stop profile, latched",
+    "PASS",
+    "6 pass"
+   ],
+   [
+    "D1",
+    "Test drive: default demo (arcs, pivot turn, reverse)",
+    "PASS",
+    "7 pass"
+   ],
+   [
+    "D2",
+    "Test drive: remote E-stop at 12 s, reset at 17 s, resume",
+    "PASS",
+    "10 pass"
+   ],
+   [
+    "D3",
+    "Test drive: radio link lost 12-14 s, re-arm, resume",
+    "PASS",
+    "11 pass"
+   ],
+   [
+    "D4",
+    "Test drive with the mower mounted",
+    "PASS",
+    "7 pass"
+   ],
+   [
+    "D5",
+    "Test drive with the sprayer (full tank, heaviest load)",
+    "PASS",
+    "7 pass"
+   ],
+   [
+    "U_mcu_control",
+    "MCU control: mode manager, safety supervisor, vehicle control",
+    "FAIL",
+    "32 pass, 1 fail, 1 skipped"
+   ],
+   [
+    "U_mcu_platform",
+    "MCU platform: SBUS decoder, RC mapping, CAN codecs, tilt",
+    "KNOWN",
+    "19 pass, 4 known"
+   ],
+   [
+    "U_drive",
+    "Traction drive: ESC, motor, gearbox, brake, STO, undervoltage",
+    "PASS",
+    "25 pass, 4 skipped"
+   ],
+   [
+    "U_power_plant",
+    "Power: precharge, safety chain, LV rails, implement drives",
+    "PASS",
+    "21 pass"
+   ],
+   [
+    "U_pack_bms",
+    "Battery pack and BMS (fast tests)",
+    "PASS",
+    "14 pass, 1 skipped"
+   ],
+   [
+    "U_structure",
+    "Structure: chassis, tracks, soil contact",
+    "FAIL",
+    "15 pass, 1 fail"
+   ],
+   [
+    "U_world",
+    "World, terrain and environment",
+    "PASS",
+    "17 pass"
+   ]
+  ]
+ }
+}

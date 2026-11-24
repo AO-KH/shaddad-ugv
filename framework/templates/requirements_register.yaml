@@ -1,0 +1,31 @@
+# Requirements register and verification matrix (NASL-EMS-HBK-001 sections 7.2 and 7.6).
+# One file per domain or subsystem, e.g. docs/requirements/<domain>.yaml. The specification and the verification
+# matrix are views of these entries. IDs are never reused; a deleted requirement keeps its ID with status deleted.
+#
+# Quality rules: necessary; singular (one "shall"); unambiguous (a number, not "fast"); verifiable (a method);
+# feasible; traceable up (source, parent) and down (allocation, verification).
+domain: <domain code, e.g. PWR>
+owner: <subsystem lead>
+updated: <YYYY-MM-DD>
+requirements:
+  - id: REQ-<DOM>-001
+    text: The <system or subsystem> shall <do something measurable> <with a value and a unit>.
+    rationale: <why it exists>
+    source: <stakeholder need, standard, decision D-NNN>
+    parent: <REQ-SYS-NNN or none>
+    allocation: [<subsystem id>]
+    safety: false                 # true for a safety requirement: no TBD allowed at G1
+    tbd: none                     # or: <what is unknown>, owner <who>, by <date>
+    verification:
+      method: Test                # Test | Analysis | Inspection | Demonstration
+      level: subsystem            # unit | subsystem | system | PIL/HIL | field
+      reference: <test class and test name, scenario, analysis or procedure>
+      campaign: simulation        # simulation | bench | field
+    status: draft                 # draft | agreed | verified | deviated | deleted
+    result:
+      verdict: open               # pass | fail | open
+      evidence: <log or report path>
+      date: <YYYY-MM-DD>
+    cards: [<card ids that implement or verify it>]
+    history:
+      - <YYYY-MM-DD: created>

@@ -1,0 +1,132 @@
+{
+ "id": "mb10_open",
+ "title": "Open Items and Calibration Plan",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The [EST] values are good enough for system studies, but each one is a source of error until it is measured. {tab:tab_open} lists what is still needed, what it affects in the model and how to obtain it."
+  },
+  {
+   "type": "table",
+   "id": "tab_open",
+   "caption": "Open items",
+   "header": [
+    "#",
+    "Open item",
+    "Affects in the model",
+    "How to close"
+   ],
+   "widths": [
+    5,
+    31,
+    32,
+    32
+   ],
+   "rows": [
+    [
+     "1",
+     "Track: gauge, width, contact length, sprocket teeth and pitch",
+     "turning (gauge factor), sinkage, speed scaling",
+     "measure on the robot; re-run `structure_identify_chi`"
+    ],
+    [
+     "2",
+     "Ratio and type of the four gearboxes",
+     "top speed, torque at the track, inertia",
+     "gearbox plate or turns count (motor turns per sprocket turn)"
+    ],
+    [
+     "3",
+     "Dual ESC model and motor data sheets (installed Movematic; the 1.0 kW motor chosen for the upgrade)",
+     "drive response, current limits, efficiency (test T6)",
+     "data sheets from Movematic, the ESC vendor and the motor supplier"
+    ],
+    [
+     "4",
+     "Sprayer: tank volume, pump flow and pressure, pump motor, nozzles, boom width",
+     "implement power, liquid mass, shift energy",
+     "pump label, tank marking, flow test"
+    ],
+    [
+     "5",
+     "Chips of the Nucleo-32 and of the USB-C board",
+     "code-generation target of `Shaddad_MCU`",
+     "read the chip markings"
+    ],
+    [
+     "6",
+     "LV supply: converter from 48 V to 12 / 24 V",
+     "LV losses, rail limits",
+     "trace the wiring in the electronics box"
+    ],
+    [
+     "7",
+     "Cell resistance and BMS thresholds as configured",
+     "voltage sag, BMS limits and warnings",
+     "BMS configuration dump; pulse test on the pack"
+    ],
+    [
+     "8",
+     "Mass split and centre of gravity",
+     "handling on slopes, track loads",
+     "weigh each track side; tilt test"
+    ],
+    [
+     "9",
+     "Tilt alarm of the companion (NavLite, Phase 2): 22 deg pitch, the same thin margin over the 20 deg design slope",
+     "Phase 2 navigation on slopes",
+     "raise it with the MCU's TILT_WARN, after the level calibration"
+    ],
+    [
+     "10",
+     "Holding brake data: static and dynamic torque and the bristle stiffness of the elasto-plastic brake model (D64) are estimates",
+     "holding on slopes, stop distance and gearbox peak torque (T8, T9)",
+     "brake data sheet; slope hold with the motors off (calibration test 3)"
+    ],
+    [
+     "11",
+     "Turning on the short real track: gauge factor 1.417 (high-fidelity model) against 1.266 (Wong), unit test T10",
+     "turn torques, gauge factor used by the MCU and the guidance",
+     "re-run `structure_identify_chi` after the relaxation-length fix; compare with the turn test (calibration test 2)"
+    ],
+    [
+     "12",
+     "MCU unit test TEL27 reads the mode at the last sample of the run",
+     "verification only",
+     "check the first mode after the link loss instead of the last sample"
+    ],
+    [
+     "13",
+     "Code generation of `Shaddad_MCU`: the field `Ts.log` is a reserved C name",
+     "embedded code (Simulink Coder is now installed)",
+     "rename the field in `shaddad_params` and its users"
+    ],
+    [
+     "14",
+     "Traction fuses and BMS: with 125 A per side (two 55 A ESC channels), any overload that blows the fuse within minutes exceeds the 150 A BMS limit, so the BMS switches the whole pack off first; the fuse only clears short circuits (T-PWR-06b)",
+     "fault isolation of one track side; T-PWR-06b",
+     "decide: accept the BMS as the overload protection and rewrite T-PWR-06b, or fuse each ESC channel (4 x about 63 A: 1.5 x = 95 A, below the BMS limit)"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Calibration plan"
+  },
+  {
+   "type": "p",
+   "text": "Six short tests on the real robot close most of the gap. Each result goes into `params/`, the affected models are regenerated and the tests are run again, as in {fig:M28_mbd_workflow.png}:"
+  },
+  {
+   "type": "numbered",
+   "items": [
+    "**Speed steps and coast-down** on farm soil, logging the ESC currents and speeds: motor constants, gear losses, rolling resistance.",
+    "**Turns at fixed track-speed ratios**: gauge factor per soil.",
+    "**Slope hold** with the motors off: brake torque and the CG.",
+    "**Pack current pulses** at three states of charge: cell resistance and polarisation.",
+    "**A sprayer shift** with the energy logged by the BMS: energy per metre and the end-of-shift state of charge.",
+    "**IMU level calibration** with the robot on level ground at commissioning: the mean MCU roll and pitch go into `P.electronics.imu_cal` (`scripts/imu_level_calibration.m`)."
+   ]
+  }
+ ]
+}

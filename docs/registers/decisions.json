@@ -1,0 +1,617 @@
+{
+ "about": "Index of the Shaddad decision log (NASL-EMS-HBK-001 section 8.2). The decision records themselves are the decisions table of docs/architecture.md (D-numbers); the owner's answers word for word are in the journal (tools/dashboard/journal.jsonl, kind \"decision\"). Regenerate this index after every new D-row.",
+ "updated": "2026-11-23",
+ "count": 122,
+ "decisions": [
+  {
+   "id": "D1",
+   "title": "Stateflow",
+   "where": "docs/architecture.md:59"
+  },
+  {
+   "id": "D2",
+   "title": "Motor-controller split and CAN protocol",
+   "where": "docs/architecture.md:60"
+  },
+  {
+   "id": "D3",
+   "title": "Motor encoders",
+   "where": "docs/architecture.md:61"
+  },
+  {
+   "id": "D4",
+   "title": "Contactor / precharge ownership",
+   "where": "docs/architecture.md:62"
+  },
+  {
+   "id": "D5",
+   "title": "BMS hardware and CAN map",
+   "where": "docs/architecture.md:63"
+  },
+  {
+   "id": "D6",
+   "title": "CAN modelling",
+   "where": "docs/architecture.md:64"
+  },
+  {
+   "id": "D7",
+   "title": "LV electronics loads",
+   "where": "docs/architecture.md:65"
+  },
+  {
+   "id": "D8",
+   "title": "Safety chain",
+   "where": "docs/architecture.md:66"
+  },
+  {
+   "id": "D9",
+   "title": "Implements",
+   "where": "docs/architecture.md:67"
+  },
+  {
+   "id": "D10",
+   "title": "Environment / terrain ownership",
+   "where": "docs/architecture.md:68"
+  },
+  {
+   "id": "D11",
+   "title": "Frames",
+   "where": "docs/architecture.md:69"
+  },
+  {
+   "id": "D12",
+   "title": "Accelerometer sign",
+   "where": "docs/architecture.md:70"
+  },
+  {
+   "id": "D13",
+   "title": "Rates",
+   "where": "docs/architecture.md:71"
+  },
+  {
+   "id": "D14",
+   "title": "Plant packaging",
+   "where": "docs/architecture.md:72"
+  },
+  {
+   "id": "D15",
+   "title": "Solver Configuration / references",
+   "where": "docs/architecture.md:73"
+  },
+  {
+   "id": "D16",
+   "title": "Physical port names",
+   "where": "docs/architecture.md:74"
+  },
+  {
+   "id": "D17",
+   "title": "Battery mass and energy",
+   "where": "docs/architecture.md:75"
+  },
+  {
+   "id": "D18",
+   "title": "RC channel map",
+   "where": "docs/architecture.md:76"
+  },
+  {
+   "id": "D19",
+   "title": "MCU <-> companion link",
+   "where": "docs/architecture.md:77"
+  },
+  {
+   "id": "D20",
+   "title": "AUTO hand-shake",
+   "where": "docs/architecture.md:78"
+  },
+  {
+   "id": "D21",
+   "title": "RC link loss behaviour",
+   "where": "docs/architecture.md:79"
+  },
+  {
+   "id": "D22",
+   "title": "Collision / geofence monitor",
+   "where": "docs/architecture.md:80"
+  },
+  {
+   "id": "D23",
+   "title": "Perception -> GNC",
+   "where": "docs/architecture.md:81"
+  },
+  {
+   "id": "D24",
+   "title": "Vision sprayer detector",
+   "where": "docs/architecture.md:82"
+  },
+  {
+   "id": "D25",
+   "title": "MCU tilt / NavLite",
+   "where": "docs/architecture.md:83"
+  },
+  {
+   "id": "D26",
+   "title": "Variant names",
+   "where": "docs/architecture.md:84"
+  },
+  {
+   "id": "D27",
+   "title": "Parameters / buses",
+   "where": "docs/architecture.md:85"
+  },
+  {
+   "id": "D28",
+   "title": "Regen into a full pack",
+   "where": "docs/architecture.md:86"
+  },
+  {
+   "id": "D29",
+   "title": "E-stop category",
+   "where": "docs/architecture.md:87"
+  },
+  {
+   "id": "D30",
+   "title": "Safety-chain re-arm (blocker)",
+   "where": "docs/architecture.md:96"
+  },
+  {
+   "id": "D31",
+   "title": "Code-generation toolchain (blocker)",
+   "where": "docs/architecture.md:97"
+  },
+  {
+   "id": "D32",
+   "title": "Rate transitions",
+   "where": "docs/architecture.md:98"
+  },
+  {
+   "id": "D33",
+   "title": "Deceleration chain",
+   "where": "docs/architecture.md:99"
+  },
+  {
+   "id": "D34",
+   "title": "RC failsafe semantics",
+   "where": "docs/architecture.md:100"
+  },
+  {
+   "id": "D35",
+   "title": "Simscape network connectivity (blocker)",
+   "where": "docs/architecture.md:101"
+  },
+  {
+   "id": "D36",
+   "title": "Loop breakers (explicit, tasking-independent)",
+   "where": "docs/architecture.md:102"
+  },
+  {
+   "id": "D37",
+   "title": "RC latency budget",
+   "where": "docs/architecture.md:103"
+  },
+  {
+   "id": "D38",
+   "title": "Companion deployment and CAN-FD",
+   "where": "docs/architecture.md:104"
+  },
+  {
+   "id": "D39",
+   "title": "Track shear model and gauge factor",
+   "where": "docs/architecture.md:105"
+  },
+  {
+   "id": "D40",
+   "title": "Energy audit",
+   "where": "docs/architecture.md:106"
+  },
+  {
+   "id": "D41",
+   "title": "GNC <-> MCU timing",
+   "where": "docs/architecture.md:107"
+  },
+  {
+   "id": "D42",
+   "title": "Collision / clearance monitor",
+   "where": "docs/architecture.md:108"
+  },
+  {
+   "id": "D43",
+   "title": "GNC command envelope",
+   "where": "docs/architecture.md:109"
+  },
+  {
+   "id": "D44",
+   "title": "RC loss in AUTO",
+   "where": "docs/architecture.md:110"
+  },
+  {
+   "id": "D45",
+   "title": "Charging at 45-50 C",
+   "where": "docs/architecture.md:111"
+  },
+  {
+   "id": "D46",
+   "title": "Shift duty and power budget",
+   "where": "docs/architecture.md:112"
+  },
+  {
+   "id": "D47",
+   "title": "MCU tilt estimate",
+   "where": "docs/architecture.md:113"
+  },
+  {
+   "id": "D48",
+   "title": "BMS estimation at end of life",
+   "where": "docs/architecture.md:114"
+  },
+  {
+   "id": "D49",
+   "title": "Navigation error model",
+   "where": "docs/architecture.md:115"
+  },
+  {
+   "id": "D50",
+   "title": "ESC speed loop",
+   "where": "docs/architecture.md:116"
+  },
+  {
+   "id": "D51",
+   "title": "Gearbox rating",
+   "where": "docs/architecture.md:117"
+  },
+  {
+   "id": "D52",
+   "title": "Drive variants and thermal ports",
+   "where": "docs/architecture.md:118"
+  },
+  {
+   "id": "D53",
+   "title": "Turning on slopes",
+   "where": "docs/architecture.md:119"
+  },
+  {
+   "id": "D54",
+   "title": "Greenhouse inset",
+   "where": "docs/architecture.md:120"
+  },
+  {
+   "id": "D55",
+   "title": "Scan-to-map localisation cost",
+   "where": "docs/architecture.md:121"
+  },
+  {
+   "id": "D56",
+   "title": "Simulation speed",
+   "where": "docs/architecture.md:122"
+  },
+  {
+   "id": "D57",
+   "title": "GNC mission plan",
+   "where": "docs/architecture.md:123"
+  },
+  {
+   "id": "D58",
+   "title": "Parameters, runs and workers",
+   "where": "docs/architecture.md:124"
+  },
+  {
+   "id": "D59",
+   "title": "Library blocks instead of MATLAB Functions",
+   "where": "docs/architecture.md:125"
+  },
+  {
+   "id": "D60",
+   "title": "MCU HW inputs and bus-off injection",
+   "where": "docs/architecture.md:126"
+  },
+  {
+   "id": "D61",
+   "title": "LV rail assignment",
+   "where": "docs/architecture.md:127"
+  },
+  {
+   "id": "D62",
+   "title": "Minor consistency fixes",
+   "where": "docs/architecture.md:128"
+  },
+  {
+   "id": "D63",
+   "title": "Navigation EKF rate structure",
+   "where": "docs/architecture.md:129"
+  },
+  {
+   "id": "D64",
+   "title": "Drive tuning, brake model and benches for the four-motor robot",
+   "where": "docs/architecture.md:130"
+  },
+  {
+   "id": "D65",
+   "title": "BMS warnings inform, they do not derate",
+   "where": "docs/architecture.md:131"
+  },
+  {
+   "id": "D66",
+   "title": "The MCU yaw loop rests at commanded standstill",
+   "where": "docs/architecture.md:132"
+  },
+  {
+   "id": "D67",
+   "title": "The GNC rides out the ESC unpark and turns round before it rejoins",
+   "where": "docs/architecture.md:133"
+  },
+  {
+   "id": "D68",
+   "title": "Zero-mean GNSS velocity and an honest along-aisle scan match",
+   "where": "docs/architecture.md:134"
+  },
+  {
+   "id": "D69",
+   "title": "T7 judges the position sigma across the lane, with hysteresis",
+   "where": "docs/architecture.md:135"
+  },
+  {
+   "id": "D70",
+   "title": "MATLAB Functions for seven logic-only block networks",
+   "where": "docs/architecture.md:136"
+  },
+  {
+   "id": "D71",
+   "title": "Soft stops end on the brakes, with STOP_FAIL as the STO backup",
+   "where": "docs/architecture.md:137"
+  },
+  {
+   "id": "D72",
+   "title": "Person protection: lost scan stops the robot, field from the implement, implement off for the rest of the hold",
+   "where": "docs/architecture.md:138"
+  },
+  {
+   "id": "D73",
+   "title": "IMU loss handling",
+   "where": "docs/architecture.md:139"
+  },
+  {
+   "id": "D74",
+   "title": "Always-on descent speed cap; no reversing with the tiller",
+   "where": "docs/architecture.md:140"
+  },
+  {
+   "id": "D75",
+   "title": "CR-001: the full-tank sprayer's operating limit on descents",
+   "where": "docs/architecture.md:141"
+  },
+  {
+   "id": "D76",
+   "title": "The scope of this phase: mowing, with the charter as its baseline",
+   "where": "docs/architecture.md:142"
+  },
+  {
+   "id": "D77",
+   "title": "Gate G0 passed with actions",
+   "where": "docs/architecture.md:143"
+  },
+  {
+   "id": "D78",
+   "title": "The plan after G0: a safety programme, version control, model credibility and a schedule",
+   "where": "docs/architecture.md:144"
+  },
+  {
+   "id": "D79",
+   "title": "The greenhouse rule: people out of the robot's zone while it mows",
+   "where": "docs/architecture.md:145"
+  },
+  {
+   "id": "D80",
+   "title": "The safety plan approved and the safety goals accepted",
+   "where": "docs/architecture.md:146"
+  },
+  {
+   "id": "D81",
+   "title": "Implement mounting and deck rules",
+   "where": "docs/architecture.md:147"
+  },
+  {
+   "id": "D82",
+   "title": "CR-003: a safe stop is measured by the park criterion",
+   "where": "docs/architecture.md:148"
+  },
+  {
+   "id": "D83",
+   "title": "The descent table's IMU error bound: 0.75 deg",
+   "where": "docs/architecture.md:149"
+  },
+  {
+   "id": "D84",
+   "title": "A person stop resumes only on the operator's command",
+   "where": "docs/architecture.md:150"
+  },
+  {
+   "id": "D85",
+   "title": "An IMU fault stops autonomous work; RC driving limps under the steepest-slope cap",
+   "where": "docs/architecture.md:151"
+  },
+  {
+   "id": "D86",
+   "title": "The E-stop stops traction as category 0",
+   "where": "docs/architecture.md:152"
+  },
+  {
+   "id": "D87",
+   "title": "The resume pivot only where the footprint fits",
+   "where": "docs/architecture.md:153"
+  },
+  {
+   "id": "D88",
+   "title": "After a reset the robot waits in FAULT for the operator",
+   "where": "docs/architecture.md:154"
+  },
+  {
+   "id": "D89",
+   "title": "Navigation validity is a health flag; the mission gate judges accuracy",
+   "where": "docs/architecture.md:155"
+  },
+  {
+   "id": "D90",
+   "title": "The RC limp speed of D85",
+   "where": "docs/architecture.md:156"
+  },
+  {
+   "id": "D91",
+   "title": "Every switch-on waits for the operator's reset",
+   "where": "docs/architecture.md:157"
+  },
+  {
+   "id": "D92",
+   "title": "After a protective stop the blades restart only on the operator's command",
+   "where": "docs/architecture.md:158"
+  },
+  {
+   "id": "D93",
+   "title": "A low charge in an operator's pause: alert and wait",
+   "where": "docs/architecture.md:159"
+  },
+  {
+   "id": "D94",
+   "title": "Hot-weather charging: the sealed pack charged only when cool",
+   "where": "docs/architecture.md:160"
+  },
+  {
+   "id": "D95",
+   "title": "The 1 kW motor stays the default, as a planned upgrade",
+   "where": "docs/architecture.md:161"
+  },
+  {
+   "id": "D96",
+   "title": "The delivered electronics are the baseline, provisionally",
+   "where": "docs/architecture.md:162"
+  },
+  {
+   "id": "D97",
+   "title": "The dock stays the twin's in this phase",
+   "where": "docs/architecture.md:163"
+  },
+  {
+   "id": "D98",
+   "title": "Precharge limits that fit any hardware, with an early short check",
+   "where": "docs/architecture.md:164"
+  },
+  {
+   "id": "D99",
+   "title": "VFH is the default bypass, gated by the hold and the footprint",
+   "where": "docs/architecture.md:165"
+  },
+  {
+   "id": "D100",
+   "title": "The scenario criteria of S4, S5, S6, S2 and T10",
+   "where": "docs/architecture.md:166"
+  },
+  {
+   "id": "D101",
+   "title": "No fixed shift: a mowing mission on one charge",
+   "where": "docs/architecture.md:167"
+  },
+  {
+   "id": "D102",
+   "title": "A scripted checklist on every documentation task",
+   "where": "docs/architecture.md:168"
+  },
+  {
+   "id": "D103",
+   "title": "The Kingdom of Saudi Arabia, with every standard dated",
+   "where": "docs/architecture.md:169"
+  },
+  {
+   "id": "D104",
+   "title": "The detection time of a wrong but plausible IMU",
+   "where": "docs/architecture.md:170"
+  },
+  {
+   "id": "D105",
+   "title": "The pack in storage",
+   "where": "docs/architecture.md:171"
+  },
+  {
+   "id": "D106",
+   "title": "The greenhouse inset widened to 0.50 m",
+   "where": "docs/architecture.md:172"
+  },
+  {
+   "id": "D107",
+   "title": "A work rate for the greenhouse",
+   "where": "docs/architecture.md:173"
+  },
+  {
+   "id": "D108",
+   "title": "A person walking head-on: a longer field ahead on open ground",
+   "where": "docs/architecture.md:174"
+  },
+  {
+   "id": "D109",
+   "title": "The test person's residual risks",
+   "where": "docs/architecture.md:175"
+  },
+  {
+   "id": "D110",
+   "title": "The technical baseline of card G1-01",
+   "where": "docs/architecture.md:176"
+  },
+  {
+   "id": "D111",
+   "title": "The envelope narrowed: the tiller descends forward only, and wet loam to 18 deg",
+   "where": "docs/architecture.md:177"
+  },
+  {
+   "id": "D112",
+   "title": "Full sun: an interim operating rule until the sealed pack's S3 run",
+   "where": "docs/architecture.md:178"
+  },
+  {
+   "id": "D113",
+   "title": "Product certification in the Kingdom: a card for a later phase",
+   "where": "docs/architecture.md:179"
+  },
+  {
+   "id": "D114",
+   "title": "Test expectations set by their purpose",
+   "where": "docs/architecture.md:180"
+  },
+  {
+   "id": "D115",
+   "title": "The simplified vehicle model: measure first",
+   "where": "docs/architecture.md:181"
+  },
+  {
+   "id": "D116",
+   "title": "A generated layout baseline",
+   "where": "docs/architecture.md:182"
+  },
+  {
+   "id": "D117",
+   "title": "The ESC command time-out: the reset and a new arm recover the robot",
+   "where": "docs/architecture.md:183"
+  },
+  {
+   "id": "D118",
+   "title": "K1 on a hardware E-stop: closed for the 1.5 s delay",
+   "where": "docs/architecture.md:184"
+  },
+  {
+   "id": "D119",
+   "title": "The five BMS changes stay on card G2-PWR",
+   "where": "docs/architecture.md:185"
+  },
+  {
+   "id": "D120",
+   "title": "S4 stays a known failure until the footprint work",
+   "where": "docs/architecture.md:186"
+  },
+  {
+   "id": "D121",
+   "title": "D31's blocker resolved: C code builds and runs on this PC",
+   "where": "docs/architecture.md:187"
+  },
+  {
+   "id": "D122",
+   "title": "The five tests that stop with an error go to their class owners",
+   "where": "docs/architecture.md:188"
+  }
+ ]
+}

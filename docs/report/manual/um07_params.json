@@ -1,0 +1,27 @@
+{
+ "id": "um07_params",
+ "title": "Change Parameters and Rebuild Models",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "All numbers come from `params/param_<domain>.m` (structure, power, drive, electronics, rc, sensors, gnc, sim, world). Edit the file, then reload the parameters before the next run:"
+  },
+  {
+   "type": "code",
+   "text": "shaddad_params();                        % reload P after editing a param file\nP.electronics.rcmap.deadband = 0.08;     % quick test: base workspace only, not saved"
+  },
+  {
+   "type": "p",
+   "text": "If you change model structure (blocks, wiring), change the build script and regenerate only the affected part:"
+  },
+  {
+   "type": "code",
+   "text": "build_drive({'esc'});          % regenerate one drive file\nbuild_shaddad_mcu('model');    % regenerate the MCU model only"
+  },
+  {
+   "type": "note",
+   "kind": "warning",
+   "text": "Do not run `build_shaddad_mcu()` or `build_shaddad_mcu('all')`: they overwrite the finished firmware units with stubs."
+  }
+ ]
+}

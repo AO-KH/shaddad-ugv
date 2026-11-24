@@ -1,0 +1,79 @@
+{
+ "id": "mb07_sprayer",
+ "title": "Sprayer Module",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The sprayer module is the implement of the real robot. The spec sheet gives its dry mass (50 kg); the photo ({fig:M03_sprayer_pump.jpg}) shows a brass piston pump with a pressure regulator under the chassis and a 12 x 8 mm high-pressure hose. Tank size, pump flow and nozzles are estimated."
+  },
+  {
+   "type": "figure",
+   "file": "M03_sprayer_pump.jpg",
+   "caption": "Sprayer pump under the chassis (source photo): brass piston pump with pressure regulator and high-pressure hose."
+  },
+  {
+   "type": "table",
+   "id": "tab_sprayer",
+   "caption": "Sprayer module: real robot and model",
+   "header": [
+    "Item",
+    "Real robot",
+    "Model value",
+    "Tag"
+   ],
+   "widths": [
+    22,
+    32,
+    32,
+    14
+   ],
+   "rows": [
+    [
+     "Module mass",
+     "50 kg dry",
+     "50 kg, on the deck behind the centre",
+     "[DATA]"
+    ],
+    [
+     "Tank",
+     "-",
+     "40 L (40 kg of liquid when full); liquid mass and CG follow the fill level",
+     "[EST]"
+    ],
+    [
+     "Pump",
+     "brass piston pump with pressure regulator",
+     "positive-displacement pump, about 9 L/min, bypass to 3 bar",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Pump motor",
+     "not visible in the photos",
+     "24 V PM DC motor, PWM driver with soft start",
+     "[EST]"
+    ],
+    [
+     "Boom and nozzles",
+     "-",
+     "1.2 m boom, 8 nozzles, 8 W valve each",
+     "[EST]"
+    ],
+    [
+     "Hose",
+     "12 mm OD x 8 mm ID, high pressure",
+     "pressure losses lumped in the pump model",
+     "[DATA]"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "In the model the sprayer is the `Impl_Sprayer` variant (`VC_IMPL = 3`). It draws its power through the implement contactor K3 and the 24 V rail, and the liquid in the tank is a variable point mass, so the robot gets lighter as it sprays. The spec render shows the module towed on a caster wheel; the model mounts it on the deck, which keeps the same mass with a simpler structure model."
+  },
+  {
+   "type": "figure",
+   "file": "M34_robot3d_sprayer.png",
+   "caption": "3-D view of the model with the sprayer module: 40 L tank on the deck and the 1.2 m boom with 8 nozzles at the rear."
+  }
+ ]
+}

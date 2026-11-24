@@ -1,0 +1,41 @@
+# Keep every file's line endings exactly as they are: the project mixes CRLF and LF on purpose,
+# and its tools check some files byte for byte.
+* -text
+
+# MATLAB and Simulink binary files
+*.fig binary
+*.mat binary
+*.mdl binary
+*.mdlp binary
+*.mexa64 binary
+*.mexw64 binary
+*.mexmaci64 binary
+*.mlapp binary
+*.mldatx binary
+*.mlproj binary
+*.mlx binary
+*.p binary
+*.sfx binary
+*.sldd binary
+*.slmx binary
+*.slreqx binary
+*.sltx binary
+*.slx binary
+*.slxc binary
+*.slxp binary
+
+# Other binary files
+*.docx binary
+*.xlsx binary
+*.pptx binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svgz binary
+*.stl binary
+*.zip binary
+*.exe binary
+*.dll binary

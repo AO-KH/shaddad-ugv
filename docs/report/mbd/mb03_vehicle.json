@@ -1,0 +1,151 @@
+{
+ "id": "mb03_vehicle",
+ "title": "Vehicle: Chassis, Tracks and Mass",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The XMachines MAX is a rubber-tracked carrier with a sprocket and an idler at the ends of each track and three road wheels between them. The red body carries the battery and the electronics; a deck rail on top takes the implement. The spec sheet ({fig:M01_spec_sheet.png}) gives the overall size and the masses; the track geometry was scaled from its side and front views."
+  },
+  {
+   "type": "figure",
+   "file": "M01_spec_sheet.png",
+   "caption": "XMachines MAX dimension and weight sheet (source photo): 1730 x 780 x 570 mm with the towed module, 220 kg robot + 50 kg module."
+  },
+  {
+   "type": "table",
+   "id": "tab_vehicle",
+   "caption": "Vehicle: real robot and model",
+   "header": [
+    "Item",
+    "Real robot",
+    "Model value",
+    "Tag"
+   ],
+   "widths": [
+    27,
+    30,
+    29,
+    14
+   ],
+   "rows": [
+    [
+     "Overall size",
+     "1730 x 780 x 570 mm with the towed module",
+     "body 1.00 x 0.78 x 0.57 m",
+     "[DATA]"
+    ],
+    [
+     "Track gauge B (centre to centre)",
+     "from the front view",
+     "0.60 m",
+     "[EST]"
+    ],
+    [
+     "Track width b / contact length L",
+     "from the side view",
+     "0.13 m / 0.75 m",
+     "[EST]"
+    ],
+    [
+     "Sprocket pitch radius",
+     "from the side view",
+     "0.090 m",
+     "[EST]"
+    ],
+    [
+     "Road wheels",
+     "3 per side",
+     "3 per side, radius 0.077 m",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Ground clearance",
+     "-",
+     "0.12 m",
+     "[EST]"
+    ],
+    [
+     "Mass, robot",
+     "220 kg",
+     "220.0 kg as built; 226.0 kg with the 1.0 kW drives (14-part mass table)",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Mass, sprayer module",
+     "50 kg dry",
+     "50 kg + 40 kg liquid (40 L tank)",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Centre of gravity",
+     "-",
+     "x = +0.008 m, height 0.27 m (robot alone)",
+     "computed"
+    ],
+    [
+     "Top speed",
+     "about 5 km/h",
+     "1.41 m/s at 3000 rpm motor speed",
+     "[EST]"
+    ]
+   ]
+  },
+  {
+   "type": "figure",
+   "file": "M26_dimensions.png",
+   "caption": "Model geometry of the real robot: side and top views with the dimensions used by the structure model and the centre of gravity."
+  },
+  {
+   "type": "h2",
+   "text": "Mass breakdown"
+  },
+  {
+   "type": "p",
+   "text": "Only the total of 220 kg and the 50 kg module are known. The model splits the total into fourteen rigid parts with their own positions and sizes, so the centre of gravity and the inertia follow from the layout ({fig:M20_mass_breakdown.png}). The battery (18.5 kg) is computed from its 195 cells, its 3 mm aluminium box and the BMS and busbars; the four drive units sit at the sprockets, and the chassis frame takes the remainder of the as-built 220 kg (81.7 kg). The proposed 1.0 kW units add 1.5 kg each, so the modelled robot weighs 226 kg. The configurations add the implement and its liquid."
+  },
+  {
+   "type": "figure",
+   "file": "M20_mass_breakdown.png",
+   "caption": "Mass model: (a) the mass table with the four 1.0 kW drive units (226 kg), (b) total mass per configuration; the mower and the tiller are model implements that the real robot does not carry."
+  },
+  {
+   "type": "h2",
+   "text": "Structure and track model"
+  },
+  {
+   "type": "p",
+   "text": "The structure model (`structure_plant`) is a 6-degree-of-freedom rigid body on two tracks. Each track touches the ground at 7 contact points along its 0.75 m contact length. At every point the model computes the normal load from the terrain height map (DEM) and the sinkage, and the tractive force from the slip with the Janosi-Hanamoto shear law and a Dahl bristle state for the transition through zero speed. The shear displacement builds up over a relaxation length of half the contact length (0.375 m). Until this version it had kept the 0.50 m of the former 1.00 m track, so the tracks slipped like a longer track: 25 % less slip than the analytic reference of unit test T4. Soil classes (sand, sandy loam farm soil, wet loam, greenhouse floor, asphalt) set the cohesion, friction angle and shear modulus."
+  },
+  {
+   "type": "figure",
+   "file": "F12_structure_plant.png",
+   "caption": "Structure plant model: rigid body, track contact points and terrain."
+  },
+  {
+   "type": "h2",
+   "text": "Skid-steer gauge factor"
+  },
+  {
+   "type": "p",
+   "text": "A tracked robot turns by driving its tracks at different speeds. Because the tracks slip sideways while turning, the effective gauge is larger than the geometric 0.60 m. The ratio is the gauge factor chi = B_eff / B; the MCU, the navigation filter and the guidance use it to convert track speeds into a yaw rate. `structure_identify_chi` identified it with the high-fidelity track model on the real geometry: **1.394 on farm soil** (1.32-1.49 over the five soils). It is larger than on the former, wider model geometry, as {fig:M25_chi_soils.png} shows. It was identified before the relaxation-length fix; the high-fidelity model now gives 1.417 for the same 2 m turn (1.7 % higher), so a new identification is listed as an open item."
+  },
+  {
+   "type": "figure",
+   "file": "M25_chi_soils.png",
+   "caption": "Skid-steer gauge factor per soil: former model geometry, real geometry (2 m turn radius, the value used by the firmware) and real geometry in a spot turn."
+  },
+  {
+   "type": "h2",
+   "text": "3-D view of the model"
+  },
+  {
+   "type": "p",
+   "text": "The live 3-D view (`shaddad.Robot3DView`) draws the model with the real robot's shape: tracks with three road wheels, the red body, the deck rail and, with the sprayer module, the 40 L tank and the boom. It moves with the simulated pose and belt speeds during a run ({fig:M33_robot3d_side.png})."
+  },
+  {
+   "type": "figure",
+   "file": "M33_robot3d_side.png",
+   "caption": "Live 3-D view of the real-robot model (side camera, MANUAL mode, both belts at 0.8 m/s)."
+  }
+ ]
+}

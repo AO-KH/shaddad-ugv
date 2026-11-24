@@ -1,0 +1,93 @@
+{
+ "about": "The Shaddad project's configuration for the framework's tools (NASL-EMS-HBK-001 chapter 12; template framework/templates/project_config.json).",
+ "project": "Shaddad UGV",
+ "code": "SHD",
+ "entity": "NASL Technologies (Robotat)",
+ "doc_prefix": "NASL-SHD",
+ "owner": "the user (the project owner: the approval authority, the change board and the gate approver)",
+ "classification": "Internal",
+ "subsystems": [
+  {
+   "wbs": "3.1",
+   "id": "STR",
+   "name": "Structure and world",
+   "lead": "structure engineer"
+  },
+  {
+   "wbs": "3.2",
+   "id": "PWR",
+   "name": "Power and BMS",
+   "lead": "power and BMS engineer"
+  },
+  {
+   "wbs": "3.3",
+   "id": "DRV",
+   "name": "Drive",
+   "lead": "drive engineer"
+  },
+  {
+   "wbs": "3.4",
+   "id": "MCU",
+   "name": "MCU firmware and electronics",
+   "lead": "MCU firmware engineer"
+  },
+  {
+   "wbs": "3.5",
+   "id": "COM",
+   "name": "Comms and RC",
+   "lead": "electronics and comms engineer"
+  },
+  {
+   "wbs": "3.6",
+   "id": "NAV",
+   "name": "Sensors and navigation",
+   "lead": "sensors and navigation engineer"
+  },
+  {
+   "wbs": "3.7",
+   "id": "GNC",
+   "name": "GNC and Companion",
+   "lead": "GNC engineer"
+  }
+ ],
+ "paths": {
+  "cards": "tools/dashboard/project_cards.json",
+  "registers": "docs/registers",
+  "requirements": "docs/requirements",
+  "documents": "docs",
+  "reports": "work/reports"
+ },
+ "life_cycle": {
+  "gates": [
+   "G0",
+   "G1",
+   "G2",
+   "G3",
+   "BUILD",
+   "G4",
+   "G5",
+   "G6",
+   "G7"
+  ],
+  "tailoring": "G0 held as a record of the project start (2026-10); SRR and SFR merged into G1; PDR and CDR per subsystem; G4 per campaign (simulation, bench and HIL, field); G6 not applicable until production starts. The full tailoring is in the project plan NASL-SHD-PMP-001."
+ },
+ "team": {
+  "project owner": "the user",
+  "lead systems engineer": "the main session",
+  "structure engineer": "shaddad-structure",
+  "power and BMS engineer": "shaddad-bms-power",
+  "drive engineer": "shaddad-drive",
+  "MCU firmware engineer": "shaddad-mcu",
+  "electronics and comms engineer": "shaddad-electronics-comms",
+  "sensors and navigation engineer": "shaddad-sensors-nav",
+  "GNC engineer": "shaddad-gnc",
+  "integration engineer": "shaddad-integration",
+  "test engineer": "shaddad-tester",
+  "independent reviewer": "shaddad-reviewer",
+  "configuration and documentation engineer": "shaddad-docs-keeper",
+  "data analyst": "shaddad-log-analyst",
+  "technical writer": "shaddad-report-writer",
+  "functional safety engineer": "shaddad-safety"
+ },
+ "team_note": "Internal roster: who fills each role. The cards and the project documents name roles only (the owner's request of 2026-11-15)."
+}

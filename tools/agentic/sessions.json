@@ -1,0 +1,104 @@
+{
+ "about": "One Claude Code session per team member, linked to the lead's session (the user's request of 2026-11-16). The lead starts a member's session with its first task and sends its later tasks to the same session (SendMessage to its id). One row per role; id and started stay null until the role's first task.",
+ "updated": "2026-11-18T01:23:32",
+ "sessions": {
+  "shaddad-structure": {
+   "role": "structure engineer",
+   "name": "structure-engineer",
+   "model": "opus",
+   "id": "local_af3e1377-edc7-4eea-b955-ba7d33b3fed0",
+   "started": "2026-11-16T00:36:16"
+  },
+  "shaddad-bms-power": {
+   "role": "power and BMS engineer",
+   "name": "power-engineer",
+   "model": "opus",
+   "id": "local_b61a3c77-83e9-4ea6-8059-1239600f4d80",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-drive": {
+   "role": "drive engineer",
+   "name": "drive-engineer",
+   "model": "opus",
+   "id": "local_f9a9c94d-356b-479c-bdde-c67b268f2d2a",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-mcu": {
+   "role": "MCU firmware engineer",
+   "name": "mcu-engineer",
+   "model": "opus",
+   "id": "local_9bfae18b-1ec3-4596-a84a-d8dd25e94610",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-electronics-comms": {
+   "role": "electronics and comms engineer",
+   "name": "electronics-engineer",
+   "model": "opus",
+   "id": "local_f7645b83-2f91-4d36-89f6-c715336ff430",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-sensors-nav": {
+   "role": "sensors and navigation engineer",
+   "name": "sensors-engineer",
+   "model": "opus",
+   "id": "local_337f614c-9fb0-4d91-9231-297ee9c48be3",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-gnc": {
+   "role": "GNC engineer",
+   "name": "gnc-engineer",
+   "model": "opus",
+   "id": "local_54326e20-05dc-4db5-aa18-be8602b1ef1b",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-integration": {
+   "role": "integration engineer",
+   "name": "integration-engineer",
+   "model": "opus",
+   "id": "local_ac59431f-c697-4836-81e7-78cdb774f2bc",
+   "started": "2026-11-16T00:36:16"
+  },
+  "shaddad-tester": {
+   "role": "test engineer",
+   "name": "test-engineer",
+   "model": "haiku",
+   "id": "local_6f484ee4-bc09-4a49-a1f6-a5a2f30cb76f",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-reviewer": {
+   "role": "independent reviewer",
+   "name": "independent-reviewer",
+   "model": "opus",
+   "id": "local_8f1ffcca-9839-4577-94c4-05c0aad6de6d",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-docs-keeper": {
+   "role": "configuration and documentation engineer",
+   "name": "docs-keeper",
+   "model": "opus",
+   "id": "local_3bfb735b-d233-491e-a0ed-17d18f91c93c",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-log-analyst": {
+   "role": "data analyst",
+   "name": "data-analyst",
+   "model": "opus",
+   "id": "local_ff14c009-6508-472c-a840-9f2bb9df6ede",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-report-writer": {
+   "role": "technical writer",
+   "name": "technical-writer",
+   "model": "opus",
+   "id": "local_553a41ba-499e-4aa3-ba27-eb1c2ceb2d25",
+   "started": "2026-11-16T00:44:09"
+  },
+  "shaddad-safety": {
+   "role": "functional safety engineer",
+   "name": "safety-engineer",
+   "model": "opus",
+   "id": "local_0c5a56a6-3ae5-4e2f-b9fb-f8f4027de455",
+   "started": "2026-11-16T01:09:59"
+  }
+ }
+}

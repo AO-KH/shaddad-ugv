@@ -1,0 +1,449 @@
+{
+ "id": "mb09_verification",
+ "title": "Verification",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The model is verified at three levels: unit benches per domain (`tests/`), system scenarios (`scripts/scenarios/scn_S*`) and the Phase 1 suite `run_phase1_tests`, which runs every case in a fresh MATLAB process and writes an HTML report. For the real robot the expected values of the tests were rewritten to follow from `P` (masses, gear ratio, current limits, number of cell groups), so the same tests now check the real-robot model."
+  },
+  {
+   "type": "h2",
+   "text": "Phase 1 suite, Full (four-motor model)"
+  },
+  {
+   "type": "p",
+   "text": "The Full suite has 23 cases: the six Quick cases (power-up, RC driving, corrupted SBUS frames, front E-stop and two unit classes), the slope and link-loss scenarios, five test drives and nine unit classes. It ran twice on the four-motor model on 27 October 2026. The first run (report `phase1_full_20261027_180406`) used the first form of decision D64 (Ki 0.060 and a wider breakaway velocity of the brake). It failed S8a and test drive D2, where the engaged brakes diverged in ESTOP, and the standstill check of S6a / S6b; these findings gave the final D64 (section 4.3). It also showed that the battery bench still referenced the former 16-group pack ({tab:tab_unitfix}). The second run on the final model is the result below."
+  },
+  {
+   "type": "p",
+   "text": "The Full suite ran on 27 October 2026 on the real-robot model: **17 of 23 cases PASS**, 2 FAIL, 4 KNOWN, 0 ERROR. The failing checks are explained in the next section."
+  },
+  {
+   "type": "table",
+   "id": "tab_full",
+   "caption": "Phase 1 Full suite on the real-robot model (report `work/reports/phase1_full_20261027_204314`)",
+   "header": [
+    "Case",
+    "What it tests",
+    "Result",
+    "Checks"
+   ],
+   "widths": [
+    16,
+    52,
+    11,
+    21
+   ],
+   "rows": [
+    [
+     "S0",
+     "Power-up and safety re-arm",
+     "PASS",
+     "11 pass"
+    ],
+    [
+     "S1",
+     "RC (SBUS) driving: speed, steering, stop distance, reverse, latency",
+     "PASS",
+     "12 pass, 1 blocked"
+    ],
+    [
+     "S6c",
+     "Corrupted SBUS bytes (1 %): frames rejected, robot keeps driving",
+     "PASS",
+     "6 pass"
+    ],
+    [
+     "S8a",
+     "Front hardware E-stop, reset and restart",
+     "PASS",
+     "6 pass"
+    ],
+    [
+     "U_rc_link",
+     "RC link: transmitter, SBUS encoder, radio, UART timing",
+     "PASS",
+     "13 pass"
+    ],
+    [
+     "U_elec_plant",
+     "Electronics plant: DI/ADC, watchdog, CAN networks",
+     "PASS",
+     "15 pass"
+    ],
+    [
+     "S2",
+     "Slope: 20 deg ramp with full sprayer, hold and restart",
+     "KNOWN",
+     "10 pass, 1 known"
+    ],
+    [
+     "S6a",
+     "Radio link lost: controlled stop, re-arm",
+     "KNOWN",
+     "6 pass, 1 known"
+    ],
+    [
+     "S6b",
+     "Silent SBUS line: controlled stop, re-arm",
+     "KNOWN",
+     "6 pass, 1 known"
+    ],
+    [
+     "S6d",
+     "Corrupted SBUS bytes (5 %): link loss, controlled stop",
+     "PASS",
+     "4 pass"
+    ],
+    [
+     "S8b",
+     "Remote E-stop (CH12): stop profile, latched",
+     "PASS",
+     "6 pass"
+    ],
+    [
+     "D1",
+     "Test drive: default demo (arcs, pivot turn, reverse)",
+     "PASS",
+     "7 pass"
+    ],
+    [
+     "D2",
+     "Test drive: remote E-stop at 12 s, reset at 17 s, resume",
+     "PASS",
+     "10 pass"
+    ],
+    [
+     "D3",
+     "Test drive: radio link lost 12-14 s, re-arm, resume",
+     "PASS",
+     "11 pass"
+    ],
+    [
+     "D4",
+     "Test drive with the mower mounted",
+     "PASS",
+     "7 pass"
+    ],
+    [
+     "D5",
+     "Test drive with the sprayer (full tank, heaviest load)",
+     "PASS",
+     "7 pass"
+    ],
+    [
+     "U_mcu_control",
+     "MCU control: mode manager, safety supervisor, vehicle control",
+     "FAIL",
+     "32 pass, 1 fail, 1 skipped"
+    ],
+    [
+     "U_mcu_platform",
+     "MCU platform: SBUS decoder, RC mapping, CAN codecs, tilt",
+     "KNOWN",
+     "19 pass, 4 known"
+    ],
+    [
+     "U_drive",
+     "Traction drive: ESC, motor, gearbox, brake, STO, undervoltage",
+     "PASS",
+     "25 pass, 4 skipped"
+    ],
+    [
+     "U_power_plant",
+     "Power: precharge, safety chain, LV rails, implement drives",
+     "PASS",
+     "21 pass"
+    ],
+    [
+     "U_pack_bms",
+     "Battery pack and BMS (fast tests)",
+     "PASS",
+     "14 pass, 1 skipped"
+    ],
+    [
+     "U_structure",
+     "Structure: chassis, tracks, soil contact",
+     "FAIL",
+     "15 pass, 1 fail"
+    ],
+    [
+     "U_world",
+     "World, terrain and environment",
+     "PASS",
+     "17 pass"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Deviations and their causes"
+  },
+  {
+   "type": "p",
+   "text": "Five checks fail on the final model ({tab:tab_dev}). Three are vehicle-level deviations accepted as known issues after the analysis of version 1.0 (user decision of 27 October 2026). The other two are unit tests whose causes lie outside the drive change; they are open items 11 and 12. U_mcu_platform also reports four known tests that still expect the stub units the MCU control units replaced (docs/STATUS.md 4.1)."
+  },
+  {
+   "type": "table",
+   "id": "tab_dev",
+   "caption": "Failing checks of the Full suite on the four-motor model and their causes",
+   "header": [
+    "Check",
+    "Model",
+    "Limit",
+    "Status",
+    "Cause"
+   ],
+   "widths": [
+    18,
+    12,
+    15,
+    10,
+    45
+   ],
+   "rows": [
+    [
+     "S2.v_mean",
+     "0.725 m/s",
+     ">= 0.75 m/s",
+     "KNOWN",
+     "about 9.5 % track slip at the 0.44 traction demand of the 316 kg robot on 20 deg (estimated track size)"
+    ],
+    [
+     "S6a.decel",
+     "1.100 m/s²",
+     "<= 1.05 m/s²",
+     "KNOWN",
+     "0.2 s catch-up of the speed loop at the start of the 1.0 m/s² controlled stop"
+    ],
+    [
+     "S6b.decel",
+     "1.099 m/s²",
+     "<= 1.05 m/s²",
+     "KNOWN",
+     "same as S6a (silent SBUS line instead of radio loss)"
+    ],
+    [
+     "U_mcu_control TEL27",
+     "STANDBY",
+     "CTRL_STOP",
+     "FAIL",
+     "the test reads the mode at the last sample, where the class-B stop has just ended; not related to the drive (open item 12)"
+    ],
+    [
+     "U_structure T10",
+     "1.417",
+     "1.266 ± 10 %",
+     "FAIL",
+     "gauge factor of the high-fidelity turn on the short real track against the analytic Wong model (open item 11)"
+    ]
+   ]
+  },
+  {
+   "type": "h3",
+   "text": "S2: tilt and ramp speed"
+  },
+  {
+   "type": "p",
+   "text": "With the IMU level calibration and TILT_WARN at 25 deg, the MCU estimate stays within about 1 deg of the true body pitch on the 20 deg ramp and TILT_WARN is never set ({fig:M44_s2_tilt_speed.png}a): the robot keeps its full speed limit and motor torque on its design slope. The remaining deviation is the ramp speed. With the belts at 0.80 m/s the tracks slip about 9.5 % at the tractive effort the 316 kg robot needs on 20 deg (0.44 of its weight), so the ground speed is 0.725 m/s against the 0.75 m/s criterion ({fig:M44_s2_tilt_speed.png}b, c). The slip is larger than in version 1.0 (about 7 %) because the track's relaxation length now matches the 0.75 m contact length (chapter 3). It depends on the estimated track size and the soil, and should be reviewed after the slope test (calibration test 2). During the 30 s hold on the ramp the engaged brakes keep the robot within 3 mm."
+  },
+  {
+   "type": "figure",
+   "file": "M44_s2_tilt_speed.png",
+   "caption": "S2 on the four-motor model: (a) true pitch, MCU estimate and the 25 deg TILT_WARN threshold, (b) MCU target, belt and ground speed against the 0.75 m/s criterion, (c) track slip and the MCU motor-torque limit."
+  },
+  {
+   "type": "h3",
+   "text": "S6a / S6b: deceleration of the controlled stop"
+  },
+  {
+   "type": "p",
+   "text": "After the radio loss the MCU ramps the speed reference down at 1.0 m/s². On farm soil the tracks' motion resistance alone decelerates the robot at about 1.05 m/s², so the stop needs almost no braking ({fig:M45_s6_stop.png}c). The MCU feed-forward subtracts the inertia torque from the driving torque the speed loop is holding, and the ESC speed loop follows the reference slightly late; when it catches up, the ground deceleration peaks at 1.10 m/s² for about 0.2 s before it settles at the shaped 1.0 m/s² ({fig:M45_s6_stop.png}b). The robot is at standstill 1.12 s after the loss is detected (limit 1.5 s), never enters ESTOP, and its peak deceleration stays far below the 2 m/s² of the E-stop."
+  },
+  {
+   "type": "figure",
+   "file": "M45_s6_stop.png",
+   "caption": "S6a on the four-motor model: (a) MCU speed reference, belt and ground speed, (b) ground deceleration (100 ms moving average) against the 1.0 m/s² shaper and the 1.05 m/s² criterion, (c) torque per motor and MCU feed-forward, (d) motor speed reference and actual; t = 0 at CTRL_STOP."
+  },
+  {
+   "type": "h3",
+   "text": "Handling of the deviations"
+  },
+  {
+   "type": "table",
+   "id": "tab_prop",
+   "caption": "Handling of the deviations",
+   "header": [
+    "Check",
+    "Handling",
+    "Note"
+   ],
+   "widths": [
+    20,
+    24,
+    56
+   ],
+   "rows": [
+    [
+     "S2.no_tilt",
+     "**Fixed**",
+     "IMU level calibration on level ground and TILT_WARN 25 deg (proposal of version 1.0, applied): passes."
+    ],
+    [
+     "S2.v_mean",
+     "**Accepted** (known issue)",
+     "Track slip at this tractive effort; review after the track is measured and the slope test is done (open item 1, calibration test 2), or set the criterion on the belt speed."
+    ],
+    [
+     "S6a.decel, S6b.decel",
+     "**Accepted** (known issues)",
+     "A 0.2 s transient, 5 % over the criterion. A softer stop jerk would remove it, but the stop jerk is shared with the E-stop profile."
+    ],
+    [
+     "U_mcu_control TEL27",
+     "open item 12",
+     "Test change only: check the first mode after the link loss."
+    ],
+    [
+     "U_structure T10",
+     "open item 11",
+     "Re-identify the gauge factor and compare with the turn test."
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "S8b (remote E-stop), whose mean deceleration was a known issue on the former robot, passes on the real-robot model, and so do S8a and test drive D2 with the elasto-plastic brake."
+  },
+  {
+   "type": "h2",
+   "text": "Unit tests on the four-motor model"
+  },
+  {
+   "type": "p",
+   "text": "Before the Full suite the affected unit classes were run on the four-motor model (153 tests). Most failures were not in the new drive itself: they were stale values from the change to the real robot that the new drive made visible. {tab:tab_unitfix} lists each finding, its cause and what was done."
+  },
+  {
+   "type": "table",
+   "id": "tab_unitfix",
+   "caption": "Unit-test findings on the four-motor model",
+   "header": [
+    "Test",
+    "Finding",
+    "Cause",
+    "Action"
+   ],
+   "widths": [
+    15,
+    25,
+    33,
+    27
+   ],
+   "rows": [
+    [
+     "`t_drive` T1, T2, T22",
+     "ramp overshoot 9.1 %, step overshoot 23 %, stop-profile error 0.23 m/s",
+     "the drive benches had kept the load of the former robot (300 kg per side on a 0.128 m sprocket) in their model workspace since they were built",
+     "the bench load follows the P of every run (`tb_drive_load`): 0.3 %, 7.9 %, 0.038 m/s"
+    ],
+    [
+     "`t_drive` T21",
+     "peak sensitivity 1.65 (bound 1.6)",
+     "the speed-PI gains were only scaled with the inertia at the real-robot change (one motor per side: Ms 2.25)",
+     "speed PI re-tuned on the two-mass model (D64): Ms 1.37"
+    ],
+    [
+     "`t_drive` T9, T10",
+     "STO peak sprocket torque 859 N m (limit 480 N m); quick-stop deceleration fit 0.61 m/s²",
+     "stick-slip of the two engaged brakes at the 1 ms step, shown once the bench had the right load",
+     "elasto-plastic brake (D64): 164 N m, 2.03 m/s²"
+    ],
+    [
+     "`t_pack_bms` (Full suite)",
+     "7 tests stop: subsystem reference `Pack_Grouped16` missing",
+     "the battery bench still referenced the former 16-group pack model; the 13-group pack of the real robot is `Pack_Grouped`",
+     "bench rebuilt (`build_tb_pack_bms`): 15 pass, 1 spec deviation"
+    ],
+    [
+     "`t_elec_plant` T-EL-16",
+     "48 V-side LV draw 123 W (105 ± 10 W)",
+     "four brakes instead of two: the two extra brake holds draw 23 W",
+     "criterion 105 W + the extra holds = 128 ± 10 W"
+    ],
+    [
+     "`t_power_plant` T-PWR-06b",
+     "the traction fuse does not blow within 150-300 s",
+     "the overload is now 1.5 x the 125 A fuse rating (187.5 A); the BMS sees more than its 150 A limit and opens the main contactor after 1.3 s, before the fuse",
+     "open item 14 (fuse and BMS coordination)"
+    ],
+    [
+     "`t_structure` T4, T7",
+     "track slip 25 % below the analytic value",
+     "the shear relaxation length had stayed at 0.50 m (half of the former 1.00 m track)",
+     "relaxation length = L/2 = 0.375 m: pass"
+    ],
+    [
+     "`t_structure` T10",
+     "gauge factor 1.417 against 1.266 from Wong's turn model (12 %, tolerance 10 %)",
+     "high-fidelity track model against the analytic turn on the short real track",
+     "open item 11"
+    ],
+    [
+     "`t_mcu_control` TEL27",
+     "STANDBY instead of CTRL_STOP at the end of the run",
+     "the class-B stop ends (standstill + 0.5 s) at the last sample of the 6 s run, which the test reads; the same with the former drive values",
+     "open item 12"
+    ],
+    [
+     "code generation",
+     "Simulink Coder stops on `Ts.log`",
+     "`log` is a reserved C name in the sample-time struct `Ts`; code generation is outside the Phase 1 suite",
+     "open item 13"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Tests updated for the real robot"
+  },
+  {
+   "type": "table",
+   "id": "tab_tests",
+   "caption": "Test changes for the real robot",
+   "header": [
+    "Test",
+    "Change"
+   ],
+   "widths": [
+    26,
+    74
+   ],
+   "rows": [
+    [
+     "`t_structure`",
+     "configuration masses 220 / 270 / 310 / 285 / 305 kg and the CG from the mass table; analytic sinkage, slip, acceleration and climbing references from `P`"
+    ],
+    [
+     "`t_drive`",
+     "torque, speed and current expectations from the motor of `P` and the 20:1 gear; bench load from `P` for every run; T6 (motor efficiency points) pending the motor data sheet"
+    ],
+    [
+     "`t_mcu_control`, `t_mcu_platform`",
+     "speed limits, overspeed stimulus and telemetry checks from the new limits; new IMU test `testGyroBiasPivot`"
+    ],
+    [
+     "`t_pack_bms`, `t_power_plant`, `t_elec_plant`",
+     "13 cell groups, 46.8 V nominal, BMS and charger limits from `P`; LV draw with the brake count; overload case from the fuse rating"
+    ],
+    [
+     "`t_gnc_tracking`, `t_gnc_mission`, `t_sensors`",
+     "footprint, corridor and sensor positions from the new geometry"
+    ],
+    [
+     "Scenarios S2-S5",
+     "gear and BMS limits, shift duration and end-of-shift SOC, obstacle corridor from `P`"
+    ]
+   ]
+  }
+ ]
+}

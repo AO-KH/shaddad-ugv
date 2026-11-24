@@ -1,0 +1,6 @@
+function f = nasl_fig(w_cm, h_cm)
+%NASL_FIG  White figure of the given size in centimetres (export at 200 dpi).
+f = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 w_cm h_cm], 'Visible', 'off', ...
+    'DefaultAxesFontName', 'Arial', 'DefaultAxesFontSize', 8, 'DefaultTextFontName', 'Arial', ...
+    'DefaultLegendFontSize', 7, 'DefaultLineLineWidth', 1.1);
+end

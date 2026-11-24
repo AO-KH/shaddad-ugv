@@ -1,0 +1,143 @@
+{
+ "id": "mb06_electronics",
+ "title": "Electronics and Firmware",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The electronics sit in a black steel box on the robot: the XMachines **XT_PS V1.0** control board carrying an **STM32 Nucleo-32**, a perfboard with optocouplers and resistors, an 8-channel logic-level shifter, and the cable conduits to the drives, the battery and the sprayer. The boards are glued and wired in place, so this chapter shows them as 3-D renders built in MATLAB from the photos (`docs/report/build/figtools/real_electronics_3d.m`). Part packages have their standard sizes; positions, silkscreen labels and colours follow the photos, and part functions are inferred from the silkscreen and the wiring."
+  },
+  {
+   "type": "figure",
+   "file": "M55_electronics_box_3d.png",
+   "caption": "Electronics box of the robot (3-D render after the photo): XT_PS control board with the Nucleo-32, perfboard with optocouplers, level shifter, cable conduits."
+  },
+  {
+   "type": "table",
+   "id": "tab_elec",
+   "caption": "Electronics: real boards and their place in the model",
+   "header": [
+    "Real board",
+    "Function on the robot",
+    "In the model"
+   ],
+   "widths": [
+    27,
+    37,
+    36
+   ],
+   "rows": [
+    [
+     "XT_PS V1.0 control board (XMachines)",
+     "48 V input with an on-board buck regulator, CAN connectors and transceiver, optocoupled inputs; carrier of the Nucleo-32",
+     "Electronics plant: LV supply, CAN networks, digital inputs (`Shaddad_Plant`)"
+    ],
+    [
+     "STM32 Nucleo-32",
+     "main controller: RC input, modes, safety, drive commands, CAN",
+     "`Shaddad_MCU` firmware model"
+    ],
+    [
+     "STM32 USB-C core board",
+     "second controller (function to be confirmed)",
+     "not modelled separately"
+    ],
+    [
+     "FT232RL USB-UART adapter",
+     "USB serial link to a PC (programming, logging)",
+     "not in the simulated signal path"
+    ],
+    [
+     "ADS1115 / ADS1015 ADC (I2C)",
+     "16-bit analog inputs, current sensor on the CUR header",
+     "ADC channels with quantisation and scaling in the electronics plant and `fw_adc_scaling`"
+    ],
+    [
+     "LM2596 buck module",
+     "5 V supply from a lower rail (max. 40 V input)",
+     "LV DC/DC converters (`LV_Distribution`)"
+    ],
+    [
+     "SPR V1.3 sprayer board (XMachines)",
+     "pump and nozzle drivers with optocoupled inputs",
+     "`Impl_Sprayer` pump driver and nozzle loads, `impl_ecu`"
+    ],
+    [
+     "Perfboard: optocouplers, level shifter",
+     "isolated digital I/O, 3.3 / 5 V level shifting",
+     "digital-input channels with debounce in the electronics plant"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Control board and main controller"
+  },
+  {
+   "type": "p",
+   "text": "The XT_PS board takes the 48 V battery voltage at its `+48V_IN` connector and makes its own low voltage with an on-board buck regulator. Two CAN connectors on its left edge lead to a transceiver (U3); two optocouplers (U5, U7) isolate digital inputs. The Nucleo-32 plugs into female headers whose pin labels (A0-A7, D13, 3V3, 5V, VIN) are printed on the board ({fig:M50_xt_ps_board_3d.png})."
+  },
+  {
+   "type": "figure",
+   "file": "M50_xt_ps_board_3d.png",
+   "caption": "XT_PS V1.0 control board with the STM32 Nucleo-32 (3-D render after electronics_box_xt_ps_nucleo.jpeg)."
+  },
+  {
+   "type": "p",
+   "text": "The firmware of the main controller is modelled in `Shaddad_MCU` as rate-monotonic tasks, as it would run on the STM32: `Task_1k` (1 ms) decodes the SBUS frames and runs the watchdog, `Task_5` (5 ms) reads the IMU and estimates tilt and yaw rate, `Task_10` (10 ms) maps the RC channels and runs the safety supervisor, the mode manager and the vehicle control, and `Task_50` (50 ms) scales the ADC inputs and runs the implement functions. Every signal between tasks passes a rate transition, as in the generated code. For the real robot the speed limits were changed to 1.4 m/s in MANUAL, 1.2 m/s in AUTO and 1.70 m/s overspeed. The mode manager in `Task_10` decides when the robot may drive ({fig:F20_mcu_modes.png}): it arms only from STANDBY with neutral sticks and all safety conditions met, and every stop needs a new arm edge."
+  },
+  {
+   "type": "figure",
+   "file": "F20_mcu_modes.png",
+   "caption": "Mode manager of the firmware model (fw_mode_manager in Task_10): Phase 1 transitions."
+  },
+  {
+   "type": "note",
+   "kind": "info",
+   "text": "The firmware model was built for an STM32H743 target. The chip of the real Nucleo-32 and of the USB-C board is not yet known (open item 5 in {sec:mb10_open}); the simulation does not depend on it, and code generation will be retargeted once the chip is confirmed."
+  },
+  {
+   "type": "h2",
+   "text": "Second controller and USB-UART adapter"
+  },
+  {
+   "type": "p",
+   "text": "Next to the control board sit a blue STM32 core board with a USB-C connector, BOOT0, NRST and KEY buttons and an LQFP48 microcontroller, and a red FT232RL USB-UART adapter with its 3.3 / 5 V jumper ({fig:M51_stm32_ftdi_3d.png}). The CUR header on the board below takes the current sensor."
+  },
+  {
+   "type": "figure",
+   "file": "M51_stm32_ftdi_3d.png",
+   "caption": "STM32 USB-C core board and FT232RL USB-UART adapter on the control board (3-D render after electronics_ftdi_stm32_board.jpeg and electronics_ftdi_closeup.jpg)."
+  },
+  {
+   "type": "h2",
+   "text": "Analog inputs and supply"
+  },
+  {
+   "type": "p",
+   "text": "An ADS1115 / ADS1015 module adds four 16-bit analog inputs over I2C ({fig:M52_ads1115_3d.png}). The LM2596 buck module ({fig:M53_lm2596_3d.png}) makes a 5 V rail; its bottom side is rendered as photographed, the top side with the usual component layout of this module."
+  },
+  {
+   "type": "figure",
+   "file": "M52_ads1115_3d.png",
+   "caption": "ADS1115 / ADS1015 ADC module on the control board (3-D render after electronics_ads1115_adc.jpg)."
+  },
+  {
+   "type": "figure",
+   "file": "M53_lm2596_3d.png",
+   "caption": "LM2596 DC-DC buck module: top side with the usual layout of this module (left) and bottom side as in electronics_lm2596_buck.jpg (right)."
+  },
+  {
+   "type": "h2",
+   "text": "Sprayer board"
+  },
+  {
+   "type": "p",
+   "text": "The XMachines SPR V1.3 board drives the sprayer. The photo shows part of it: 1 % metal-film resistors, a 4-pin SMD package, an axial diode and two capacitors next to the board name ({fig:M54_spr_board_3d.png})."
+  },
+  {
+   "type": "figure",
+   "file": "M54_spr_board_3d.png",
+   "caption": "Detail of the XMachines SPR V1.3 sprayer board (3-D render after electronics_xmachines_spr_v1_3_board.jpg)."
+  }
+ ]
+}

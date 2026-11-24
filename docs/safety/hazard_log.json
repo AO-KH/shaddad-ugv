@@ -1,0 +1,3566 @@
+{
+  "doc_no": "NASL-SHD-HAZ-001",
+  "title": "Shaddad UGV: hazard log",
+  "version": "1.5",
+  "date": "2026-11-18",
+  "status": "Issued for review",
+  "prepared_by": "the functional safety engineer",
+  "reviewer": "the independent reviewer",
+  "approver": "the project owner",
+  "card": "G1-07",
+  "about": "The hazard log of the Shaddad UGV for the mowing phase (D76), the structured record behind NASL-SHD-HAZ-001. Each hazard has its cause, hazardous event, the people exposed, its rating (ISO 13849-1:2023 Annex A risk graph, with the project rules of the method section), its safety goal, the required performance level and the safety function that meets it today, or the gap. Hazards are never renumbered; a closed hazard stays with its closure evidence. HAZ-001 to HAZ-099 are the mowing phase; HAZ-101 onward are later-phase entries (tillage, spraying), rated provisionally. The safety plan NASL-SHD-SAF-001 governs this record. docs/safety/hazard_log.md is generated from this file by docs/safety/hazard_log_render.py.",
+  "basis": {
+    "system": "The Shaddad UGV as designed in its digital twin (the MCU firmware, the companion software and the plant models), on the as-built robot of docs/hardware/real_robot_components.md (2026-10-27). The robot's controller today is the supplier's board (XT_PS with an STM32 Nucleo-32); the firmware generated from the twin is not on it yet.",
+    "operating_concept": "The charter NASL-SHD-CHR-001 v1.2, section 6: greenhouses, palm groves and the slope test ground, with the greenhouse rule (D79): people are kept out of the robot's zone while it mows a greenhouse aisle, and work in the other aisles; RC driving, autonomous missions, the hardware E-stop chain; mowing with the deck lowered, turns at the row ends, return to the dock to charge; the abnormal cases of section 6. The envelope of CR-001: the 20 deg design slope with no implement, the mower or the tiller forward; the full-tank sprayer to about 18.5 deg. The tiller is not used until real tiller data exist.",
+    "sources": [
+      "docs/project/charter.md (NASL-SHD-CHR-001 v1.2)",
+      "docs/hardware/real_robot_components.md (the as-built record)",
+      "docs/specs/*.md (the safety functions: electronics 2.5, 2.7.3, 2.7.10 to 2.7.12, 2.9.1; power 2.5, 3.4; drive 2.7, 2.9; sensors 3.7; gnc 2.6, 2.9, 4.1)",
+      "docs/architecture.md (sections 10 and 12; decisions D30 to D80, above all D71, D72, D73, D79 and D80; D103 for the standards)",
+      "docs/changes/CR-001_sprayer_descent_envelope.md; docs/changes/CR-002_plan_after_g0.md",
+      "docs/STATUS.md section 6 (open problems 3, 8, 9, 16a, 16c, 18 to 28)",
+      "the review report NASL-SHD-ANR-001 of 2026-11-15 (items R-01 to R-87, and the owner's open decisions 1 to 20)",
+      "params/param_structure.m and params/param_electronics.m (the descent cap table, card G2-DSC)"
+    ]
+  },
+  "method": {
+    "standard": "ISO 12100:2010 for the risk assessment (hazard identification, risk estimation, the three-step method); ISO 13849-1:2023 Annex A risk graph for the required performance level PLr; ISO 18497-1:2024 for the hazards of automated agricultural machines.",
+    "S": {
+      "S1": "Slight, normally reversible injury (bruises, small burns, a short slow movement of at most 0.1 m at 0.1 m/s).",
+      "S2": "Serious, normally irreversible injury, or death: a person crushed, run over, pinned against a post, a wall or the dock, struck by a tipping robot, or reached by the blades."
+    },
+    "F": {
+      "F1": "Seldom to less often, or a short exposure: people are in the zone that the hazardous event can reach at most once per 15 min and for at most 1/20 of the working time. Each F1 gives its exposure reason: a short mode (RC driving to place the robot, a mission start, a reset, docking, a power-up), a place with few people in the robot's zone (a greenhouse under the greenhouse rule, D79; the slope test ground; a palm-grove row in a large field; berms), or a zone entered only for a task (maintenance).",
+      "F2": "Frequent to continuous, or a long exposure: more often or longer than F1. In this log: the air of a greenhouse, which the people at work in its other aisles share with the working robot (a fire, HAZ-029), and the noise of the shift (HAZ-042). People at work beside the robot in a greenhouse would be F2 too; the greenhouse rule (D79) keeps them out of its zone."
+    },
+    "P": {
+      "P1": "Possible under specific conditions: the hazard develops slowly (a motion of at most 0.2 m/s, or a fire or heat that builds over minutes) and the person has room to move away. The hazard's own safety functions, warnings included, earn no credit (rule 1).",
+      "P2": "Scarcely possible: the person cannot see the hazard coming (back turned, kneeling, vegetation, a corner or a door), cannot move away (an aisle, a wall, a post, the dock), or the event is sudden (a tip-over, an unexpected start, an arc, a thrown object, a stop that fails in an emergency)."
+    },
+    "graph": {
+      "S1 F1 P1": "a",
+      "S1 F1 P2": "b",
+      "S1 F2 P1": "b",
+      "S1 F2 P2": "c",
+      "S2 F1 P1": "c",
+      "S2 F1 P2": "d",
+      "S2 F2 P1": "d",
+      "S2 F2 P2": "e"
+    },
+    "rules": [
+      "Each hazardous event is rated without the safety functions meant to reduce it, warnings and stop commands included: they earn no credit in F or P.",
+      "F is set by the exposure of people to the hazard zone, never by how rare the cause or the event is; no level is lowered for a low probability of the hazardous event, although ISO 13849-1 allows one level with a justification.",
+      "A hazard that arises in several places is rated in the worst place; its reason names the other places. The goal takes the highest level of its hazards.",
+      "A hazard reduced by inherently safe design, a guard or the information for use, with no control function, keeps its S, F and P for the record and has PLr n/a.",
+      "The ceiling of each safety function's architecture is a preliminary judgement for this issue; the functional safety concept (G2-FSC) and the FMEA (G3-FME) settle it. A single-channel function in one microcontroller is Category B (PL b at most), because a microcontroller is not a well-tried component; PL c and above need a tested or a redundant architecture with rated parts."
+    ],
+    "F_definition": "F is the exposure of people to the zone that the hazardous event can reach (the robot's path and swept zone, its implement, the zone it can tip or roll into, the air of a fire): who is there, how often and for how long, while the robot is in that mode and place, whatever the cause of the event. How often the cause occurs (a failure, an emergency, a lost link) never sets F (rule 2).",
+    "assumptions": [
+      "The greenhouse rule, the owner's decision (D79; the charter v1.2, section 6): people are kept out of the robot's zone while it mows a greenhouse aisle, and work in the other aisles. Here the robot's zone is the zone its hazardous events can reach: the aisle it mows and any lane its detour can enter, the cross aisles and doors it uses, and the beds and posts beside them. A person is in that zone only seldom and briefly, to cross it or by mistake: F1. People in the other aisles still share the greenhouse's air (HAZ-029) and hear the mower (HAZ-042). People at work beside the robot would set F2, PL e for six goals, and the need for safety-rated person detection (E-09).",
+      "The palm groves: the robot works one row of a large field; a worker is seldom in the row it mows or on the berm it crosses. The owner has still to confirm this (section 7, open points).",
+      "RC driving places the robot and moves it between places (the charter, section 6): a few short drives a shift, under 1/20 of the working time. If RC driving becomes a way of working, its hazards are F2 where people work.",
+      "The slope test ground is closed to people other than the test team.",
+      "The charging place is attended only to connect and disconnect the pack. The owner has still to confirm this (section 7, open points)."
+    ]
+  },
+  "safe_state": "Standstill, held on the spring brakes, with the traction torque off (STO) and the implement off.",
+  "people": {
+    "the operator": "drives by RC, starts and stops missions, answers holds and faults in the field (charter 5)",
+    "the supervisor": "plans missions and decides when the robot works; on the project, the project owner (charter 5)",
+    "the maintainer": "charges the pack, fits and changes implements, inspects the brakes, tracks and sensors (charter 5)",
+    "people nearby": "work in the greenhouse or the grove, or are otherwise in or near the operating zone (charter 5)"
+  },
+  "places": [
+    "greenhouse aisles",
+    "palm groves",
+    "the slope test ground",
+    "the dock and the charging place",
+    "any place"
+  ],
+  "cases": [
+    "normal use",
+    "a person in the path",
+    "lost RC",
+    "lost GNSS",
+    "a sensor fault",
+    "a stop on a slope",
+    "an E-stop with reset and re-arm",
+    "low energy",
+    "maintenance",
+    "foreseeable misuse"
+  ],
+  "safety_functions": [
+    {
+      "id": "SF-01",
+      "name": "Hardware E-stop chain",
+      "does": "E-stop buttons (front, rear), bumpers and an optional certified wireless E-stop in a dual-channel loop to a safety relay. The immediate contacts open the STO of both ESCs, the brake-release power (the spring brakes engage) and the implement 24 V relay K3 in at most 20 ms; the delayed contacts open the main contactor coils after 1.5 s. The stop is independent of the firmware: the MCU can only open the loop (DO0) and pulse a re-arm (DO1). The pulse comes on the reset button, on RC CH9 over the SBUS radio, and once on each SELFTEST entry (D30); the relay closes only if every contact of the loop is closed (finding F-01).",
+      "where": "hardware (POWER's Safety_Chain, D8)",
+      "evidence": "S8a (STO 20 ms after the edge, stop within 0.6 m from 1.2 m/s, no restart before release, reset and re-arm); fault bits 0, 27, 29; T-EL-28/29",
+      "robot": "on the robot, by the owner's statement (D80): E-stop buttons and a safety relay with STO wiring; their positions, parts, category and wiring are not in the as-built record yet (card G1-04). Bumpers and a key switch are not confirmed",
+      "architecture": "two channels with a discrepancy check (bit 27), independent of the software for the stop: Category 3 is possible, so PL d with rated parts. The re-arm is not a manual reset: a controller restart or RC CH9 re-arms the relay (F-01)"
+    },
+    {
+      "id": "SF-02",
+      "name": "Safe torque off (STO) of the ESCs",
+      "does": "Removes the motor torque at once on the safety relay (SF-01) or when the MCU's stop monitor sets STOP_FAIL (bit 22, DO0 low); the ESC enters its STO state with the brake engaged.",
+      "where": "ESC (drive esc_sm state 8) and the safety relay",
+      "evidence": "drive spec 2.9; S8a; T19b to T19d",
+      "robot": "STO wiring confirmed by the owner (D80); the dual-channel ESC per side is known, but its STO input and its rating are not documented (R-14; the ESC manual, card G1-04)",
+      "architecture": "depends on the ESC's STO and its rating (unknown)"
+    },
+    {
+      "id": "SF-03",
+      "name": "Spring brakes and the park at the end of every stop",
+      "does": "Spring-applied, electrically released brakes on the motor shafts engage on any loss of power. Every soft stop ends on the brakes: CTRL_STOP and ESTOP.DECEL decelerate, then park with the torque limits held until both ESCs confirm the brake (D71). The ESC applies the brake at once on a park request, and 2.0 s after the start of a DISABLING or QUICK_STOP stop at any speed.",
+      "where": "drive (brake, ESC) and MCU (mode manager)",
+      "evidence": "D64 (elasto-plastic brake), D71, S2 hold (roll-back within 0.05 m), T8, T9",
+      "robot": "an estimate: 5 N m per motor [EST], the brake mass 0.5 kg [EST]; no brake data in the as-built record; the slope brake test T-04 is planned",
+      "architecture": "spring-applied brakes are well-tried mechanical parts if specified so; there is no brake monitoring: the confirmation (FB1 brake_released) echoes the brake command (STATUS 27)"
+    },
+    {
+      "id": "SF-04",
+      "name": "Controlled stop with the stop monitor",
+      "does": "On a class-B fault, an RC link loss or failsafe, a disarm, a companion time-out or stop request, the MCU decelerates at 1.0 m/s^2 (constant-deceleration law), holds zero speed for 0.5 s or to its time-out, then parks on the brakes (SF-03). The stop monitor (STOP_FAIL, bit 22, class A) opens DO0 when a stop does not slow down, the brakes do not confirm within 0.5 s, or the robot moves in STANDBY, ESTOP.SAFE or FAULT: STO and K3 open after 15 ms.",
+      "where": "MCU (mode manager, safety supervisor)",
+      "evidence": "D33 (0.71 m from 1.0 m/s with 128 ms detection), D71, S6a/S6b, T-EL-54 to 60",
+      "robot": "not yet: the firmware generated from the twin is not on the robot",
+      "architecture": "one microcontroller, one channel: Category B, PL b at most. STOP_FAIL gives a second shut-off path (STO through the relay), but its monitor runs on the same MCU"
+    },
+    {
+      "id": "SF-05",
+      "name": "Remote stop from the RC transmitter",
+      "does": "RC mode-switch position 3 (CH12) on valid frames, 40 ms persistence: the MCU stops at 2.0 m/s^2 for at most 1.2 s, then parks, and latches ESTOP; reset needs CH12 off, a reset request and standstill. A receiver failsafe never latches ESTOP (D34).",
+      "where": "RC transmitter and receiver (SBUS), MCU",
+      "evidence": "S8b (2.0 m/s^2 within 0.1), D33 (0.62 m from 1.2 m/s with 92 ms worst latency), D34",
+      "robot": "the robot's RC transmitter and receiver are not in the as-built record",
+      "architecture": "a functional stop: SBUS is not safety-rated (electronics spec D7); Category B, PL b at most. The spec recommends a certified wireless E-stop (PL d) in series with the loop of SF-01"
+    },
+    {
+      "id": "SF-06",
+      "name": "Lost-link stops",
+      "does": "RC link lost (rc_age above 0.10 s) or receiver failsafe: CTRL_STOP within 0.13 s, in RC driving and in AUTO (rc_required_in_auto true, D44). Companion command age above 0.20 s in AUTO: CTRL_STOP. ESC: 10 missed command frames (100 ms): QUICK_STOP at 2.0 m/s^2, then the brake. MCU: an ESC feedback (FB1 or FB3) older than 50 ms is a class-A fault (REQ-SYS-070).",
+      "where": "MCU, ESC",
+      "evidence": "S6a, S6b (CTRL_STOP within 0.13 s, standstill within 1.5 s, no motion after the link returns until arm off then on); T-EL-32, T-EL-35",
+      "robot": "not yet (generated firmware not on the robot)",
+      "architecture": "MCU and ESC software, one channel: Category B, PL b at most. A hung companion that keeps sending fresh frames is not detected (alive counters unchecked, R-39)"
+    },
+    {
+      "id": "SF-07",
+      "name": "Watchdog and the reset behaviour",
+      "does": "The IWDG (50 ms) resets a stalled MCU; during the reset all digital outputs are low: DO0 opens the safety loop, K1 opens, the brakes engage, the ESCs time out into QUICK_STOP. After the reset the MCU boots through SELFTEST to STANDBY; the relay is re-armed automatically once on SELFTEST entry (D30).",
+      "where": "MCU (IWDG), electronics plant (watchdog-reset emulation)",
+      "evidence": "electronics 2.7.11, 2.9.2; S0 (automatic re-arm at power-up)",
+      "robot": "not yet",
+      "architecture": "an independent hardware timer with an independent shut-off path: a diagnostic for a stalled MCU; it does not detect a wrong output. The latches are cleared by a reset (R-36)"
+    },
+    {
+      "id": "SF-08",
+      "name": "Person stop: the protective field, the lost-scan stop, hold and resume",
+      "does": "The perception sets protectiveStop when a kept LiDAR point lies in the front or the rear field, or after more than 2 consecutive invalid scans; the front field starts at the front of the fitted implement (mower 1.20 m, tiller, sprayer and none 0.55 m), runs 0.5 + 0.8 |v| m, 1.08 m wide; both fields are on below 0.1 m/s, otherwise the field in the direction of travel. The GNC enters OBSTACLE_HOLD (PERSON or SENSOR_LOST) and commands standstill; H1 resumes after 2 s clear on valid scans. The field is true from the start until the first valid scan (D72).",
+      "where": "companion (LiDAR, perception, GNC), CAN2, MCU",
+      "evidence": "D72; T-PER-02, tPER02b, T-PER-07; S5 (clearance at least 1.0 m to a crossing person)",
+      "robot": "not in the as-built record: the LiDAR and the sensor mast are a model addition (not in the photos), and no companion computer is listed",
+      "architecture": "a LiDAR and a companion computer that are not safety-rated, through CAN2 and one MCU: Category B, PL b at most. Gaps in the twin: the zone in front of the body is not covered (R-02, the owner's open decision 2; STATUS 21); the field follows the build setting, not the fitted implement (STATUS 25); static walls cause holds at lane ends (STATUS 18); on the robot a re-published stale cloud stays valid (STATUS 28)"
+    },
+    {
+      "id": "SF-09",
+      "name": "Blade stop and the implement latch",
+      "does": "The rotor runs only in MANUAL or AUTO with the implement switch on and no implement fault; the GNC stops the blades at once on person_near, after more than 3 s in OBSTACLE_HOLD, in TRANSIT, PAUSE, FAULT and MANUAL; once a person or a lost scan is seen in a hold, the implement stays off for the rest of that hold (D72). The E-stop opens K3, the implement 24 V relay.",
+      "where": "GNC (implement manager), MCU (implement output), safety relay (K3)",
+      "evidence": "D72 (latch), gnc 2.9, electronics 2.7.12, power 2.5",
+      "robot": "the mower implement is not in the as-built record (blades, guard, motor, brake)",
+      "architecture": "the person path is companion and MCU software: Category B, PL b at most; the E-stop path (K3) follows SF-01. The blade run-down time is not specified or checked, and no blade brake is specified (R-33)"
+    },
+    {
+      "id": "SF-10",
+      "name": "Tilt stop and the IMU-loss handling",
+      "does": "TILT_WARN above 25 deg for 0.5 s derates (0.5); TILT_STOP above 28 deg for 0.5 s is a class-B stop; both use the level-calibrated estimate and are gated on a valid IMU (D47, D73). The GNC faults on pitch above 25 deg or roll above 18 deg in AUTO. A frozen IMU is invalid after 0.1 s; IMU_FAULT is class C (derate 0.25, yaw loop off): its class is the owner's open decision 5.",
+      "where": "MCU (fw_imu_tilt, supervisor), sensors (sens_acq_imu), GNC",
+      "evidence": "D47, D73; S2 (no tilt fault in start or stop on the ramp); T-NAV-13",
+      "robot": "no IMU is listed in the as-built record (the model uses an ICM-20948)",
+      "architecture": "one IMU and one MCU: Category B, PL b at most. Since D73 a frozen IMU raises IMU_FAULT; a wrong but plausible IMU (a bias, a misalignment, a slow drift) removes the tilt stop and the slope limits together without a fault (R-05)"
+    },
+    {
+      "id": "SF-11",
+      "name": "Descent speed cap and trip",
+      "does": "In every mode the MCU limits the speed target to the highest speed at which a brakes-locked stop may start without tipping, by the measured downhill pitch (peak-held 1 s) and the fitted implement (P.structure.descent, 12 breakpoints to 25 deg); the trip sets OVERSPEED and parks at once. An unknown implement takes the smallest entries; the mower with its deck reported raised takes the raised rows (0.15 m/s on the flat, 0 from 5 deg). The GNC governor and look-ahead slow the robot before a descent; the GNC keeps the deck down while moving. CR-001 limits the full-tank sprayer to about 18.5 deg.",
+      "where": "MCU (Descent_cap, Descent_trip), GNC (governor, look-ahead, deck-down rule)",
+      "evidence": "card G2-DSC (in progress; D74 and NASL-SHD-ER-005 pending); S2c, S2d; T-EL-54 to 60",
+      "robot": "not yet; the tip speeds rest on estimated contact data until the slope brake test T-04",
+      "architecture": "one IMU, the encoders and one MCU: Category B, PL b at most; the raised rows rest on one lift sensor"
+    },
+    {
+      "id": "SF-12",
+      "name": "Overspeed and speed-follow trip",
+      "does": "OVERSPEED (bit 16, class B) when a track exceeds 1.70 m/s for 0.2 s, or runs more than 0.2 m/s above its reference for 0.2 s in the driving modes (REQ-SYS-109); CTRL_STOP and ESTOP.DECEL then park at once (D71). The ESC has its own overspeed trip at 4000 rpm (about 1.885 m/s on the track).",
+      "where": "MCU, ESC",
+      "evidence": "D71; STATUS 19 and 24 (open: with CCL 0 the speed-follow term parks at speed on steep descents and trips on ordinary stops)",
+      "robot": "not yet",
+      "architecture": "one MCU on the encoders: Category B, PL b at most"
+    },
+    {
+      "id": "SF-13",
+      "name": "Speed limits by mode and the turn limits on slopes",
+      "does": "Top speed 1.41 m/s; RC driving 1.4 m/s, AUTO 1.2 m/s (the GNC limits derived from the MCU, D43), the dock approach 0.2 m/s; the yaw rate limited by the tilt (1.2 rad/s below 8 deg to 0.2 rad/s at 20 deg), no pivots above 10 deg, no headland turns where the slope exceeds 10 deg (D53).",
+      "where": "MCU (shaper, limits), GNC (command shaping, mission compiler)",
+      "evidence": "D43, D53; S1; T7b (which cannot fail, R-54)",
+      "robot": "not yet",
+      "architecture": "MCU and companion software: Category B, PL b at most"
+    },
+    {
+      "id": "SF-14",
+      "name": "Geofence, path and navigation integrity",
+      "does": "The GNC faults (FAULT, standstill) on a geofence breach above 0.5 m, navigation lost for 0.3 s, a cross-track error above 0.5 m for 3 s, a robot stuck for 5 s, or the tilt limits; navigation degraded for 2 s pauses the mission.",
+      "where": "companion (GNC, navigation)",
+      "evidence": "gnc 4.1 (G1, T7); S7 (GNSS dropout)",
+      "robot": "not in the as-built record: no GNSS receiver or companion computer is listed",
+      "architecture": "companion software on GNSS and LiDAR localisation: Category B, PL b at most; no false-fix model or check (R-43)"
+    },
+    {
+      "id": "SF-15",
+      "name": "Start warning and indication",
+      "does": "AUTO_START sounds the buzzer for 3 s with the beacon blinking green before the robot moves; in AUTO the buzzer beeps every 2 s; the beacon shows the mode (amber MANUAL, red ESTOP and FAULT).",
+      "where": "MCU (auxiliary outputs), beacon and buzzer",
+      "evidence": "electronics 2.7.3, 2.7.12",
+      "robot": "the beacon and the buzzer are not in the as-built record",
+      "architecture": "a warning (information for use), not a protective function"
+    },
+    {
+      "id": "SF-16",
+      "name": "Start and restart interlocks",
+      "does": "Arming from STANDBY needs the RC link, an arm edge, the sticks neutral and the power ready; resuming after any stop needs a new arm edge; ESTOP and FAULT reset need the E-stop released, a reset request and standstill; the relay re-arms only if every hardware contact is closed (D30).",
+      "where": "MCU (mode manager), safety relay",
+      "evidence": "electronics 2.7.3; S6 (no motion after the link returns until arm off then on); S8a",
+      "robot": "not yet",
+      "architecture": "MCU software: Category B, PL b at most. An arm edge can come from the receiver (R-35); the relay re-arms on RC CH9 and automatically on SELFTEST entry (D30, F-01), and a reset clears the latches (R-36)"
+    },
+    {
+      "id": "SF-17",
+      "name": "Battery protection",
+      "does": "The BMS opens the main contactor on cell over- and under-voltage, over-temperature, over-current, a precharge failure or a weld; HV_Opening_Warn makes the MCU stop first; the charge current follows the cell temperature (no charge from 50 deg C); traction fuses (125 A [EST]); the dock contactor K4 closes only with dock contact.",
+      "where": "BMS, power distribution, charger",
+      "evidence": "power 2.5, 3.4; T-PWR tests; D45, D65",
+      "robot": "a bought 13S BMS (120 to 150 A, CAN) and a 54.6 V 20 A charger (IP54) are in the as-built record; their protections, settings and CAN frames are unknown (R-15); the fuse and BMS coordination is open (T-PWR-06b fails)",
+      "architecture": "the bought BMS's own design and rating (unknown); no K2 or K4 weld detection (R-45)"
+    },
+    {
+      "id": "SF-18",
+      "name": "Encoder plausibility",
+      "does": "ENC_L/R_MISMATCH (bits 12 and 13, class B, 0.2 s): the MCU-read motor encoders against the drive-reported speed.",
+      "where": "MCU",
+      "evidence": "electronics 2.7.7, 2.7.10",
+      "robot": "not yet; whether the encoders are read by the MCU or come over CAN is open",
+      "architecture": "a plausibility check in one MCU: a diagnostic for the speed measurement, no independent shut-off"
+    },
+    {
+      "id": "SF-19",
+      "name": "Manual control: the stick-release stop",
+      "does": "In RC driving the sticks spring back to centre, which commands zero; the MCU shaper decelerates and the robot stops in about 0.88 m from 1.2 m/s, including 60 ms latency (D33); the speed limit of RC driving is 1.4 m/s.",
+      "where": "RC transmitter, SBUS, MCU",
+      "evidence": "D33; S1",
+      "robot": "not yet: the generated firmware is not on the robot, and the robot's RC equipment is not in the as-built record",
+      "architecture": "a functional control path, not safety-rated: Category B, PL b at most"
+    }
+  ],
+  "safety_goals": [
+    {
+      "id": "SG-01",
+      "name": "Person protection in motion",
+      "goal": "The robot shall detect a person in the zone that it or its implement is about to occupy, in every autonomous mode and in the dock approach, and stop before contact; it shall keep its speed within what that detection zone can stop.",
+      "safe_state": "standstill on the brakes, implement off, holding while the person is in the zone",
+      "plr": "d",
+      "plr_note": "PL d in every place: in the greenhouse with people kept out of the robot's zone (D79), in the palm groves, in transit and at the dock. People at work beside the robot in a greenhouse would need PL e (HAZ-001, -003, -004, -007, -010 and -045 at F2).",
+      "hazards": [
+        "HAZ-001",
+        "HAZ-002",
+        "HAZ-003",
+        "HAZ-004",
+        "HAZ-007",
+        "HAZ-010",
+        "HAZ-013",
+        "HAZ-045"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-12",
+        "SF-13",
+        "SF-15",
+        "SF-18"
+      ],
+      "status": "not met",
+      "gap": "The person stop is not safety-rated (PL b at most); the zone in front of the body and the sides are not covered; the field does not follow the fitted implement; the LiDAR is not in the as-built record. Escalated: E-01, E-02 (class 1)."
+    },
+    {
+      "id": "SG-02",
+      "name": "Safe resume after a person stop",
+      "goal": "After a person stop the robot shall move off, or restart its implement, only when the zone it will occupy, the near zone of the body included, has been seen free.",
+      "safe_state": "hold on the brakes, implement off",
+      "plr": "d",
+      "plr_note": "PL d, with people kept out of the robot's zone in the greenhouse (D79). People at work beside the robot would need PL e (HAZ-005 at F2).",
+      "hazards": [
+        "HAZ-005"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-09"
+      ],
+      "status": "not met",
+      "gap": "The resume (H1) is judged on a field that does not cover the zone in front of the body (the owner's open decision 2); PL b at most. Escalated: E-01, E-02 (class 1)."
+    },
+    {
+      "id": "SG-03",
+      "name": "The operating zone",
+      "goal": "The robot shall stay inside its permitted operating zone and within a bounded distance of its planned path, and stop when it cannot show where it is.",
+      "safe_state": "standstill on the brakes, mission paused",
+      "plr": "d",
+      "plr_note": "PL d in the greenhouse under the greenhouse rule (D79, HAZ-009) and in the palm groves (HAZ-008). People at work beside the robot would need PL e.",
+      "hazards": [
+        "HAZ-008",
+        "HAZ-009"
+      ],
+      "functions": [
+        "SF-14"
+      ],
+      "status": "not met",
+      "gap": "Companion software on GNSS and LiDAR localisation (PL b at most); the cross-track check runs on the estimated position; nothing checks for a false RTK fix (R-43); no GNSS receiver is in the as-built record. Escalated: E-01, E-08 (class 1)."
+    },
+    {
+      "id": "SG-04",
+      "name": "Stability",
+      "goal": "No brakes-locked stop, E-stop or loss of power shall tip the robot over within its envelope (the 20 deg design slope; the full-tank sprayer to about 18.5 deg, CR-001), and the robot shall not pass its tilt limits.",
+      "safe_state": "standstill on the brakes below the tip speed; at the tilt limit, a stop",
+      "plr": "d",
+      "plr_note": "",
+      "hazards": [
+        "HAZ-017",
+        "HAZ-018",
+        "HAZ-019",
+        "HAZ-023",
+        "HAZ-038",
+        "HAZ-039",
+        "HAZ-040"
+      ],
+      "functions": [
+        "SF-04",
+        "SF-10",
+        "SF-11",
+        "SF-13",
+        "SF-17"
+      ],
+      "status": "not met",
+      "gap": "Card G2-DSC is in progress; the cap, the trip and the tilt stop rest on one IMU, the encoders and one MCU (PL b at most); a wrong but plausible IMU removes them together (R-05); the tip speeds rest on estimated contact data until T-04. Escalated: E-01, E-03 (class 1)."
+    },
+    {
+      "id": "SG-05",
+      "name": "Stop and hold, no runaway",
+      "goal": "Every stop shall end with the robot held on its brakes on any slope of the envelope, and the robot shall not gain speed downhill beyond the speed of its mode.",
+      "safe_state": "standstill on the brakes, torque off",
+      "plr": "d",
+      "plr_note": "",
+      "hazards": [
+        "HAZ-024",
+        "HAZ-025",
+        "HAZ-027",
+        "HAZ-040"
+      ],
+      "functions": [
+        "SF-02",
+        "SF-03",
+        "SF-04",
+        "SF-11",
+        "SF-12",
+        "SF-16",
+        "SF-17"
+      ],
+      "status": "not met",
+      "gap": "D71 ends every soft stop on the brakes with STOP_FAIL as the STO backup, but nothing monitors the brakes (STATUS 27), the detection is one MCU (PL b at most), the steep descent with CCL 0 and the hill start are open (STATUS 19, 24; R-37), and the brakes are estimates in the as-built record. Escalated: E-01, E-03 (class 1)."
+    },
+    {
+      "id": "SG-06",
+      "name": "Emergency stop",
+      "goal": "An emergency stop, from the robot or from the operator's remote stop, shall stop the motion and the implement independently of the software, and keep them stopped until a deliberate reset and a new arm command.",
+      "safe_state": "STO, spring brakes engaged, implement power off, latched",
+      "plr": "d",
+      "plr_note": "PL d, with people kept out of the robot's zone in the greenhouse (D79). People at work beside the robot would need PL e (HAZ-021, HAZ-022 at F2).",
+      "hazards": [
+        "HAZ-021",
+        "HAZ-022"
+      ],
+      "functions": [
+        "SF-01",
+        "SF-02",
+        "SF-03",
+        "SF-05",
+        "SF-06"
+      ],
+      "status": "partly met",
+      "gap": "The on-board chain is designed as two channels and shown in S8a; the owner confirms E-stop buttons and a safety relay with STO wiring on the robot (D80), but their parts, category and wiring are not recorded yet (card G1-04); the relay re-arms without a manual reset after a controller restart or on RC CH9 (F-01); the remote stop is a functional stop through SBUS (PL b at most); no certified wireless E-stop. Escalated: E-01, E-04 (class 1)."
+    },
+    {
+      "id": "SG-07",
+      "name": "Stop on loss of control",
+      "goal": "On the loss of the operator's link, of the companion's commands or of the controller, the robot shall stop and park.",
+      "safe_state": "standstill on the brakes, torque off",
+      "plr": "d",
+      "plr_note": "PL d, with people kept out of the robot's zone in the greenhouse (D79). People at work beside the robot would need PL e (HAZ-012 at F2).",
+      "hazards": [
+        "HAZ-012",
+        "HAZ-016",
+        "HAZ-043"
+      ],
+      "functions": [
+        "SF-04",
+        "SF-06",
+        "SF-14"
+      ],
+      "status": "not met",
+      "gap": "The stops on a lost link act in simulation (S6, T-EL-32), but in one MCU and the ESC software (PL b at most); a hung companion that keeps sending is not detected (R-39); the radio model of the row tests cannot produce a link loss (R-12). Escalated: E-01, E-05 (class 1)."
+    },
+    {
+      "id": "SG-08",
+      "name": "No unexpected start-up",
+      "goal": "The robot shall not move, release its brakes or start its implement at power-up, after a reset, when a link returns or during maintenance, without a deliberate command and a warning; maintenance shall be done with the energy isolated.",
+      "safe_state": "standstill on the brakes, torque off, implement off",
+      "plr": "d",
+      "plr_note": "During maintenance the goal is met by isolating the energy (the pack disconnected), not by a control function.",
+      "hazards": [
+        "HAZ-011",
+        "HAZ-026",
+        "HAZ-032",
+        "HAZ-034",
+        "HAZ-037"
+      ],
+      "functions": [
+        "SF-01",
+        "SF-07",
+        "SF-08",
+        "SF-15",
+        "SF-16"
+      ],
+      "status": "not met",
+      "gap": "A new arm edge is needed after any stop, but the interlocks are one MCU (PL b at most); the relay re-arms automatically on SELFTEST entry and on RC CH9 (D30, F-01), so a controller restart re-arms it without the manual reset; an arm edge can come from the receiver (R-35); no isolation procedure or lockable isolator is recorded. Escalated: E-01, E-05 (class 1)."
+    },
+    {
+      "id": "SG-09",
+      "name": "Blade safety",
+      "goal": "The blades shall not run where a person can reach them: they shall stop on an E-stop, a person near, a hold, a tip, a raised deck and outside the working modes, within a run-down time that the mower standard sets, and shall not restart without a deliberate command.",
+      "safe_state": "blades stopped, implement power off",
+      "plr": "d",
+      "plr_note": "PL d, with people kept out of the robot's zone in the greenhouse (D79). The deck housing is the primary measure (a fixed guard); this level is for the blade stop. People at work beside the robot would need PL e (HAZ-006 at F2).",
+      "hazards": [
+        "HAZ-006",
+        "HAZ-020",
+        "HAZ-033"
+      ],
+      "functions": [
+        "SF-01",
+        "SF-09"
+      ],
+      "status": "not met",
+      "gap": "The person path of the blade stop is software (PL b at most) and does not watch the sides of the deck; the run-down time is unknown and no blade brake is specified (R-33); the mower implement is not in the as-built record. Escalated: E-01, E-06 (class 1)."
+    },
+    {
+      "id": "SG-10",
+      "name": "Battery, charging and live parts",
+      "goal": "The pack shall not overheat, overcharge or short in operation, charging or storage at 45 to 50 deg C, and live parts shall be protected against contact and short circuit.",
+      "safe_state": "contactors open, charging stopped",
+      "plr": "d",
+      "plr_note": "PL d through HAZ-029: a fire reaches the people at work in the other aisles of the greenhouse; the greenhouse rule (D79) does not lower it.",
+      "hazards": [
+        "HAZ-028",
+        "HAZ-029",
+        "HAZ-030"
+      ],
+      "functions": [
+        "SF-17"
+      ],
+      "status": "unknown",
+      "gap": "The bought BMS and charger protect the pack, but their settings, rating and frames are unknown (R-15); the fuse and BMS coordination is open (T-PWR-06b); the sealed pack runs hot (R-04); no K4 weld check (R-45). Escalated: E-01 (class 1)."
+    },
+    {
+      "id": "SG-11",
+      "name": "Manual control integrity",
+      "goal": "In RC driving the robot shall move only as the operator commands, stop when the operator lets go of the sticks, and keep the speed limit of RC driving.",
+      "safe_state": "standstill on the brakes",
+      "plr": "d",
+      "plr_note": "",
+      "hazards": [
+        "HAZ-014",
+        "HAZ-015"
+      ],
+      "functions": [
+        "SF-05",
+        "SF-06",
+        "SF-16",
+        "SF-19"
+      ],
+      "status": "not met",
+      "gap": "The RC chain (radio, SBUS, one MCU) is not safety-rated (PL b at most); corrupted bytes can pass as valid frames (STATUS 8, R-47). Escalated: E-01, E-05 (class 1)."
+    },
+    {
+      "id": "SG-12",
+      "name": "Hazards reduced without a control function",
+      "goal": "Hot surfaces, noise, the charger's mains, manual handling and recovery, thrown objects and foreseeable misuse shall be reduced by the design, guards and the information for use, to the standards that G1-01 names.",
+      "safe_state": "not applicable",
+      "plr": "n/a",
+      "plr_note": "No safety function is claimed; the measures are design, guards, labels, procedures and training.",
+      "hazards": [
+        "HAZ-031",
+        "HAZ-035",
+        "HAZ-036",
+        "HAZ-041",
+        "HAZ-042",
+        "HAZ-044"
+      ],
+      "functions": [],
+      "status": "open",
+      "gap": "The measures are to be shown by the design records and the manuals (V-06); the mower deck, the charger's conformity and the maintenance procedures are not in the records yet."
+    }
+  ],
+  "hazards": [
+    {
+      "id": "HAZ-001",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Person in the path in a greenhouse aisle",
+      "modes": [
+        "autonomous: rows"
+      ],
+      "places": [
+        "greenhouse aisles"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path",
+        "a sensor fault"
+      ],
+      "cause": "A worker is in the aisle the robot mows, kneeling, bending or with the back turned, or steps into it, and the person stop misses the worker or does not stop the robot: the worker is in the zone in front of the body or below the scan plane; the field is set from the build's implement, not the fitted one; the LiDAR gives valid but wrong data (a stale cloud re-published, film reflections, dust); or the companion, CAN2 or the MCU chain fails.",
+      "event": "The robot or its mower deck strikes the worker, runs over a foot or a leg, or pins the worker against a post or the end wall.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing and fractures; cuts or amputation at the deck",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: crushing under a 220 to 316 kg tracked robot and blade injuries are irreversible. F1: the greenhouse rule (D79) keeps people out of the aisle the robot mows; a worker is in it only seldom and briefly, to cross it or by mistake (assumption 1). P2: the aisle and its end walls leave no room to step aside, and a kneeling worker facing away cannot see the robot.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-13",
+        "SF-15"
+      ],
+      "other_measures": "beacon and buzzer (warning); the deck housing as a guard",
+      "meets": "no",
+      "gap": "The person stop runs on a LiDAR and a companion that are not safety-rated, through the GNC and one MCU (PL b at most); the zone in front of the body is not covered (the owner's open decision 2); the LiDAR is not in the as-built record.",
+      "refs": [
+        "D72",
+        "R-02",
+        "R-03",
+        "STATUS 18",
+        "STATUS 21",
+        "STATUS 25",
+        "STATUS 28",
+        "S5"
+      ]
+    },
+    {
+      "id": "HAZ-002",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Person in the path in a palm-grove row",
+      "modes": [
+        "autonomous: rows"
+      ],
+      "places": [
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path",
+        "a sensor fault"
+      ],
+      "cause": "A worker lies, kneels or works in the row, or crosses it; tall grass or fronds hide a low person from the scan plane; the detection and the stop chain can fail as in HAZ-001.",
+      "event": "The robot strikes the person, runs over a limb or cuts it at the deck.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing; cuts or amputation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2 as HAZ-001. F1: a palm-grove row is one of many in a large field, and a worker is seldom in the row the robot mows (assumption 2, which the owner has still to confirm). P2: a lying or kneeling person in tall grass cannot see the robot or hear it over the mower.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-13",
+        "SF-15"
+      ],
+      "other_measures": "beacon and buzzer; the deck housing",
+      "meets": "no",
+      "gap": "As HAZ-001: PL b at most with this architecture; no safety-rated detection; the LiDAR is not in the as-built record.",
+      "refs": [
+        "D72",
+        "R-02",
+        "S5"
+      ]
+    },
+    {
+      "id": "HAZ-003",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Person in the path in transit, on the return and at greenhouse doors",
+      "modes": [
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves",
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path",
+        "low energy"
+      ],
+      "cause": "Transit runs at up to 1.2 m/s with the implement off, on farm tracks, through greenhouse doors and towards the dock, where people walk; the field length grows with the measured speed; static walls at doors cause holds, which tempt people to defeat the field (STATUS 3).",
+      "event": "The robot strikes a person at transit speed or pins them in a doorway.",
+      "exposed": [
+        "people nearby",
+        "the maintainer"
+      ],
+      "harm": "impact, crushing in a doorway",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: pinning in a doorway. F1: in the greenhouse the greenhouse rule (D79) keeps people out of the cross aisles and doors the robot uses (assumption 1); in the groves and at the dock few people are on its way. P2: at a door or a corner the person cannot see the robot coming.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-13",
+        "SF-15"
+      ],
+      "other_measures": "beacon and buzzer",
+      "meets": "no",
+      "gap": "As HAZ-001.",
+      "refs": [
+        "D72",
+        "STATUS 3",
+        "R-02"
+      ]
+    },
+    {
+      "id": "HAZ-004",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Person beside the robot in a turn or a pivot",
+      "modes": [
+        "autonomous: turns and pivots"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path"
+      ],
+      "cause": "In a headland turn, an alignment pivot or a resume pivot the body and the mower deck sweep sideways; the fields look to the front and the rear only, and only in the direction of travel above 0.1 m/s; the deck is invisible to the collision checks (R-06: a resume pivot on a wall lane drives the deck into the post line, margin about -0.61 m) and the pivot has no clearance check (STATUS 16c).",
+      "event": "The deck or the body strikes a person beside the robot, or pins them against a post or a wall.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing against a post or wall; blade contact at the deck edge",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: pinning against a post or a wall. F1: in the greenhouse the greenhouse rule (D79) keeps people out of the lane ends and the cross aisles where the robot turns (assumption 1); in the groves few people are near a turning robot. P2: a pivot moves the deck sideways at close range.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-13"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "No function covers the swept zone at the sides; PL b at most.",
+      "refs": [
+        "R-06",
+        "STATUS 16c",
+        "D53",
+        "D67"
+      ]
+    },
+    {
+      "id": "HAZ-005",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "The robot resumes into a person after a hold",
+      "modes": [
+        "autonomous: hold and resume"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "a person in the path"
+      ],
+      "cause": "H1 resumes after 2 s clear on valid scans; a person still in the zone in front of the body (not covered) or crouched below the scan plane counts as clear; a second person enters during the clear time; the mower restarts at H1, where the D72 latch ends; the operator walks up to answer the hold.",
+      "event": "The robot moves off and its blades restart into the person.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing; cuts or amputation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2 as HAZ-001. F1: the greenhouse rule (D79) keeps people out of the robot's zone, so the robot holds for a person there only seldom (assumption 1); in the groves few people come close. P2: the person believes the robot is stopped for them.",
+      "goals": [
+        "SG-02"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-09"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "No function checks the near zone before the resume (the owner's open decision 2, R-02); PL b at most.",
+      "refs": [
+        "D72",
+        "R-02",
+        "R-03",
+        "STATUS 21"
+      ]
+    },
+    {
+      "id": "HAZ-006",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "A person reaches the running deck from the side",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: turns and pivots"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path"
+      ],
+      "cause": "A person approaches the mowing robot from the side, to stop it or to clear debris; the fields look front and rear only, so the blades keep running until the person enters a field.",
+      "event": "A hand or a foot reaches the blades through the side or the discharge opening of the deck.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "cuts or amputation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: amputation. F1: the greenhouse rule (D79) keeps people out of the aisle the robot mows and the beds beside it, so a person is within reach of the deck only seldom (assumption 1); in the groves few people are beside the robot. P2: a blade at 76 m/s tip speed gives no time to withdraw.",
+      "goals": [
+        "SG-09"
+      ],
+      "functions": [
+        "SF-09"
+      ],
+      "other_measures": "the deck housing as a fixed guard (the primary measure), to the mower standard G1-01 names",
+      "meets": "no",
+      "gap": "No function stops the blades for a person beside the deck (the fields look to the front and the rear); PL b at most; the mower implement (blades, guard, motor, brake) is not in the as-built record.",
+      "refs": [
+        "D72",
+        "gnc 2.9",
+        "power 2.5"
+      ]
+    },
+    {
+      "id": "HAZ-007",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "A detour into a person or an occupied lane",
+      "modes": [
+        "autonomous: bypass and rejoin"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path"
+      ],
+      "cause": "After 10 s in a hold the robot may detour round the obstacle (H2) where the segment allows it, also round a person standing still, or into the next lane where a person works; the bypass speed skips the governor (R-41); the rejoin goal can lie behind the robot (R-49).",
+      "event": "The robot strikes a person on its detour.",
+      "exposed": [
+        "people nearby"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: impact and pinning. F1: where a mission allows detours in a greenhouse, the greenhouse rule (D79) keeps people out of the lanes the detour can enter (assumption 1); in the groves few people are in the neighbouring rows. P2: the person who made the robot stop does not expect it to move round them.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-13"
+      ],
+      "other_measures": "detours are off in the greenhouse mission of S4 (a mission setting, not a safety function)",
+      "meets": "no",
+      "gap": "As HAZ-002; no rule keeps a detour away from a person who stands still.",
+      "refs": [
+        "R-24",
+        "R-41",
+        "R-49",
+        "gnc 4.1 H2"
+      ]
+    },
+    {
+      "id": "HAZ-008",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "The robot leaves its operating zone in a palm grove",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "lost GNSS",
+        "a sensor fault"
+      ],
+      "cause": "A wrong position (a false RTK fix, R-43; multipath under the canopy; the antenna lever-arm bias, R-21), a wrong mission plan or boundary, or a geofence that fails; the robot drives onto a road, a canal bank or a neighbour's plot, or off a berm edge.",
+      "event": "The robot strikes people or vehicles outside its zone, or falls from a berm.",
+      "exposed": [
+        "people nearby",
+        "people outside the zone"
+      ],
+      "harm": "impact; a fall or tip-over of the robot",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: impact; a robot falling from a berm. F1: people beyond the field's edge (a road, a canal, a neighbour's plot) are seldom close to it. P2: the robot arrives at up to 1.2 m/s, and a person outside the field does not expect it.",
+      "goals": [
+        "SG-03"
+      ],
+      "functions": [
+        "SF-14"
+      ],
+      "other_measures": "the mission check in the twin before the field",
+      "meets": "no",
+      "gap": "Companion software on GNSS (PL b at most); no check against a false RTK fix (R-43); no GNSS receiver is in the as-built record.",
+      "refs": [
+        "R-21",
+        "R-43",
+        "S7",
+        "gnc 4.1 G1"
+      ]
+    },
+    {
+      "id": "HAZ-009",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "The robot leaves its aisle in a greenhouse",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: turns and pivots",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "greenhouse aisles"
+      ],
+      "cases": [
+        "normal use",
+        "lost GNSS",
+        "a sensor fault"
+      ],
+      "cause": "A scan-match localisation error (R-23, R-51), an IMU loss of 1 s or more that ends navigation in the greenhouse (STATUS 26), cross-track errors at the row entry (R-52).",
+      "event": "The robot leaves the aisle into the beds, a post, the end wall, the film or a door, and can pin a worker there.",
+      "exposed": [
+        "people nearby"
+      ],
+      "harm": "crushing against a post or wall",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: pinning against a post or a wall. F1: the greenhouse rule (D79) keeps people out of the aisle the robot mows and the beds and posts beside it (assumption 1); a person is there only seldom and briefly. P2: a person between the robot and a post or the end wall cannot move away.",
+      "goals": [
+        "SG-03"
+      ],
+      "functions": [
+        "SF-14"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "The cross-track check runs on the estimated position, so a localisation error is not seen; navigation cannot re-align without RTK (R-44); PL b at most.",
+      "refs": [
+        "R-23",
+        "R-44",
+        "R-51",
+        "R-52",
+        "STATUS 26"
+      ]
+    },
+    {
+      "id": "HAZ-010",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Speed above what the stop distance allows",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: transit and return",
+        "RC driving"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "a sensor fault"
+      ],
+      "cause": "The speed limit of the mode fails, or the measured speed is wrong (an encoder or odometry error, track slip, a downhill gain), so the field length (0.5 + 0.8 |v| m) and the stop distance no longer match.",
+      "event": "The robot reaches a person before it stops.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2 as HAZ-001. F1: the greenhouse rule (D79) keeps people out of the robot's path in the greenhouse (assumption 1), and elsewhere few people are in it. P2: the person relies on the robot stopping in time.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-13",
+        "SF-12",
+        "SF-18"
+      ],
+      "other_measures": "none",
+      "meets": "partly",
+      "gap": "The speed limits and the overspeed trip act in S1 and the D71 tests, but one MCU on the encoders (PL b at most).",
+      "refs": [
+        "D33",
+        "D43",
+        "D71"
+      ]
+    },
+    {
+      "id": "HAZ-011",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "A person close to the robot when a mission starts",
+      "modes": [
+        "autonomous: start"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves",
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "The supervisor starts a mission while a worker or the maintainer is beside or in front of the robot.",
+      "event": "After the 3 s warning the robot moves off into the person.",
+      "exposed": [
+        "people nearby",
+        "the maintainer",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: pinning. F1: a start lasts a few seconds, a few times a shift. P2: in an aisle or at the dock the person cannot move away; the start warning earns no credit (rule 1).",
+      "goals": [
+        "SG-08"
+      ],
+      "functions": [
+        "SF-15",
+        "SF-08",
+        "SF-16"
+      ],
+      "other_measures": "the supervisor's look at the robot before the start (information for use)",
+      "meets": "no",
+      "gap": "The warning is information only; the field does not cover the near zone or the sides; PL b at most.",
+      "refs": [
+        "electronics 2.7.3",
+        "D72"
+      ]
+    },
+    {
+      "id": "HAZ-012",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Loss of the companion or of its commands in AUTO",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: transit and return",
+        "autonomous: turns and pivots"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "a sensor fault"
+      ],
+      "cause": "The companion stops, or hangs while its CAN frames stay fresh (alive counters not checked, R-39); the CAN2 link fails; ROS frames are dropped (R-48); a stale command persists.",
+      "event": "The robot runs on with its last command, past a person or out of its zone.",
+      "exposed": [
+        "people nearby"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: impact and crushing by a robot out of control. F1: the greenhouse rule (D79) keeps people out of the working robot's zone in the greenhouse (assumption 1), and elsewhere few people are in its path. P2: an uncontrolled robot gives no warning.",
+      "goals": [
+        "SG-07"
+      ],
+      "functions": [
+        "SF-06",
+        "SF-04"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "The companion time-out (T-EL-32) catches a silent companion, but a hung companion that keeps sending fresh frames is not seen (R-39); PL b at most.",
+      "refs": [
+        "R-39",
+        "R-48",
+        "electronics 2.7.10 bit 4"
+      ]
+    },
+    {
+      "id": "HAZ-013",
+      "phase": "mowing",
+      "group": "Autonomous missions",
+      "title": "Crushing between the robot and the dock",
+      "modes": [
+        "docking and charging"
+      ],
+      "places": [
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "normal use",
+        "low energy",
+        "a person in the path"
+      ],
+      "cause": "The robot approaches its dock at 0.2 m/s while the maintainer stands between it and the dock; docking is unsupervised and has never met a dock body (R-10); masking the dock zone for the approach would blind the field there.",
+      "event": "The maintainer's legs are crushed between the robot and the dock.",
+      "exposed": [
+        "the maintainer",
+        "people nearby"
+      ],
+      "harm": "crushing of the legs",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: crushing against a fixed body. F1: people are at the dock only when a robot docks, a few times a day. P2: a person caught between the robot and the dock cannot move away.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-13"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "PL b at most; docking has never met a dock body (R-10); the dock is not in the as-built record.",
+      "refs": [
+        "R-10",
+        "gnc 4.1 R3 and R4"
+      ]
+    },
+    {
+      "id": "HAZ-014",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "A person struck while the operator drives by RC",
+      "modes": [
+        "RC driving"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves",
+        "the slope test ground",
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "The operator misjudges a distance, cannot see a person behind or beside the robot, or steers the wrong way when the robot faces them; the person stop does not act in RC driving.",
+      "event": "The robot strikes or pins the person, or runs over a foot.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: pinning. F1: RC driving places the robot and moves it between places, a few short drives a shift, under 1/20 of the working time. P2: in an aisle the person cannot move away, and RC speeds reach 1.4 m/s; the stick-release stop earns no credit (rule 1).",
+      "goals": [
+        "SG-11"
+      ],
+      "functions": [
+        "SF-19",
+        "SF-05",
+        "SF-06"
+      ],
+      "other_measures": "the operator's training and line of sight (information for use)",
+      "meets": "partly",
+      "gap": "The stick-release stop (S1) and the remote stop (S8b) act in the twin, but the RC chain is not safety-rated (PL b at most).",
+      "refs": [
+        "D33",
+        "D34",
+        "S1",
+        "S8b"
+      ]
+    },
+    {
+      "id": "HAZ-015",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "Unintended motion in RC driving",
+      "modes": [
+        "RC driving"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "a sensor fault"
+      ],
+      "cause": "Corrupted SBUS bytes accepted as valid frames (STATUS 8, S6c, R-47); a wrong channel map (R-70); a receiver failsafe preset that makes an arm edge (R-35); a stuck stick or trim; a switch from AUTO to MANUAL with the sticks off centre.",
+      "event": "The robot moves without the operator's command, towards a person.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: impact and crushing. F1: RC driving is short, as HAZ-014. P2: the motion is unexpected.",
+      "goals": [
+        "SG-11"
+      ],
+      "functions": [
+        "SF-16",
+        "SF-19",
+        "SF-05"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "Corrupted bytes can pass as valid frames (STATUS 8); PL b at most.",
+      "refs": [
+        "STATUS 8",
+        "R-35",
+        "R-47",
+        "R-70"
+      ]
+    },
+    {
+      "id": "HAZ-016",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "The RC link is lost while the robot moves",
+      "modes": [
+        "RC driving"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "lost RC"
+      ],
+      "cause": "Out of range, interference, a flat transmitter battery, a receiver failsafe. In AUTO a lost link stops the robot (D44); a failure of that stop leaves the operator without the remote stop, which is HAZ-022.",
+      "event": "The robot runs on without control.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: impact and crushing by a robot out of control. F1: RC driving is short, as HAZ-014. P2: an uncontrolled robot gives no warning.",
+      "goals": [
+        "SG-07"
+      ],
+      "functions": [
+        "SF-06",
+        "SF-04"
+      ],
+      "other_measures": "the operator stays in range (in AUTO a lost link stops the robot, D44)",
+      "meets": "partly",
+      "gap": "The stop acts in S6, but one MCU (PL b at most); the radio model of the row tests cannot produce a link loss (R-12).",
+      "refs": [
+        "D34",
+        "D37",
+        "D44",
+        "S6",
+        "R-12"
+      ]
+    },
+    {
+      "id": "HAZ-017",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "A descent too fast, or a hard stop on the slope",
+      "modes": [
+        "RC driving",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a stop on a slope"
+      ],
+      "cause": "The robot descends the 20 deg ramp or a berm and stops or E-stops; a brakes-locked stop above the tip speed for the slope and the implement tips it over its front (S2c).",
+      "event": "The robot pitches over its nose onto a person in front of or below it.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "crushing under the robot",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: a 220 to 316 kg robot falling on a person. F1: few people are near a robot on a slope: the slope test ground is closed to others, and berms are a small part of a grove. P2: a tip-over is sudden.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11",
+        "SF-10"
+      ],
+      "other_measures": "the CR-001 envelope in the information for use",
+      "meets": "partly",
+      "gap": "The cap acts on the benches (T-EL-54 to 60), but G2-DSC is open (D74 pending); one IMU and one MCU (PL b at most); the tip speeds rest on estimated contact data until T-04.",
+      "refs": [
+        "G2-DSC",
+        "CR-001",
+        "S2c",
+        "D71",
+        "STATUS 19"
+      ]
+    },
+    {
+      "id": "HAZ-018",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "Driving or stopping with the mower deck raised",
+      "modes": [
+        "RC driving",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "a sensor fault",
+        "foreseeable misuse"
+      ],
+      "cause": "The deck is raised for transport or by the lift switch; raised, the robot is nose-heavy and a locked stop tips it from about 0.23 m/s on the flat; the deck-down rule is in the GNC, with the MCU's raised rows as a backstop (0.15 m/s on the flat, 0 from 5 deg); a lift-sensor fault reports the deck down.",
+      "event": "The robot tips forward in a stop.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "crushing; the deck strikes a person",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: the robot tips over onto a person. F1: the robot moves with the deck raised only in transport, a short part of the use. P2: a tip-over is sudden.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11"
+      ],
+      "other_measures": "the deck down whenever the robot moves (the owner's decision of 2026-11-15)",
+      "meets": "no",
+      "gap": "The raised-deck rows act in t_mcu_control, in the MCU's own sense of the lift position, but the twin reads that position inverted: the plant gives 0 with the deck at the top, and the MCU counts the deck raised at 0.667 and above, so the rows apply with the deck low and not with it raised (the structure spec; pending, cards G2-STR or G2-MCU, the check on G2-INT). In RC driving the GNC's deck-down rule does not act, so nothing in the twin covers a raised deck there. Once fixed, the rows rest on one lift sensor and one MCU (PL b at most).",
+      "refs": [
+        "params/param_structure.m descent rows",
+        "params/param_electronics.m lim.descent"
+      ]
+    },
+    {
+      "id": "HAZ-019",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "Loading on a trailer, or crossing a ramp or a berm edge",
+      "modes": [
+        "transport and recovery"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "normal use",
+        "foreseeable misuse"
+      ],
+      "cause": "Driving onto a trailer or a loading ramp, or over a berm edge steeper than the envelope; a track leaves the side of the ramp.",
+      "event": "The robot falls off the ramp or tips over onto the operator.",
+      "exposed": [
+        "the operator",
+        "the maintainer"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: a 220 kg robot falling from a ramp. F1: loading takes minutes, a few times a week. P2: the operator is close to the robot on the ramp.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11",
+        "SF-10"
+      ],
+      "other_measures": "a loading procedure with the ramp angle and width (information for use)",
+      "meets": "no",
+      "gap": "The cap and the tilt stop act on the pitch only; nothing sees a track leaving the side of a ramp; no loading procedure.",
+      "refs": [
+        "D47"
+      ]
+    },
+    {
+      "id": "HAZ-020",
+      "phase": "mowing",
+      "group": "RC driving",
+      "title": "Blades running while a person approaches in RC driving",
+      "modes": [
+        "RC driving"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "In RC driving the rotor runs with the implement switch on and the person stop does not act; a helper approaches to guide the robot or clear the deck.",
+      "event": "Blade contact through the deck openings.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "cuts or amputation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: amputation. F1: RC driving with the implement on is short. P2: a blade leaves no time to withdraw.",
+      "goals": [
+        "SG-09"
+      ],
+      "functions": [
+        "SF-09",
+        "SF-01"
+      ],
+      "other_measures": "the deck housing as a guard; the operator's training",
+      "meets": "no",
+      "gap": "No function stops the blades for a person in RC driving; the mower implement is not in the as-built record.",
+      "refs": [
+        "electronics 2.7.12"
+      ]
+    },
+    {
+      "id": "HAZ-021",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "The robot does not stop on its E-stop button or bumper",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "an E-stop with reset and re-arm"
+      ],
+      "cause": "A part of the chain is missing or fails: the bumpers and the brake-release cut are not confirmed on the robot (the owner confirms the E-stop buttons and a safety relay with STO wiring, D80); a welded relay contact, an STO input that does not act, a brake that does not engage.",
+      "event": "The robot keeps moving into the person who pressed the E-stop.",
+      "exposed": [
+        "the operator",
+        "people nearby",
+        "the maintainer"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: the person who pressed the E-stop is struck. F1: the greenhouse rule (D79) keeps people out of the working robot's zone in the greenhouse (assumption 1), and elsewhere few people are close to it; the E-stop is needed by a person in that zone. P2: in an emergency the person is already in danger.",
+      "goals": [
+        "SG-06"
+      ],
+      "functions": [
+        "SF-01",
+        "SF-02",
+        "SF-03"
+      ],
+      "other_measures": "none",
+      "meets": "partly",
+      "gap": "Designed in the twin as two channels with a discrepancy check, and shown in S8a. On the robot the owner confirms E-stop buttons and a safety relay with STO wiring (D80), but their parts, category and wiring are not recorded yet (card G1-04); the ESC's STO and the brakes are unconfirmed (R-14); the relay re-arms without a manual reset (F-01).",
+      "refs": [
+        "electronics D7",
+        "D30",
+        "S8",
+        "power 2.5",
+        "R-33"
+      ]
+    },
+    {
+      "id": "HAZ-022",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "The operator's remote stop does not act",
+      "modes": [
+        "RC driving",
+        "autonomous: rows",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "an E-stop with reset and re-arm",
+        "lost RC"
+      ],
+      "cause": "The remote E-stop (CH12) travels through the SBUS radio and the MCU, which are not safety-rated; it acts on valid frames only and is lost out of range; no certified wireless E-stop is fitted.",
+      "event": "The robot does not stop when the operator presses the remote stop, and keeps moving into a person.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2 as HAZ-021. F1 as HAZ-021. P2: the stop is used when the person is already in danger.",
+      "goals": [
+        "SG-06"
+      ],
+      "functions": [
+        "SF-05",
+        "SF-06"
+      ],
+      "other_measures": "none",
+      "meets": "partly",
+      "gap": "The remote stop acts in S8b, but it is a functional stop through SBUS (PL b at most) and is lost out of range; a remote emergency stop needs a safety-rated radio stop (the spec's recommendation: a certified wireless E-stop in series with the loop): new hardware.",
+      "refs": [
+        "electronics 2.5",
+        "D34",
+        "D44",
+        "architecture 13 R1"
+      ]
+    },
+    {
+      "id": "HAZ-023",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "An E-stop or a loss of power on a descent tips the robot",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "an E-stop with reset and re-arm",
+        "a stop on a slope",
+        "low energy"
+      ],
+      "cause": "An E-stop or a loss of power applies STO and the spring brakes at once (traction stops as category 0, R-33) at a speed above the safe start speed of a brakes-locked stop for the slope and the implement.",
+      "event": "The robot pitches over its front.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "crushing under the robot",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: the robot tips over onto a person. F1: few people are near a robot on a descent, as HAZ-017. P2: a tip-over is sudden.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11"
+      ],
+      "other_measures": "the CR-001 envelope",
+      "meets": "no",
+      "gap": "No run shows yet that an E-stop on the descent does not tip (an exit criterion of G2-DSC); PL b at most.",
+      "refs": [
+        "G2-DSC",
+        "CR-001",
+        "R-33"
+      ]
+    },
+    {
+      "id": "HAZ-024",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "A controlled stop on a slope does not hold the robot",
+      "modes": [
+        "stops: controlled stop and park"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "a stop on a slope"
+      ],
+      "cause": "The soft stop ends without the brakes (fixed by D71: brakes first, STOP_FAIL as the STO backup), or a brake is worn, stuck released or missing; the brake confirmation only echoes the brake command (STATUS 27).",
+      "event": "The robot rolls away downhill.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: a robot rolling into a person. F1: few people are below a robot on a slope, as HAZ-017. P2: a runaway gathers speed.",
+      "goals": [
+        "SG-05"
+      ],
+      "functions": [
+        "SF-03",
+        "SF-04",
+        "SF-02"
+      ],
+      "other_measures": "none",
+      "meets": "partly",
+      "gap": "D71 parks every soft stop on the brakes (S2 hold), but nothing monitors the brakes (STATUS 27), the detection is one MCU (PL b at most), and the brakes are estimates in the as-built record.",
+      "refs": [
+        "D71",
+        "R-01",
+        "STATUS 27",
+        "T-04"
+      ]
+    },
+    {
+      "id": "HAZ-025",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "Runaway on a long descent when the battery cannot take charge",
+      "modes": [
+        "RC driving",
+        "autonomous: transit and return",
+        "autonomous: rows"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a stop on a slope"
+      ],
+      "cause": "With a full or a hot pack (CCL 0; the sealed pack at 45 deg C stays above 50 deg C, R-04) the drive cannot brake by regeneration and the speed rises downhill; the speed-follow trip then parks at speed (STATUS 19), and with CCL 0 it also trips on ordinary stops (STATUS 24).",
+      "event": "The robot gains speed downhill, then locks its brakes at speed: it skids into a person or tips over.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact; crushing under the robot",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: an impact at speed or a tip-over. F1: few people are below a robot on a descent, as HAZ-017. P2: a runaway gathers speed.",
+      "goals": [
+        "SG-05"
+      ],
+      "functions": [
+        "SF-12",
+        "SF-11",
+        "SF-03",
+        "SF-04"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "With CCL 0 the speed-follow trip parks at speed on steep descents (STATUS 19) and trips on ordinary stops (STATUS 24): open in G2-DSC; a stop without skidding is proposed (G2-BRK); PL b at most.",
+      "refs": [
+        "STATUS 16a",
+        "STATUS 19",
+        "STATUS 24",
+        "R-04",
+        "G2-BRK"
+      ]
+    },
+    {
+      "id": "HAZ-026",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "Unexpected motion after a reset or a restart",
+      "modes": [
+        "stops: E-stop, reset and re-arm",
+        "power-up and self-test"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "an E-stop with reset and re-arm"
+      ],
+      "cause": "The safety relay is re-armed by the MCU's reset pulse (DO1): on the reset button, on RC CH9 over the SBUS radio, which is not safety-rated, from wherever the transmitter is, and once automatically on each SELFTEST entry (D30). After a controller restart (power-up or watchdog) the relay re-arms with no manual action, provided every loop contact is closed. A controller reset clears the latches (R-36); an arm edge can come from the receiver (R-35); a stale command or an AUTO resume can follow the reset.",
+      "event": "The robot or its blades start while a person who believes it stopped is close.",
+      "exposed": [
+        "the operator",
+        "the maintainer",
+        "people nearby"
+      ],
+      "harm": "impact, crushing; cuts",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: crushing, and cuts if the blades start. F1: a reset is a deliberate act at a stopped robot, a few times a shift. P2: the person believes the robot is stopped.",
+      "goals": [
+        "SG-08"
+      ],
+      "functions": [
+        "SF-16",
+        "SF-07"
+      ],
+      "other_measures": "none",
+      "meets": "partly",
+      "gap": "Motion still needs a new arm edge (S6, S8a), but that interlock is one MCU (PL b at most); after a restart, the stop of a maintained E-stop rests on that interlock, not on the hardware latch (F-01).",
+      "refs": [
+        "D30",
+        "R-35",
+        "R-36",
+        "S6",
+        "S8"
+      ]
+    },
+    {
+      "id": "HAZ-027",
+      "phase": "mowing",
+      "group": "Stops, E-stop, reset and re-arm",
+      "title": "Roll-back at a hill start",
+      "modes": [
+        "RC driving",
+        "autonomous: rows"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "a stop on a slope"
+      ],
+      "cause": "The brakes release before the speed loop holds the robot (R-37: about 0.1 m at 20 deg; the hill-start fix of CR-001 is in progress).",
+      "event": "The robot rolls back about 0.1 m towards a person behind it.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "a bruise",
+      "S": "S1",
+      "F": "F1",
+      "P": "P1",
+      "plr": "a",
+      "why": "S1: a short slow movement (about 0.1 m at 0.09 m/s). F1: few people stand behind a robot on a slope. P1: slow, with room to step back.",
+      "goals": [
+        "SG-05"
+      ],
+      "functions": [
+        "SF-03",
+        "SF-16"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "No function prevents the roll-back yet; the hill-start fix of CR-001 is in progress on G2-DSC; PL a is within the reach of one MCU.",
+      "refs": [
+        "R-37",
+        "CR-001",
+        "G2-DSC"
+      ]
+    },
+    {
+      "id": "HAZ-028",
+      "phase": "mowing",
+      "group": "Docking and charging",
+      "title": "Battery fire while charging in the heat",
+      "modes": [
+        "docking and charging",
+        "maintenance: charging"
+      ],
+      "places": [
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "normal use",
+        "low energy",
+        "maintenance"
+      ],
+      "cause": "Charging the sealed NMC pack at 45 to 50 deg C ambient (R-04); a charger or BMS fault (overcharge, charging outside the cell's temperature window); a cell defect; the dock air of the model does not exist for the real pack.",
+      "event": "Thermal runaway, fire and toxic smoke at the charging place.",
+      "exposed": [
+        "the maintainer",
+        "people nearby"
+      ],
+      "harm": "burns, smoke inhalation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P1",
+      "plr": "c",
+      "why": "S2: burns and smoke. F1: people stay at the charging place only to connect and disconnect the pack (assumption 5, which the owner has still to confirm). P1: a fire builds over minutes, and people can leave.",
+      "goals": [
+        "SG-10"
+      ],
+      "functions": [
+        "SF-17"
+      ],
+      "other_measures": "the charger's own constant-voltage limit (54.6 V); charging in a ventilated place away from flammables (information for use)",
+      "meets": "unknown",
+      "gap": "The bought BMS and charger: their protections, settings and frames are unknown (R-15).",
+      "refs": [
+        "R-04",
+        "R-15",
+        "D45"
+      ]
+    },
+    {
+      "id": "HAZ-029",
+      "phase": "mowing",
+      "group": "Docking and charging",
+      "title": "Battery fire in operation",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: transit and return",
+        "RC driving"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "A short circuit or an overcurrent (the fuse and BMS coordination is open: at 187.5 A the BMS opens before the 125 A fuse, T-PWR-06b fails); overheating at 45 to 50 deg C; damage after a tip-over or an impact.",
+      "event": "Fire on the robot in a greenhouse with plastic film, or in dry grass.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "burns, smoke inhalation",
+      "S": "S2",
+      "F": "F2",
+      "P": "P1",
+      "plr": "d",
+      "why": "S2: burns and smoke. F2: people at work in the other aisles of the greenhouse share its air with the working robot; the greenhouse rule (D79) does not change that (F1 in the groves). P1: a fire builds over minutes, and people can leave.",
+      "goals": [
+        "SG-10"
+      ],
+      "functions": [
+        "SF-17"
+      ],
+      "other_measures": "the 3 mm aluminium pack box; fuses",
+      "meets": "unknown",
+      "gap": "Fuse and BMS coordination open; the BMS's settings unknown (R-15).",
+      "refs": [
+        "real_robot_components 6 (T-PWR-06b)",
+        "R-04",
+        "R-15"
+      ]
+    },
+    {
+      "id": "HAZ-030",
+      "phase": "mowing",
+      "group": "Docking and charging",
+      "title": "Live dock contacts and arcs at the charging connections",
+      "modes": [
+        "maintenance: charging",
+        "docking and charging"
+      ],
+      "places": [
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "normal use",
+        "maintenance"
+      ],
+      "cause": "The dock contacts are live while the robot is not docked (a welded K4 is not detected, R-45); an arc when the charging connections are made or broken. 54.6 V is below the shock limit in dry conditions, but a short of a 3 kWh pack gives a high current.",
+      "event": "An arc flash or a burn; a small shock in wet conditions.",
+      "exposed": [
+        "the maintainer"
+      ],
+      "harm": "burns",
+      "S": "S1",
+      "F": "F1",
+      "P": "P2",
+      "plr": "b",
+      "why": "S1: local burns. F1: work at the pack and the contacts is short: connecting and disconnecting. P2: an arc is sudden.",
+      "goals": [
+        "SG-10"
+      ],
+      "functions": [
+        "SF-17"
+      ],
+      "other_measures": "insulated tools, terminal covers, touch-protected contacts; a short of the pack by a tool is reduced by these, not by a function",
+      "meets": "partly",
+      "gap": "K4 closes only with dock contact (power spec 2.5; the charging tests), but no weld check (R-45).",
+      "refs": [
+        "R-45",
+        "power 2.5 (K4)"
+      ]
+    },
+    {
+      "id": "HAZ-031",
+      "phase": "mowing",
+      "group": "Docking and charging",
+      "title": "Mains shock from the charger",
+      "modes": [
+        "maintenance: charging"
+      ],
+      "places": [
+        "the dock and the charging place"
+      ],
+      "cases": [
+        "maintenance"
+      ],
+      "cause": "The charger (100 to 240 VAC, IP54, fan cooled) is used outdoors in the wet, or its cable is damaged.",
+      "event": "An electric shock from the mains.",
+      "exposed": [
+        "the maintainer"
+      ],
+      "harm": "electric shock",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "n/a",
+      "why": "S2 F1 P2 for the record (a shock is sudden); no control function reduces it.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "the charger's own conformity; an RCD-protected socket; use in a dry place (information for use)",
+      "meets": "by other measures",
+      "gap": "The charger's conformity data are not in the records.",
+      "refs": [
+        "real_robot_components 2"
+      ]
+    },
+    {
+      "id": "HAZ-032",
+      "phase": "mowing",
+      "group": "Maintenance",
+      "title": "The tracks start during inspection or cleaning",
+      "modes": [
+        "maintenance: inspection and cleaning"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "maintenance"
+      ],
+      "cause": "The robot is powered while the maintainer inspects the brakes, the tracks or the sensors, and a command (RC, the companion, a reset) starts the tracks.",
+      "event": "Drawing-in at a sprocket, crushing under a track.",
+      "exposed": [
+        "the maintainer"
+      ],
+      "harm": "crushing, drawing-in of a hand",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: a hand drawn into a sprocket. F1: an inspection is short, about once a day. P2: the start is unexpected, and the hand is already at the track.",
+      "goals": [
+        "SG-08"
+      ],
+      "functions": [
+        "SF-16",
+        "SF-01"
+      ],
+      "other_measures": "isolation of the pack (the SB120 connector) per a maintenance procedure; the E-stop pressed when power is needed",
+      "meets": "no",
+      "gap": "The start interlocks act in the twin (PL b at most), but no isolation procedure or lockable isolator is recorded (the manuals come with V-06).",
+      "refs": [
+        "charter 5",
+        "real_robot_components 2 (SB120)"
+      ]
+    },
+    {
+      "id": "HAZ-033",
+      "phase": "mowing",
+      "group": "Maintenance",
+      "title": "Blades start, or still turn, while the maintainer works at the deck",
+      "modes": [
+        "maintenance: implement change",
+        "maintenance: inspection and cleaning",
+        "stops: controlled stop and park"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "maintenance",
+        "an E-stop with reset and re-arm"
+      ],
+      "cause": "The rotor gets power while the maintainer changes a blade or clears the deck; after a stop the blades coast down with no brake, and the run-down time is unknown and unchecked (R-33).",
+      "event": "Cuts or amputation.",
+      "exposed": [
+        "the maintainer",
+        "the operator"
+      ],
+      "harm": "cuts, amputation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: amputation. F1: work at the deck is short, a few times a week. P2: a coasting blade is hard to see.",
+      "goals": [
+        "SG-09"
+      ],
+      "functions": [
+        "SF-09",
+        "SF-01"
+      ],
+      "other_measures": "isolation before work at the deck",
+      "meets": "no",
+      "gap": "Run-down time unknown; no blade brake specified; the mower is not in the as-built record.",
+      "refs": [
+        "R-33",
+        "power 2.5"
+      ]
+    },
+    {
+      "id": "HAZ-034",
+      "phase": "mowing",
+      "group": "Maintenance",
+      "title": "Crushing when fitting, removing or lifting an implement",
+      "modes": [
+        "maintenance: implement change"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "maintenance"
+      ],
+      "cause": "The deck lift moves under power (the 3-position switch); the 50 kg module or the deck falls or swings; the robot moves during the change.",
+      "event": "A hand or a foot is crushed.",
+      "exposed": [
+        "the maintainer"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: a hand or a foot crushed under a 50 kg module. F1: an implement change is short, a few times a week. P2: a falling module or a robot that moves is sudden.",
+      "goals": [
+        "SG-08"
+      ],
+      "functions": [
+        "SF-16"
+      ],
+      "other_measures": "isolation; lifting aids; a procedure",
+      "meets": "no",
+      "gap": "No procedure recorded; the coupling and the lift of the as-built implements are not in the record.",
+      "refs": [
+        "electronics 2.7.12 (lift)",
+        "real_robot_components 5"
+      ]
+    },
+    {
+      "id": "HAZ-035",
+      "phase": "mowing",
+      "group": "Maintenance",
+      "title": "Recovering a stranded robot on a slope",
+      "modes": [
+        "transport and recovery"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "low energy",
+        "maintenance"
+      ],
+      "cause": "An empty or tripped battery leaves the robot on its spring brakes; to move it, the brakes are released by hand (if the real brakes allow it) or the robot is towed, and on a slope it runs away.",
+      "event": "The robot rolls onto the maintainer.",
+      "exposed": [
+        "the maintainer"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "n/a",
+      "why": "S2 F1 P2 for the record; no control function reduces it.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "a recovery procedure: chock the tracks, tow from uphill, release the brakes on flat ground only; a manual release, if any, of the hold-to-release kind",
+      "meets": "by other measures",
+      "gap": "The brakes' design is not in the as-built record; no procedure.",
+      "refs": [
+        "SF-03"
+      ]
+    },
+    {
+      "id": "HAZ-036",
+      "phase": "mowing",
+      "group": "Maintenance",
+      "title": "Hot surfaces",
+      "modes": [
+        "maintenance: inspection and cleaning"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "maintenance"
+      ],
+      "cause": "Motors, ESCs and the pack box in the sun at 45 to 50 deg C.",
+      "event": "A burn on touch.",
+      "exposed": [
+        "the maintainer",
+        "the operator"
+      ],
+      "harm": "a minor burn",
+      "S": "S1",
+      "F": "F1",
+      "P": "P1",
+      "plr": "n/a",
+      "why": "S1 F1 P1 for the record: a hand withdraws from a hot surface.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "guards, labels, gloves",
+      "meets": "by other measures",
+      "gap": "",
+      "refs": []
+    },
+    {
+      "id": "HAZ-037",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "Unexpected motion or brake release at power-up",
+      "modes": [
+        "power-up and self-test"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "A stale command, an ESC that enables on its own, brakes released at power-up, the automatic re-arm on SELFTEST entry (D30), or an MCU that boots into a wrong state; the robot's controller today is the supplier's board, whose start-up behaviour is not documented.",
+      "event": "The robot moves at power-up into the person next to it.",
+      "exposed": [
+        "the maintainer",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: crushing at close range. F1: a power-up lasts seconds, a few times a day. P2: the motion is unexpected.",
+      "goals": [
+        "SG-08"
+      ],
+      "functions": [
+        "SF-16",
+        "SF-07"
+      ],
+      "other_measures": "none",
+      "meets": "partly",
+      "gap": "S0 shows BOOT, SELFTEST and STANDBY with no motion and the brakes applied until ACTIVE, but in one MCU (PL b at most); the robot's controller today is the supplier's board, whose start-up is not documented.",
+      "refs": [
+        "S0",
+        "D30",
+        "R-36"
+      ]
+    },
+    {
+      "id": "HAZ-038",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "Tip-over or rollover on a side slope, a berm or a turn on a slope",
+      "modes": [
+        "RC driving",
+        "autonomous: rows",
+        "autonomous: turns and pivots",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a stop on a slope",
+        "a sensor fault"
+      ],
+      "cause": "A side slope or a berm beyond the envelope; a turn on a slope (the D53 limits; T7b cannot fail, R-54); a wrong but plausible IMU (a bias, a misalignment, a slow drift) that removes the tilt stop and the slope limits together without a fault (R-05; since D73 a frozen IMU raises IMU_FAULT, whose class is the owner's open decision 5).",
+      "event": "The robot rolls over onto a person beside or below it.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: the robot rolls over onto a person. F1: few people are beside or below a robot on a side slope or a berm, as HAZ-017. P2: a rollover is sudden.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-10",
+        "SF-11",
+        "SF-13"
+      ],
+      "other_measures": "the slope limits in the information for use",
+      "meets": "partly",
+      "gap": "The tilt stop acts in the twin (S2 shows no false trip; T-NAV-13), but one IMU and one MCU (PL b at most); a wrong but plausible IMU is not seen (R-05).",
+      "refs": [
+        "D47",
+        "D53",
+        "D73",
+        "R-05",
+        "R-54"
+      ]
+    },
+    {
+      "id": "HAZ-039",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "The robot applies the descent limits of the wrong implement",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "a sensor fault",
+        "foreseeable misuse"
+      ],
+      "cause": "The implement code (the coding plug) reports another valid implement, or the lift sensor fails, so the descent cap takes a row that is too high.",
+      "event": "A brakes-locked stop above the tip speed: the robot tips over.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: the robot tips over onto a person. F1: few people are near a robot on a slope, as HAZ-017. P2: a tip-over is sudden.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "An unknown implement takes the smallest row, but a wrong valid code is not seen; PL b at most.",
+      "refs": [
+        "params/param_electronics.m lim.descent rows 5 and 6",
+        "G2-DSC"
+      ]
+    },
+    {
+      "id": "HAZ-040",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "A low-energy stop on the way back",
+      "modes": [
+        "autonomous: transit and return",
+        "RC driving"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "low energy"
+      ],
+      "cause": "The SOC estimate of the as-built BMS is wrong or unknown, the return reserve is too small, or the BMS opens the contactor at low voltage while the robot moves (HV_Opening_Warn makes the MCU stop first only if the BMS warns). On flat ground such a stop is a stop on the brakes, and the robot is left where it stopped.",
+      "event": "An uncontrolled stop on the brakes at speed (a tip-over on a descent), or a robot stranded on a slope or in a lane.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2: a tip-over on a descent. F1: few people are near a robot on a descent, as HAZ-017. P2: the stop is sudden.",
+      "goals": [
+        "SG-05",
+        "SG-04"
+      ],
+      "functions": [
+        "SF-17",
+        "SF-04",
+        "SF-11"
+      ],
+      "other_measures": "the return reserve (soc_rth)",
+      "meets": "no",
+      "gap": "The as-built BMS's frames and warnings are unknown (R-15); the return on low energy has no scenario yet (charter 6; cards G2-INT, T-03).",
+      "refs": [
+        "R-15",
+        "R-19",
+        "charter 6",
+        "T-03"
+      ]
+    },
+    {
+      "id": "HAZ-041",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "Thrown objects from the mower deck",
+      "modes": [
+        "autonomous: rows",
+        "RC driving"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "Stones, sticks, palm debris or irrigation fittings thrown by the blades.",
+      "event": "Eye and body injuries of people nearby.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "eye injury, impact",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "n/a",
+      "why": "S2 F1 P2 for the record (a thrown object is sudden); reduced by the deck's guarding.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "the deck housing and its discharge guard (to the mower standard); a keep-out distance in the information for use",
+      "meets": "by other measures",
+      "gap": "The mower deck is not in the as-built record.",
+      "refs": []
+    },
+    {
+      "id": "HAZ-042",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "Mower noise",
+      "modes": [
+        "autonomous: rows",
+        "RC driving"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "Long shifts near the mowing robot.",
+      "event": "Hearing damage.",
+      "exposed": [
+        "the operator",
+        "people nearby"
+      ],
+      "harm": "hearing loss",
+      "S": "S2",
+      "F": "F2",
+      "P": "P1",
+      "plr": "n/a",
+      "why": "S2: hearing loss is irreversible. F2: the operator and people at work hear the mower through the shift. P1: the harm builds over hours, and hearing protection or distance limits it. For the record; no control function reduces it.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "noise emission data; hearing protection",
+      "meets": "by other measures",
+      "gap": "No noise data.",
+      "refs": []
+    },
+    {
+      "id": "HAZ-043",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "Misuse of the links (provisional, card G2-CYB)",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "lost RC",
+        "lost GNSS",
+        "foreseeable misuse"
+      ],
+      "cause": "The RC link jammed or spoofed by another transmitter; false RTK corrections over LTE; frames injected on CAN.",
+      "event": "Unauthorised or wrong commands, a wrong position, a lost link.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "Provisional: S2; F1 as HAZ-012, under the greenhouse rule (D79); P2. The threat analysis G2-CYB rates it.",
+      "goals": [
+        "SG-07"
+      ],
+      "functions": [
+        "SF-06",
+        "SF-14"
+      ],
+      "other_measures": "none",
+      "meets": "unknown",
+      "gap": "G2-CYB is proposed for a later phase; a jammed link stops the robot (SF-06), a spoofed one is not detected. A spoofed position also bears on SG-03, which G2-CYB rates.",
+      "refs": [
+        "G2-CYB",
+        "CR-002 A.12"
+      ]
+    },
+    {
+      "id": "HAZ-044",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "Foreseeable misuse: riding on the robot, a bridged E-stop, AUTO with nobody at the transmitter",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "foreseeable misuse"
+      ],
+      "cause": "A person, a child among them, climbs or rides on the robot; an E-stop or a bumper is bridged; a guard is removed; a mission runs with nobody near the transmitter.",
+      "event": "A fall or crushing; a robot that cannot be stopped.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "falls, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "n/a",
+      "why": "S2 F1 P2 for the record (a fall is sudden); reduced by the design and the information for use.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "no footholds; labels; training; the RC link required in AUTO (D44), so the transmitter stays in range",
+      "meets": "by other measures",
+      "gap": "The manuals come with V-06.",
+      "refs": [
+        "D44"
+      ]
+    },
+    {
+      "id": "HAZ-045",
+      "phase": "mowing",
+      "group": "Power-up, sensors and other",
+      "title": "The protective field starts at the wrong implement",
+      "modes": [
+        "autonomous: rows",
+        "autonomous: turns and pivots",
+        "autonomous: transit and return"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "a sensor fault",
+        "foreseeable misuse"
+      ],
+      "cause": "The protective field comes from the build setting, not the fitted implement (STATUS 25): a companion built for the mower and run with no implement or the tiller starts its front field at 1.20 m instead of 0.55 m; nothing compares the build setting with the implement the MCU reports.",
+      "event": "A person between the body and the start of the field is missed and struck.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "impact, crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "S2 as HAZ-001. F1: the greenhouse rule (D79) keeps people out of the robot's path in the greenhouse (assumption 1), and elsewhere few people are in it. P2: the person relies on being seen.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08"
+      ],
+      "other_measures": "none",
+      "meets": "no",
+      "gap": "The field does not follow the fitted implement (STATUS 25); PL b at most.",
+      "refs": [
+        "STATUS 25",
+        "D72"
+      ]
+    },
+    {
+      "id": "HAZ-101",
+      "phase": "later: tillage",
+      "group": "Later phase: tillage (card G2-TIL)",
+      "title": "The raised tiller tips the robot backward",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "As estimated (85 kg, 0.90 m behind the centre) the raised tiller makes the robot fall over backward at rest on flat soil in the full vehicle model.",
+      "event": "The robot tips backward onto a person behind it.",
+      "exposed": [
+        "the maintainer",
+        "the operator"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "Provisional, rated again with the tiller data.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11"
+      ],
+      "other_measures": "the tiller is not used until real tiller data exist (charter 3)",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "charter 3",
+        "G2-DSC"
+      ]
+    },
+    {
+      "id": "HAZ-102",
+      "phase": "later: tillage",
+      "group": "Later phase: tillage (card G2-TIL)",
+      "title": "Contact with the tiller rotor",
+      "modes": [
+        "autonomous: rows",
+        "RC driving"
+      ],
+      "places": [
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path"
+      ],
+      "cause": "A person reaches the rotating tines; the rotor restarts after a hold.",
+      "event": "Entanglement, drawing-in, cuts.",
+      "exposed": [
+        "people nearby",
+        "the maintainer"
+      ],
+      "harm": "amputation",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "Provisional.",
+      "goals": [
+        "SG-09"
+      ],
+      "functions": [
+        "SF-09"
+      ],
+      "other_measures": "the rotor guard; the implement latch (D72)",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "D72"
+      ]
+    },
+    {
+      "id": "HAZ-103",
+      "phase": "later: tillage",
+      "group": "Later phase: tillage (card G2-TIL)",
+      "title": "Reversing with the tiller",
+      "modes": [
+        "RC driving",
+        "autonomous: turns and pivots"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "Reversing with the tiller tips the robot backward or drives the tiller into a person behind it (the rear field starts at -1.125 m).",
+      "event": "A tip-over backward or a strike from behind.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "Provisional.",
+      "goals": [
+        "SG-04",
+        "SG-01"
+      ],
+      "functions": [
+        "SF-11",
+        "SF-08"
+      ],
+      "other_measures": "no reversing with the tiller (the cap's reverse row is 0)",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "params/param_structure.m descent rows"
+      ]
+    },
+    {
+      "id": "HAZ-104",
+      "phase": "later: tillage",
+      "group": "Later phase: tillage (card G2-TIL)",
+      "title": "Stones and soil thrown by the tiller",
+      "modes": [
+        "autonomous: rows"
+      ],
+      "places": [
+        "palm groves"
+      ],
+      "cases": [
+        "normal use"
+      ],
+      "cause": "The tines throw stones and clods.",
+      "event": "Injuries of people nearby.",
+      "exposed": [
+        "people nearby"
+      ],
+      "harm": "impact, eye injury",
+      "S": "S2",
+      "F": "F1",
+      "P": "P1",
+      "plr": "n/a",
+      "why": "Provisional; reduced by the guard.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "the tiller guard",
+      "meets": "later phase",
+      "gap": "",
+      "refs": []
+    },
+    {
+      "id": "HAZ-105",
+      "phase": "later: tillage",
+      "group": "Later phase: tillage (card G2-TIL)",
+      "title": "A brakes-locked stop with the tiller on a descent",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "a stop on a slope"
+      ],
+      "cause": "A stop at speed with the tiller forward on a descent; the cap rows for the tiller rest on estimated tiller data.",
+      "event": "A tip-over.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "Provisional.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11"
+      ],
+      "other_measures": "the tiller is not used until real data exist",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "G2-DSC"
+      ]
+    },
+    {
+      "id": "HAZ-106",
+      "phase": "later: spraying",
+      "group": "Later phase: spraying (card G2-SPR)",
+      "title": "The full-tank sprayer on a descent beyond about 18.5 deg",
+      "modes": [
+        "any mode"
+      ],
+      "places": [
+        "the slope test ground",
+        "palm groves"
+      ],
+      "cases": [
+        "a stop on a slope"
+      ],
+      "cause": "On the 20 deg ramp the robot measures 21 to 21.6 deg, where a brakes-locked stop with a full tank may start only at 0.05 to 0.10 m/s; the robot cannot tell a full tank from an empty one, so the full-tank row applies whenever the sprayer is fitted.",
+      "event": "A tip-over forward.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "crushing; chemical exposure",
+      "S": "S2",
+      "F": "F1",
+      "P": "P2",
+      "plr": "d",
+      "why": "Provisional.",
+      "goals": [
+        "SG-04"
+      ],
+      "functions": [
+        "SF-11"
+      ],
+      "other_measures": "the CR-001 operating limit (about 18.5 deg), in the requirements and the operating concept",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "CR-001",
+        "G2-BRK"
+      ]
+    },
+    {
+      "id": "HAZ-107",
+      "phase": "later: spraying",
+      "group": "Later phase: spraying (card G2-SPR)",
+      "title": "Spray reaches people",
+      "modes": [
+        "autonomous: rows"
+      ],
+      "places": [
+        "greenhouse aisles",
+        "palm groves"
+      ],
+      "cases": [
+        "normal use",
+        "a person in the path"
+      ],
+      "cause": "Drift onto workers in a greenhouse; nozzles on near a person; a wrong detection of the vision sprayer.",
+      "event": "Skin, eye or inhalation exposure to plant-protection products.",
+      "exposed": [
+        "people nearby",
+        "the operator"
+      ],
+      "harm": "poisoning, eye injury",
+      "S": "S2",
+      "F": "F2",
+      "P": "P1",
+      "plr": "d",
+      "why": "Provisional: S2 F2 P1.",
+      "goals": [
+        "SG-01"
+      ],
+      "functions": [
+        "SF-08",
+        "SF-09"
+      ],
+      "other_measures": "nozzles on only above 0.2 m/s; spray off in a hold; re-entry rules (information for use)",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "electronics 2.7.12",
+        "gnc 4.1 T5"
+      ]
+    },
+    {
+      "id": "HAZ-108",
+      "phase": "later: spraying",
+      "group": "Later phase: spraying (card G2-SPR)",
+      "title": "Chemical exposure in filling, cleaning, a hose burst or a spill",
+      "modes": [
+        "maintenance: implement change",
+        "any mode"
+      ],
+      "places": [
+        "any place"
+      ],
+      "cases": [
+        "maintenance"
+      ],
+      "cause": "Filling or cleaning the 40 L tank; a burst of the 12 mm hose at 3 bar; a spill after a tip-over.",
+      "event": "Skin or eye exposure to concentrate or spray.",
+      "exposed": [
+        "the maintainer",
+        "people nearby"
+      ],
+      "harm": "chemical burns, poisoning",
+      "S": "S2",
+      "F": "F1",
+      "P": "P1",
+      "plr": "n/a",
+      "why": "Provisional; reduced by procedures and PPE.",
+      "goals": [
+        "SG-12"
+      ],
+      "functions": [],
+      "other_measures": "PPE; filling and cleaning procedures",
+      "meets": "later phase",
+      "gap": "",
+      "refs": [
+        "real_robot_components 5"
+      ]
+    }
+  ],
+  "walkthrough": [
+    {
+      "case": "Placing the robot by RC (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "RC driving"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-014",
+        "HAZ-020",
+        "HAZ-029",
+        "HAZ-041",
+        "HAZ-042"
+      ],
+      "palm groves": [
+        "HAZ-014",
+        "HAZ-017",
+        "HAZ-020",
+        "HAZ-025",
+        "HAZ-029",
+        "HAZ-038",
+        "HAZ-041",
+        "HAZ-042"
+      ],
+      "the slope test ground": [
+        "HAZ-014",
+        "HAZ-017",
+        "HAZ-025",
+        "HAZ-038"
+      ],
+      "the dock and the charging place": [
+        "HAZ-014"
+      ]
+    },
+    {
+      "case": "Starting a mission (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "autonomous: start"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-011"
+      ],
+      "palm groves": [
+        "HAZ-011"
+      ],
+      "the slope test ground": [],
+      "the dock and the charging place": [
+        "HAZ-011"
+      ]
+    },
+    {
+      "case": "Mowing the rows with the deck lowered (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "autonomous: rows"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-001",
+        "HAZ-006",
+        "HAZ-009",
+        "HAZ-029",
+        "HAZ-041",
+        "HAZ-042"
+      ],
+      "palm groves": [
+        "HAZ-002",
+        "HAZ-006",
+        "HAZ-008",
+        "HAZ-025",
+        "HAZ-029",
+        "HAZ-038",
+        "HAZ-041",
+        "HAZ-042"
+      ],
+      "the slope test ground": [
+        "HAZ-025",
+        "HAZ-038"
+      ],
+      "the dock and the charging place": []
+    },
+    {
+      "case": "Turns at the row ends and pivots (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "autonomous: turns and pivots"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-004",
+        "HAZ-006",
+        "HAZ-009"
+      ],
+      "palm groves": [
+        "HAZ-004",
+        "HAZ-006",
+        "HAZ-038"
+      ],
+      "the slope test ground": [
+        "HAZ-038"
+      ],
+      "the dock and the charging place": []
+    },
+    {
+      "case": "Transit and the return to the dock (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "autonomous: transit and return"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-003",
+        "HAZ-009",
+        "HAZ-029"
+      ],
+      "palm groves": [
+        "HAZ-003",
+        "HAZ-008",
+        "HAZ-017",
+        "HAZ-025",
+        "HAZ-029",
+        "HAZ-038"
+      ],
+      "the slope test ground": [
+        "HAZ-017",
+        "HAZ-025",
+        "HAZ-038"
+      ],
+      "the dock and the charging place": [
+        "HAZ-003"
+      ]
+    },
+    {
+      "case": "Bypass and rejoin (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "autonomous: bypass and rejoin"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-007"
+      ],
+      "palm groves": [
+        "HAZ-007"
+      ],
+      "the slope test ground": [],
+      "the dock and the charging place": []
+    },
+    {
+      "case": "Docking and charging (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "docking and charging"
+        ]
+      },
+      "greenhouse aisles": [],
+      "palm groves": [],
+      "the slope test ground": [],
+      "the dock and the charging place": [
+        "HAZ-013",
+        "HAZ-028",
+        "HAZ-030"
+      ]
+    },
+    {
+      "case": "Power-up and self-test (normal use)",
+      "filter": {
+        "case": "normal use",
+        "modes": [
+          "power-up and self-test"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-037"
+      ],
+      "palm groves": [
+        "HAZ-037"
+      ],
+      "the slope test ground": [
+        "HAZ-037"
+      ],
+      "the dock and the charging place": [
+        "HAZ-037"
+      ]
+    },
+    {
+      "case": "A person in the path (hold, then resume)",
+      "filter": {
+        "case": "a person in the path",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-001",
+        "HAZ-003",
+        "HAZ-004",
+        "HAZ-005",
+        "HAZ-006",
+        "HAZ-007"
+      ],
+      "palm groves": [
+        "HAZ-002",
+        "HAZ-003",
+        "HAZ-004",
+        "HAZ-005",
+        "HAZ-006",
+        "HAZ-007"
+      ],
+      "the slope test ground": [],
+      "the dock and the charging place": [
+        "HAZ-003",
+        "HAZ-013"
+      ]
+    },
+    {
+      "case": "Lost RC",
+      "filter": {
+        "case": "lost RC",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-016",
+        "HAZ-022",
+        "HAZ-043"
+      ],
+      "palm groves": [
+        "HAZ-016",
+        "HAZ-022",
+        "HAZ-043"
+      ],
+      "the slope test ground": [
+        "HAZ-016",
+        "HAZ-022",
+        "HAZ-043"
+      ],
+      "the dock and the charging place": [
+        "HAZ-016",
+        "HAZ-022",
+        "HAZ-043"
+      ]
+    },
+    {
+      "case": "Lost GNSS",
+      "filter": {
+        "case": "lost GNSS",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-009",
+        "HAZ-043"
+      ],
+      "palm groves": [
+        "HAZ-008",
+        "HAZ-043"
+      ],
+      "the slope test ground": [
+        "HAZ-043"
+      ],
+      "the dock and the charging place": [
+        "HAZ-043"
+      ]
+    },
+    {
+      "case": "A sensor fault (LiDAR, IMU, encoders, lift sensor, implement code, companion)",
+      "filter": {
+        "case": "a sensor fault",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-001",
+        "HAZ-009",
+        "HAZ-010",
+        "HAZ-012",
+        "HAZ-015",
+        "HAZ-018",
+        "HAZ-045"
+      ],
+      "palm groves": [
+        "HAZ-002",
+        "HAZ-008",
+        "HAZ-010",
+        "HAZ-012",
+        "HAZ-015",
+        "HAZ-018",
+        "HAZ-038",
+        "HAZ-039",
+        "HAZ-045"
+      ],
+      "the slope test ground": [
+        "HAZ-010",
+        "HAZ-012",
+        "HAZ-015",
+        "HAZ-018",
+        "HAZ-038",
+        "HAZ-039",
+        "HAZ-045"
+      ],
+      "the dock and the charging place": [
+        "HAZ-010",
+        "HAZ-012",
+        "HAZ-015",
+        "HAZ-018",
+        "HAZ-045"
+      ]
+    },
+    {
+      "case": "A stop on a slope (park on the brakes, within the descent cap)",
+      "filter": {
+        "case": "a stop on a slope",
+        "modes": null
+      },
+      "greenhouse aisles": [],
+      "palm groves": [
+        "HAZ-017",
+        "HAZ-023",
+        "HAZ-024",
+        "HAZ-025",
+        "HAZ-027",
+        "HAZ-038"
+      ],
+      "the slope test ground": [
+        "HAZ-017",
+        "HAZ-023",
+        "HAZ-024",
+        "HAZ-025",
+        "HAZ-027",
+        "HAZ-038"
+      ],
+      "the dock and the charging place": []
+    },
+    {
+      "case": "An E-stop with reset and re-arm",
+      "filter": {
+        "case": "an E-stop with reset and re-arm",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-021",
+        "HAZ-022",
+        "HAZ-026",
+        "HAZ-033"
+      ],
+      "palm groves": [
+        "HAZ-021",
+        "HAZ-022",
+        "HAZ-023",
+        "HAZ-026",
+        "HAZ-033"
+      ],
+      "the slope test ground": [
+        "HAZ-021",
+        "HAZ-022",
+        "HAZ-023",
+        "HAZ-026",
+        "HAZ-033"
+      ],
+      "the dock and the charging place": [
+        "HAZ-021",
+        "HAZ-022",
+        "HAZ-026",
+        "HAZ-033"
+      ]
+    },
+    {
+      "case": "Low energy (return to the dock)",
+      "filter": {
+        "case": "low energy",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-003"
+      ],
+      "palm groves": [
+        "HAZ-003",
+        "HAZ-023",
+        "HAZ-035",
+        "HAZ-040"
+      ],
+      "the slope test ground": [
+        "HAZ-023",
+        "HAZ-035",
+        "HAZ-040"
+      ],
+      "the dock and the charging place": [
+        "HAZ-003",
+        "HAZ-013",
+        "HAZ-028"
+      ]
+    },
+    {
+      "case": "Maintenance: charging",
+      "filter": {
+        "case": "maintenance",
+        "modes": [
+          "maintenance: charging"
+        ]
+      },
+      "greenhouse aisles": [],
+      "palm groves": [],
+      "the slope test ground": [],
+      "the dock and the charging place": [
+        "HAZ-028",
+        "HAZ-030",
+        "HAZ-031"
+      ]
+    },
+    {
+      "case": "Maintenance: changing implements",
+      "filter": {
+        "case": "maintenance",
+        "modes": [
+          "maintenance: implement change"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-033",
+        "HAZ-034"
+      ],
+      "palm groves": [
+        "HAZ-033",
+        "HAZ-034"
+      ],
+      "the slope test ground": [
+        "HAZ-033",
+        "HAZ-034"
+      ],
+      "the dock and the charging place": [
+        "HAZ-033",
+        "HAZ-034"
+      ]
+    },
+    {
+      "case": "Maintenance: inspecting the brakes, tracks and sensors",
+      "filter": {
+        "case": "maintenance",
+        "modes": [
+          "maintenance: inspection and cleaning"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-032",
+        "HAZ-033",
+        "HAZ-036"
+      ],
+      "palm groves": [
+        "HAZ-032",
+        "HAZ-033",
+        "HAZ-036"
+      ],
+      "the slope test ground": [
+        "HAZ-032",
+        "HAZ-033",
+        "HAZ-036"
+      ],
+      "the dock and the charging place": [
+        "HAZ-032",
+        "HAZ-033",
+        "HAZ-036"
+      ]
+    },
+    {
+      "case": "Transport and recovery",
+      "filter": {
+        "case": [
+          "normal use",
+          "low energy",
+          "maintenance"
+        ],
+        "modes": [
+          "transport and recovery"
+        ]
+      },
+      "greenhouse aisles": [
+        "HAZ-019"
+      ],
+      "palm groves": [
+        "HAZ-019",
+        "HAZ-023",
+        "HAZ-035"
+      ],
+      "the slope test ground": [
+        "HAZ-019",
+        "HAZ-023",
+        "HAZ-035"
+      ],
+      "the dock and the charging place": [
+        "HAZ-019"
+      ]
+    },
+    {
+      "case": "Foreseeable misuse",
+      "filter": {
+        "case": "foreseeable misuse",
+        "modes": null
+      },
+      "greenhouse aisles": [
+        "HAZ-018",
+        "HAZ-019",
+        "HAZ-043",
+        "HAZ-044",
+        "HAZ-045"
+      ],
+      "palm groves": [
+        "HAZ-018",
+        "HAZ-019",
+        "HAZ-039",
+        "HAZ-043",
+        "HAZ-044",
+        "HAZ-045"
+      ],
+      "the slope test ground": [
+        "HAZ-018",
+        "HAZ-019",
+        "HAZ-039",
+        "HAZ-043",
+        "HAZ-044",
+        "HAZ-045"
+      ],
+      "the dock and the charging place": [
+        "HAZ-018",
+        "HAZ-019",
+        "HAZ-043",
+        "HAZ-044",
+        "HAZ-045"
+      ]
+    }
+  ],
+  "escalations": [
+    {
+      "id": "E-01",
+      "class": "1",
+      "to": "the project owner, through the lead systems engineer",
+      "goals": [
+        "SG-01",
+        "SG-02",
+        "SG-03",
+        "SG-04",
+        "SG-05",
+        "SG-06",
+        "SG-07",
+        "SG-08",
+        "SG-09",
+        "SG-10",
+        "SG-11"
+      ],
+      "text": "No safety goal can be shown met on the robot as built. The question of v1.1, which safety devices the robot actually has, is answered by the owner (2026-11-16, D80): \"E-stop button(s), Safety relay / STO wiring\". Their positions, parts, category and wiring are not in the as-built record yet; the other devices the question named (bumpers, a key switch, spring brakes on the motors) are not named in the answer and stay unconfirmed. The holding brakes are estimates; no LiDAR, GNSS, IMU or companion computer is in the record; the mower implement and the dock are not recorded; the robot's controller is the supplier's board. Needed: the data of the confirmed devices and the supplier's data (the ESC manual with its STO and brake feedback, the brakes, the controller, the BMS: review decision 7, R-14, R-15), on card G1-04; then the concept (G2-FSC) answers each goal at its level. Nothing is bought now (D80).",
+      "state": "open, its question answered",
+      "decision": "D80",
+      "cards": [
+        "G1-04",
+        "G2-FSC"
+      ]
+    },
+    {
+      "id": "E-02",
+      "class": "1",
+      "to": "the project owner",
+      "goals": [
+        "SG-01",
+        "SG-02"
+      ],
+      "text": "Person protection needs PL d: in the greenhouse with people kept out of the robot's zone (D79), in the palm groves, in transit and at the dock; people at work beside the robot would need PL e. The designed person stop (a LiDAR and a companion that are not safety-rated, through one MCU) reaches PL b at most, and does not cover the zone in front of the body, the sides, or a field set for another implement. A safety-rated detection wired into the stop chain is new hardware. The owner's open decision 2 (the near zone) belongs to these goals.",
+      "state": "open",
+      "decision": "",
+      "cards": [
+        "G2-FSC"
+      ]
+    },
+    {
+      "id": "E-03",
+      "class": "1",
+      "to": "the project owner",
+      "goals": [
+        "SG-04",
+        "SG-05"
+      ],
+      "text": "Stability and the hold on slopes need PL d. The descent cap, its trip and the tilt stop rest on one IMU, the encoders and one MCU (PL b at most), and nothing monitors the brakes. Since D73 a frozen IMU raises IMU_FAULT, but a wrong but plausible IMU is not seen. PL d needs a second, independent measurement and shut-off path, brake monitoring, or a stop that cannot tip (card G2-BRK, which may need a braking resistor): hardware. The brake feedback comes with the ESC manual (card G1-04, STATUS 27). The owner's open decision 5 (the IMU fault class) belongs to these goals.",
+      "state": "open",
+      "decision": "",
+      "cards": [
+        "G2-FSC",
+        "G1-04"
+      ]
+    },
+    {
+      "id": "E-04",
+      "class": "1",
+      "to": "the project owner",
+      "goals": [
+        "SG-06"
+      ],
+      "text": "The emergency stop needs PL d (D79). The owner confirms E-stop buttons and a safety relay with STO wiring on the robot (D80); their parts, category and wiring come from the supplier on card G1-04. In the twin the chain is two channels, and its relay re-arms without a manual reset (F-01); the operator's remote stop is a functional stop through the SBUS radio (PL b at most). A certified wireless E-stop in series with the loop, as the electronics spec recommends, is new hardware; whether the chain reaches PL d depends on its parts and its diagnostics (G2-FSC, G3-FME).",
+      "state": "open",
+      "decision": "",
+      "cards": [
+        "G1-04",
+        "G2-FSC"
+      ]
+    },
+    {
+      "id": "E-05",
+      "class": "1",
+      "to": "the project owner",
+      "goals": [
+        "SG-07",
+        "SG-08",
+        "SG-11"
+      ],
+      "text": "The stops on a lost link, the start interlocks and the manual control need PL d and run in one MCU (PL b at most). The concept (G2-FSC) must give them a tested or redundant architecture; that may need a safety controller or a second channel the robot does not have.",
+      "state": "open",
+      "decision": "",
+      "cards": [
+        "G2-FSC"
+      ]
+    },
+    {
+      "id": "E-06",
+      "class": "1",
+      "to": "the project owner",
+      "goals": [
+        "SG-09"
+      ],
+      "text": "Blade safety needs PL d (D79), and a run-down time that the mower standard sets. The mower implement is not in the as-built record, its run-down time is unknown, no blade brake is specified, and the blade stop for a person is software that does not watch the sides of the deck: implement data, and maybe a blade brake, are hardware questions.",
+      "state": "open",
+      "decision": "",
+      "cards": [
+        "G2-FSC"
+      ]
+    },
+    {
+      "id": "E-07",
+      "class": "decision (not class 1)",
+      "to": "the project owner",
+      "goals": [],
+      "text": "The editions of the standards and the jurisdiction, decided by the project owner on 2026-11-18: \"Kingdom, dated editions (Recommended)\"; on the standards' texts: \"Buy none now\" (D103). The jurisdiction is the Kingdom of Saudi Arabia, and every standard is cited with its edition, the binding SASO and CST layer in its own column (NASL-SHD-SAF-001 v1.4, section 3 and Table 1). ISO 13849-1:2023 stays the rating method, so no hazard is rated again. The machine's classification and its mower standard are decided on card G2-FSC with E-06, because ISO 5395 does not cover a robotic or battery mower. The texts are not bought: the safety values the standards would set (REQ-SYS-033, -046, -048 and -098) are set by risk assessment and marked as not yet confirmed against the standards. A plain decision, not a class-1 change.",
+      "state": "decided",
+      "decision": "D103",
+      "cards": []
+    },
+    {
+      "id": "E-08",
+      "class": "1",
+      "to": "the project owner",
+      "goals": [
+        "SG-03"
+      ],
+      "text": "Localisation integrity: the operating zone and the path bound need PL d: in the greenhouse under the greenhouse rule (D79, HAZ-009) and in the groves (HAZ-008). They rest on GNSS and LiDAR localisation in the companion (PL b at most); nothing checks for a false RTK fix (R-43), and the cross-track check runs on the estimated position, so it cannot see a localisation error; no GNSS receiver is in the as-built record. PL d needs a tested or redundant position path (an independent second source, or an integrity monitor): hardware.",
+      "state": "open",
+      "decision": "",
+      "cards": [
+        "G2-FSC"
+      ]
+    },
+    {
+      "id": "E-09",
+      "class": "decision (not class 1)",
+      "to": "the project owner",
+      "goals": [
+        "SG-01",
+        "SG-02",
+        "SG-03",
+        "SG-06",
+        "SG-07",
+        "SG-09"
+      ],
+      "text": "The greenhouse operating concept, decided by the project owner on 2026-11-16: \"Keep people out (Recommended)\" (D79). People are kept out of the robot's zone while it mows a greenhouse aisle, and work in the other aisles (the charter v1.2, section 6; the zone as section 2, assumption 1 defines it). The six goals SG-01, SG-02, SG-03, SG-06, SG-07 and SG-09 are at PL d instead of PL e; SG-10 stays at PL d, because a fire reaches the whole house. People at work beside the robot would need person protection at PL e, with safety-rated detection (D79). A plain decision, not a class-1 change.",
+      "state": "decided",
+      "decision": "D79",
+      "cards": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "severity": "Major",
+      "text": "The safety relay is re-armed by the MCU's reset pulse (DO1): on the reset button, on RC CH9 over the SBUS radio, which is not safety-rated, from wherever the transmitter is, and once automatically on each SELFTEST entry (D30). After a controller restart (power-up or watchdog) the relay re-arms with no manual action. The bound: the relay closes only with every loop contact closed, and motion still needs an arm edge (SF-16, PL b), so after a restart the stop of a maintained E-stop rests on the MCU's interlock instead of the hardware latch. This bypasses the manual reset the design selects (electronics spec, power spec), and the manual reset of the safety function that ISO 13849-1 and IEC 60204-1 ask for, beside ISO 13850, whose reset is the release at the E-stop device, which must not restart the machine; G1-01 confirms the clauses. SF-01 is corrected to match. Goals SG-06 and SG-08 (HAZ-021, HAZ-026, HAZ-037); for the concept G2-FSC and the MCU engineer."
+    },
+    {
+      "id": "F-02",
+      "severity": "Major",
+      "text": "The brake confirmation echoes the brake command (STATUS 27): a stuck or worn brake reaches STANDBY. Goals SG-05 and SG-06 (HAZ-021, HAZ-024)."
+    },
+    {
+      "id": "F-03",
+      "severity": "Major",
+      "text": "Since D73 a frozen IMU raises IMU_FAULT, but a wrong but plausible IMU (a bias, a misalignment, a slow drift) removes the tilt stop, the descent cap and the heading together without a fault (R-05); IMU_FAULT stays class C pending the owner's decision 5. Goal SG-04."
+    },
+    {
+      "id": "F-04",
+      "severity": "Major",
+      "text": "The protective field does not cover the zone in front of the body (0.05 to 0.45 m) or the sides, and follows the build setting, not the fitted implement (STATUS 21, 25; the owner's decision 2). Goals SG-01 and SG-02 (HAZ-001 to HAZ-005, HAZ-045)."
+    },
+    {
+      "id": "F-05",
+      "severity": "Minor",
+      "text": "Traction stops as category 0 on an E-stop while the spec claims category 1 (R-33, O4, the owner's decision 9); nothing checks that the blades run down. Goals SG-04, SG-06, SG-09."
+    },
+    {
+      "id": "F-06",
+      "severity": "Minor",
+      "text": "The return on low energy and the sensor faults other than lost GNSS have no system scenario (the charter, section 6). Goals SG-04 and SG-05 (HAZ-040)."
+    }
+  ],
+  "history": [
+    [
+      "1.0",
+      "2026-11-16",
+      "First issue, for the independent review (card G1-07)"
+    ],
+    [
+      "1.1",
+      "2026-11-16",
+      "The independent review RID-G1-07-01 to -08: P and F applied as written, F restated as the exposure to the hazard zone, HAZ-039 split (HAZ-045), SG-03 escalated (E-08), F-01 and SF-01 completed, the Safety Analysis Manager file, the walk-through and the goal traces derived from the hazards and checked, the classes of met today and status today defined, wording; the greenhouse decision E-09"
+    ],
+    [
+      "1.2",
+      "2026-11-16",
+      "Approved by the project owner (D80); the greenhouse rule (D79): six goals to PL d"
+    ],
+    [
+      "1.3",
+      "2026-11-18",
+      "E-07 decided (D103); the references dated"
+    ],
+    [
+      "1.4",
+      "2026-11-18",
+      "RID-G1T-04: SF-06's stale ESC feedback at 50 ms (REQ-SYS-070)"
+    ],
+    [
+      "1.5",
+      "2026-11-18",
+      "Point 31 and check 19b: HAZ-006, HAZ-018 (met today: no), SF-01 and SF-12 aligned"
+    ]
+  ],
+  "met_classes": {
+    "met": "a safety function covers the hazardous event at the required level, and its parts are in the as-built record",
+    "partly": "a safety function in the twin covers the event by its design and a test or a scenario shows it acting, but its architecture cannot reach the PLr or its parts are not in the as-built record",
+    "no": "no safety function covers the event by its design (a zone it does not watch, a cause it cannot see), or no test or scenario shows it acting yet",
+    "unknown": "the risk rests on a bought part whose data are missing",
+    "by other measures": "no safety function is claimed (PLr n/a); the measures are design, guards, procedures and the information for use, still to be shown"
+  },
+  "status_classes": {
+    "met": "every hazard of the goal is met",
+    "partly met": "every hazard of the goal is partly met or better",
+    "unknown": "no hazard is unmet, and at least one rests on missing data",
+    "not met": "at least one hazard of the goal is not met",
+    "open": "a goal with no PL: its measures are still to be shown"
+  },
+  "finding_scale": "Critical, Major and Minor, as the safety plan uses for the review of every safety record.",
+  "sam_file": {
+    "path": "docs/safety/hazard_log.mldatx",
+    "state": "not made",
+    "note": "The Safety Analysis Manager copy docs/safety/hazard_log.mldatx is not made: Simulink Fault Analyzer is installed but not licensed to the project's MATLAB (its own licence check, in a batch run on 2026-11-16). Open point OP-01: the project owner decides on the licence by 2026-11-23; the functional safety engineer then makes the copy from this record in one batch run, before G1-05. Until then this record and its PDF are the hazard log."
+  },
+  "approval": {
+    "by": "the project owner",
+    "date": "2026-11-16",
+    "card": "G1-07",
+    "decision": "D80",
+    "words": "Approve and accept (Recommended)",
+    "what": "the safety plan NASL-SHD-SAF-001 v1.1 approved, and the 12 safety goals of this log accepted as the top-level safety requirements, at the levels the greenhouse rule (D79) sets"
+  }
+}

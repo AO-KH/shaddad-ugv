@@ -1,0 +1,163 @@
+# Shaddad UGV - power requirement drafts (YAML, since Requirements Toolbox is not installed).
+# Scope: precharge only, T-PWR-03 (skill shaddad-req-tests, steps 1-2). Status Draft: the user decides
+# what passing means before any test is written. Base keys follow the toolkit schema
+# (generate-requirement-drafts, references/yaml-requirements.md): description = the model part it
+# constrains. Project keys: source, signals, pass, method, conditions, note, decision.
+# Checked against docs/architecture.md 2b and docs/build_plan.md T04/T05, which override the spec:
+# D1 (mode manager = MATLAB Function bms_mode_manager.m), D4/D6 (HV_Enable_Req arrives in the 50 ms
+# CAN frame BMS_REQ 0x3D0), D30 (power-up re-arm), D36 (10 ms BMS output delay), D56 (1 ms network).
+# Drafted 2026-11-12 by shaddad-bms-power. Reviewed 2026-11-12: the user decided the open points (each item\'s decision field); status Review until the tests exist. Statuses set 2026-11-12 from the test runs in docs/requirements/power_coverage.md: Implemented where a test now passes (.a .b .c .e .f .h); .d and .i are analysis, .g has no passing test yet.
+schema_version: "1.0"
+package: "Shaddad_UGV power: precharge"
+
+requirements:
+  - id: "T-PWR-03"
+    summary: "When HV_Enable_Req rises with the DC bus discharged, the BMS shall precharge the bus through K2 and R_pre, close K1, open K2 and set HV_Ready."
+    description: "tests/power/tb_power_plant.slx: Power_Plant (PDU, Safety_Chain) + Model block Shaddad_BMS (BMS_Core/ModeManager)"
+    rationale: "Charging the DC links through 22 Ohm keeps the K1 inrush and the resistor duty small."
+    asil: Unset
+    status: Review
+    priority: Unset
+    keywords: [draft, power, precharge]
+    derived_from: null
+    source: "power.md 8 (T-PWR-03), 2.4, 2.5, 4.1, 6.3, 6.8; build_plan T04, T05"
+    method: test
+    conditions: >-
+      VC_PACK 2, VC_IMPL 1, VC_CHG 1; TB = tb_power_plant_default(): D30 re-arm (DO0 at 10 ms, DO1
+      30-80 ms), so Safety_HV_OK is true long before 1 s; HV_Enable_Req (BMS_REQ) rises at t = 1.0 s;
+      DRIVE stubs at 0 A, no dock, 25 C. C_bus = 2 x 2.2 mF (ESR 10 mOhm) + 1.0 mF mower link + 0.1 mF
+      C_pdu with the 5 kOhm bleed = 5.5 mF (VC_IMPL 0 or 3 leave 4.5 mF). R_pre 22 Ohm; K2 t_on/t_off
+      10/5 ms, K1 15/8 ms; chart t_pre_min 0.25 s, k_pre 0.97, t_overlap 0.05 s, tick 0.01 s. Pack
+      13S15P at SOC 0.95, V_pack about 53.4 V. Local Backward Euler at 1 ms.
+    note: "5.5 mF is still an assumption (spec O2, DRIVE to confirm). The system scenarios run with R_pre = 4.7 Ohm (P.sim.ovr.R_pre, STATUS.md 6 item 10), because the ESC idle load (about 2 x 7 W) holds V_bus at 87 % with 22 Ohm; every value below assumes 22 Ohm and an unloaded bus. Decided 2026-11-12 (user): the requirements keep 22 Ohm, the parameter value; the 22 vs 4.7 Ohm choice stays a separate open item (STATUS.md 6 item 10). The additions T-PWR-03.h and .i are kept."
+
+  - id: "T-PWR-03.a"
+    summary: "After the HV_Enable_Req rising edge, V_bus shall reach 0.97 V_pack at 0.42 +/- 0.05 s."
+    description: "Power_Plant/PDU (R_pre, K2, C_pdu) with the bench DC links"
+    rationale: "The precharge time follows from R_pre and C_bus."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 8 (T-PWR-03), 2.4; build_plan T05"
+    signals: "Bus_PowerStatus.V_bus_V, V_pack_V, K2_Closed (1 ms)"
+    pass: "t(V_bus_V >= 0.97 V_pack_V) - t_ref in [0.37, 0.47] s, t_ref = first K2_Closed = 1"
+    method: test
+    note: "With the bleed the bus settles at 0.9956 V_pack, tau 0.121 s, so the crossing is 0.442 s after K2 closes (the spec's 0.424 s leaves the bleed out)."
+    decision: "Decided 2026-11-12 (user): (A), measured from K2 closing, as t_power_plant/precharge_T03 does. The latency before K2 closes (BMS_REQ 50 ms, output delay, rate transition, K2 pickup) is T-PWR-03.g."
+
+  - id: "T-PWR-03.b"
+    summary: "While in PRECHARGE, the BMS shall command K1 only after t_pre_min = 0.25 s in PRECHARGE and only when V_bus >= 0.97 V_pack."
+    description: "Shaddad_BMS/BMS_Core/ModeManager (PRECHARGE -> CLOSE_MAIN)"
+    rationale: "K1 must not close on a large voltage step."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 4.1, 6.8; build_plan T04"
+    signals: "bms_state (logged in Shaddad_BMS, 10 ms); Bus_BMS_Cmd.K1_Cmd; Bus_PowerStatus.V_bus_V, V_pack_V, K1_Closed"
+    pass: "At bms_state 2 -> 3: time in PRECHARGE >= 0.25 s and true V_bus_V / V_pack_V >= 0.969 (0.001 for the spec 2.10 sensor errors); K1_Closed rises after the 0.97 crossing"
+    method: test
+
+  - id: "T-PWR-03.c"
+    summary: "When K1 has been commanded, the BMS shall keep K2 closed for t_overlap = 0.05 s, then open it."
+    description: "Shaddad_BMS ModeManager (CLOSE_MAIN -> HV_ON); Power_Plant/PDU coil delays"
+    rationale: "K1 carries the bus before the precharge path opens."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 8 (T-PWR-03), 4.1, 6.3; build_plan T04"
+    signals: "Bus_BMS_Cmd.K1_Cmd, K2_Cmd; Bus_PowerStatus.K1_Closed, K2_Closed"
+    pass: "K2_Cmd falls 0.050 +/- 0.010 s after K1_Cmd rises (the commands; the contacts follow by the relay times, about 40 ms)"
+    method: test
+    decision: "Decided 2026-11-12 (user): on the commands."
+
+  - id: "T-PWR-03.d"
+    summary: "When K1 closes, the I^2t of the K1 inrush shall be at most 2 A^2s."
+    description: "Power_Plant/PDU (K1, fuses, cables) with the bench DC links and the pack R0"
+    rationale: "The closing transient stays negligible for K1 and the fuses."
+    asil: Unset
+    status: Review
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 8 (T-PWR-03), 2.4, R10"
+    signals: "Bus_PowerStatus.I_pack_A minus its value just before K1_Closed rises, over 20 ms"
+    pass: "integral of (I_pack_A - I_base)^2 dt <= 2 A^2s"
+    method: analysis
+    note: "dV^2 C / (2 R_loop): spec 0.95 A^2s (1.6 V, 7.45 mOhm); bench about 0.2 A^2s (K1 at 0.978 V_pack, 1.2 V, about 19 mOhm with the pack R0), hand estimates. The tau of about 0.1 ms is not resolved at 1 ms: Backward Euler gives about dV^2 C^2 / h (0.037 A^2s logged), so a test needs h <= 1e-5 s."
+
+  - id: "T-PWR-03.e"
+    summary: "During the precharge and the K1 closing, no fuse shall blow."
+    description: "Power_Plant/PDU fuses"
+    rationale: "Precharge and inrush currents are far below every fuse curve."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 8 (T-PWR-03), 2.4"
+    signals: "Bus_PowerStatus.Fuse_Blown (uint8, 1 ms)"
+    pass: "Fuse_Blown = 0 over the whole run"
+    method: test
+
+  - id: "T-PWR-03.f"
+    summary: "When the precharge completes, the BMS shall set HV_Ready by t = 1.60 s (0.60 s after the request) and keep it set."
+    description: "Shaddad_BMS ModeManager (HV_ON) and Telemetry (0.1 s)"
+    rationale: "The MCU drives only on HV_Ready (D4: power_ready := HV_Ready)."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 8 (T-PWR-03); build_plan T04, T05"
+    signals: "Bus_BMS_Telemetry.HV_Ready (0.1 s); bms_state = 4 HV_ON (10 ms)"
+    pass: "first HV_Ready = 1 at t <= 1.60 s; HV_Ready = 1 at the end of the run"
+    method: test
+
+  - id: "T-PWR-03.g"
+    summary: "When the BMS receives HV_Enable_Req, K2 shall close within 30 ms."
+    description: "Shaddad_BMS (ModeManager, output Unit Delay) and Power_Plant/PDU K2"
+    rationale: "Bounds the reaction before the precharge time of T-PWR-03.a starts."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "build_plan T04 only (not in the spec)"
+    signals: "bms_hv_enable_eff (logged in Shaddad_BMS); Bus_BMS_Cmd.K2_Cmd; Bus_PowerStatus.K2_Closed"
+    pass: "t(K2_Closed rises) - t(bms_hv_enable_eff rises) <= 0.030 s"
+    method: test
+    decision: "Decided 2026-11-12 (user): restated as <= 0.030 s, the designed latency (10 ms output Unit Delay D36 + 10 ms 0.01 -> 0.001 s rate transition + 10 ms K2 pickup). The build plan T04 figure of 20 ms stays an accepted deviation (STATUS.md 6), which is why t_pack_bms/precharge_bench ends Incomplete."
+
+  - id: "T-PWR-03.h"
+    summary: "While in STANDBY, when HV_Enable_Req and Safety_OK (= Safety_HV_OK) are true, Dock_Present is false and the BMS is re-armed, the BMS shall enter PRECHARGE with K2 only; while in PRECHARGE, when HV_Enable_Req or Safety_OK goes false, it shall return to STANDBY with K2 open."
+    description: "Shaddad_BMS/BMS_Core/ModeManager (subsystems/power/bms_mode_manager.m)"
+    rationale: "Precharge only on a valid request, with the safety relay closed and the robot off the dock."
+    asil: Unset
+    status: Implemented
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 4.1 (STANDBY, PRECHARGE, en latch note), 2.5"
+    signals: "bms_state; Bus_BMS_Cmd.K1_Cmd, K2_Cmd"
+    pass: "PRECHARGE within 0.01 s of the request, K2_Cmd = 1 and K1_Cmd = 0; no PRECHARGE while Dock_Present; STANDBY within 0.01 s of the abort with K2_Cmd = 0; after a Safety_OK drop a new HV_Enable_Req edge is needed"
+    method: test
+
+  - id: "T-PWR-03.i"
+    summary: "Each precharge shall load R_pre with at most V_pack / R_pre peak current, V_pack^2 / R_pre peak power and C_bus V_pack^2 / 2 energy."
+    description: "Power_Plant/PDU R_pre (50 W aluminium-clad resistor)"
+    rationale: "Sizes the precharge resistor; the shorted-bus case is T-PWR-03b."
+    asil: Unset
+    status: Review
+    priority: Unset
+    keywords: [draft, precharge]
+    derived_from: "T-PWR-03"
+    source: "power.md 2.4"
+    signals: "P.power.pdu.R_pre, C_bus_total_assumed; V_pack"
+    pass: "at V_pack 53.4 V: peak 2.4 A (<= 2.5), 129 W (<= 130), 7.8 J (<= 8)"
+    method: analysis

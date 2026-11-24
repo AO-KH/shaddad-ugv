@@ -1,0 +1,429 @@
+[
+  {
+    "file": "F01_system_top.png",
+    "caption": "Top model Shaddad_System at VC_PHASE = 1: ScenarioIn drives Operator_Console and Operator_RC (RC_Link_Sim), whose SBUS byte stream enters MCU_In and the Shaddad_MCU Model block; the MCU reaches the Shaddad_Plant and Shaddad_BMS Model blocks over CAN1_Net and GNC_Variant (GNC_Stub in Phase 1) over CAN2_Link, with Sensors, Sim_Monitors and Viz_Logging alongside.",
+    "source": "print -s Shaddad_System (VC_PHASE = 1), 200 dpi, authored layout",
+    "ok": true,
+    "width_px": 6382,
+    "height_px": 5906
+  },
+  {
+    "file": "F02_plant_top.png",
+    "caption": "Shaddad_Plant top level: Plant_In and the four Simscape domain networks structure_plant (Structure), Power_Plant (Power), drive_system (Drive) and Electronics_Plant (Electronics), joined by the DC48_TracL/R electrical and Spr_L/R / Impl_Shaft mechanical lines, with the single Solver Configuration.",
+    "source": "print -s Shaddad_Plant, 200 dpi",
+    "ok": true,
+    "width_px": 3019,
+    "height_px": 3261
+  },
+  {
+    "file": "F03_mcu_top.png",
+    "caption": "Shaddad_MCU (STM32H743 firmware) top level: SIM IO_In / IO_Out variants, the tasks Task_1k, Task_5, Task_10, Task_50 and Task_100, the CAN codecs fw_can1_codec and fw_can2_codec, and the rate-transition blocks (RT_*) between the task rates.",
+    "source": "print -s Shaddad_MCU, 200 dpi (dense authored layout; arrangeSystem gave no improvement)",
+    "ok": true,
+    "width_px": 6487,
+    "height_px": 7558
+  },
+  {
+    "file": "F04_mcu_task10.png",
+    "caption": "Shaddad_MCU/Task_10 (10 ms task): RC_Mapping (fw_rc_mapping), Safety_Supervisor (fw_safety_supervisor), Mode_Manager (fw_mode_manager), Vehicle_Ctrl (fw_vehicle_ctrl), odometry (sens_odom_compute) and Telemetry (fw_telemetry) with the platform / status bus creators and the alive counter.",
+    "source": "print -s Shaddad_MCU/Task_10, 200 dpi",
+    "ok": true,
+    "width_px": 6508,
+    "height_px": 6269
+  },
+  {
+    "file": "F05_rc_link_sim.png",
+    "caption": "RC_Link_Sim: operator command and RC fault inputs pass 1 ms and 14 ms frame-rate transitions into RC_Transmitter, RC_Radio_Channel (link loss), RC_Receiver (failsafe), SBUS_Encoder (25-byte frames) and UART_Line_Sim, which outputs the SBUS byte stream (sbus) and the rc_frame log.",
+    "source": "print -s RC_Link_Sim (subsystems/rc/RC_Link_Sim.slx), 200 dpi",
+    "ok": true,
+    "width_px": 3053,
+    "height_px": 561,
+    "note": "source of F05_rc_link_sim_split.png; the report uses the split version (fix round 2)"
+  },
+  {
+    "file": "F06_sbus_decoder.png",
+    "caption": "fw_sbus_decoder (MCU Task_1k): the Frame_Sync MATLAB Function checks header, gap and channel range and counts n_ok / n_bad / n_skip, the Latch holds the 16 channels and flags, and the frame age gives rc_link_lost (> 0.10 s), rc_ok and lq_warn in the RcDec bus.",
+    "source": "print -s fw_sbus_decoder (subsystems/electronics), 200 dpi",
+    "ok": true,
+    "width_px": 3250,
+    "height_px": 1608
+  },
+  {
+    "file": "F07_drive_side.png",
+    "caption": "drive_side (one track side): ESC (drive_esc) -> Gearbox (drive_gearbox, 24:1) -> Brake (drive_brake) -> Thermal (drive_thermal) and the Plant variant (SYS), with fault selectors, zero-order holds, power products (p_dc, p_spr, p_shaft) and energy integrators (E_dc, E_spr, E_loss) feeding the truth bus.",
+    "source": "print -s drive_side (subsystems/drive), 200 dpi, authored layout",
+    "ok": true,
+    "width_px": 4719,
+    "height_px": 1764
+  },
+  {
+    "file": "F08_drive_esc.png",
+    "caption": "drive_esc ESC firmware model: Cmd_In unpacks DRV_CMD, ESC_SM implements the DS402-style state machine, Speed_Ctrl runs the speed PI loop, and Output_Stage, Speed_Meas, Protections, Torque_Limiter and Temp_Sens produce the torque command and the DRV_FB Feedback bus.",
+    "source": "print -s drive_esc (top level is readable, so the Torque_Limiter fallback was not needed), 200 dpi",
+    "ok": true,
+    "width_px": 4326,
+    "height_px": 4403
+  },
+  {
+    "file": "F09_power_plant.png",
+    "caption": "Power_Plant: Battery_Pack (Grouped16 Simscape Battery variant) with Pack_Thermal, Safety_Chain, PDU (fuses, shunt, K1/K2 precharge, K3, K4), LV_Distribution (DC-DC rails), Implement_Loads (None variant), Dock_Charger and Power_Sensors producing bms_meas, power_status and power_truth.",
+    "source": "print -s of an in-memory copy of Power_Plant.slx after Simulink.BlockDiagram.arrangeSystem (layout only, same blocks and lines; the authored layout overlaps its labels; the project file is untouched)",
+    "ok": true,
+    "width_px": 4331,
+    "height_px": 5686
+  },
+  {
+    "file": "F10_battery_pack.png",
+    "caption": "Pack_Grouped16 (print -s; the Probe block is widened for legibility): the generated Battery Builder module (block Module) with the pack terminals pack_p / pack_n and the thermal port AmbH, the balancing-command path Bal_Cmd -> RT_bal -> Bal_double -> Bal_PS, and the Probe whose outputs batteryTemperature, socParallelAssembly and vParallelAssembly become T_cell_true, SOC_true and V_cell_true.",
+    "source": "print -s Pack_Grouped16 (subsystems/power), 200 dpi, re-printed 2026-10-23 with the Probe block widened in memory (model closed without saving); build/figtools/print_f10_battery_pack.m",
+    "ok": true,
+    "width_px": 1672,
+    "height_px": 747
+  },
+  {
+    "file": "F11_safety_chain.png",
+    "caption": "Power_Plant/Safety_Chain: E-stop, bumper and wireless E-stop inputs OR-ed into EStop_Any with dual-channel EStop_Ch1/Ch2_OK, Loop_OK, the SR Relay_latch set by the stretched (Toff 0.05 s) MCU Safety_Reset_Req pulse, Immediate_contacts (Safety_OK / STO, Ton 0.02 s, Toff 0.015 s) and Delayed_contacts (Safety_HV_OK, Toff 1.5 s) gating the K1-K4 coils.",
+    "source": "print -s Safety_Chain (subsystems/power), 200 dpi",
+    "ok": true,
+    "width_px": 1894,
+    "height_px": 3106
+  },
+  {
+    "file": "F12_structure_plant.png",
+    "caption": "structure_plant: Implement (structure_implement) mechanics, the Fidelity variant (HiFi 6-DOF body with track contact and the sprocket ports Spr_L / Spr_R) and Env (structure_env), producing the truth, tracks, implement-mechanics, environment and diagnostic buses.",
+    "source": "print -s structure_plant (subsystems/structure), 200 dpi",
+    "ok": true,
+    "width_px": 1975,
+    "height_px": 1158
+  },
+  {
+    "file": "F13_operator_console.png",
+    "caption": "Shaddad_System/Operator_Console: the OpSource variant source selects the scenario input (VC_OPSRC = 1, active), the Dashboard (2) or the joystick placeholder (3); right: the Dashboard HMI controls - throttle and steering sliders, speed knob, mode rotary switch (MANUAL / HOLD / AUTO), arm, remote E-stop and transmitter-power toggle switches and the reset push button.",
+    "source": "print -s Operator_Console + print -s Operator_Console/Dashboard (HMI widget regions cropped from the Dashboard print), composed with tiledlayout",
+    "ok": true,
+    "width_px": 2734,
+    "height_px": 1430
+  },
+  {
+    "file": "F14_bms_top.png",
+    "caption": "Shaddad_BMS (STM32G4 BMS ECU firmware) top level: IO_In (SIM variant: measurements and BMS_REQ frame), BMS_Core (contactor sequencing, estimation, limits, faults), BMS_CAN_Pack (BMS_* CAN frames) and IO_Out, with the telem output.",
+    "source": "print -s Shaddad_BMS, 200 dpi",
+    "ok": true,
+    "width_px": 1988,
+    "height_px": 300
+  },
+  {
+    "file": "F15_mode_manager.png",
+    "caption": "fw_mode_manager (MCU Task_10): DI-word masks (KEY_ON 0x800, SAFETY_OK 0x4, LID_CLOSED 0x400, DOCK_PRESENT 0x2000), standstill and self-test checks (ESC / BMS frame freshness, 24 / 12 / 5 V rails) feed the Mode_FSM MATLAB Function (mcu_mode_manager.m) that outputs mode, cmd_src, drive_enable, rearm_req and bms_req.",
+    "source": "print -s fw_mode_manager (subsystems/electronics), 200 dpi",
+    "ok": true,
+    "width_px": 5276,
+    "height_px": 2933
+  },
+  {
+    "file": "F16_matlab_desktop.png",
+    "caption": "MATLAB R2026b desktop with the Shaddad_UGV project open in the Project panel and the shaddad_startup report in the Command Window: data and 7 config sets loaded in 5.5 s; Simscape, Simscape Electrical, Simscape Battery, Embedded Coder and ROS Toolbox OK; Simulink Coder missing, so code generation is BLOCKED.",
+    "source": "real window capture (user32 PrintWindow, PW_RENDERFULLCONTENT) of the MATLAB desktop on 2026-10-23; startup report re-printed through a timer so it appears in the Command Window; the account name in the top-right toolbar was masked",
+    "ok": true,
+    "width_px": 1649,
+    "height_px": 1046,
+    "note": "original capture shows the licence type in the title bar; the report uses the cropped version"
+  },
+  {
+    "file": "F17_simulink_editor.png",
+    "caption": "Simulink editor with Shaddad_System open at 100 % zoom on the CAN1_Net, CAN2_Link, MCU_In, Shaddad_MCU and Sim_Monitors region, with the SIMULATION toolstrip (Normal mode, Stop Time, Run, Data Inspector, Bird's-Eye Scope).",
+    "source": "real window capture (user32 PrintWindow) of the Simulink editor; the window was enlarged and scrolled for legibility, then its location was restored and the model closed without saving",
+    "ok": true,
+    "width_px": 1942,
+    "height_px": 1222,
+    "note": "original capture shows the licence type in the title bar; the report uses the cropped version"
+  },
+  {
+    "file": "F18_architecture.png",
+    "caption": "Phase 1 architecture: TX16S-class transmitter -> 2.4 GHz -> RC receiver -> SBUS (25 B per 14 ms) -> STM32H743 MCU -> CAN1 500 kbit/s DRV_CMD -> ESC L/R (1 kHz speed loop) -> 2.5 kW PMSM -> 24:1 gearbox -> tracks on the 6-DOF chassis, powered by the 48 V 16S3P LFP pack through the PDU under the BMS ECU and the hard-wired safety chain (STO, K1/K2), with GNSS/LiDAR and the CAN2 companion greyed as Phase 2.",
+    "source": "drawn in MATLAB from docs/architecture.md (sections 1 and 4, D4, D8, D29, D30) and docs/icd.md (sections 4, 6, 7)",
+    "ok": true,
+    "width_px": 1325,
+    "height_px": 896
+  },
+  {
+    "file": "F19_rc_signal_chain.png",
+    "caption": "RC signal chain and latency budget: stick -> RC_Transmitter (14 ms frames) -> RC_Radio_Channel (1 frame) -> RC_Receiver / SBUS_Encoder -> UART (3 ms) -> fw_sbus_decoder (1 ms poll) -> Task_10 (<= 10 ms) -> CAN1 DRV_CMD -> ESC (10 ms RT, 1 kHz loop); the D37 budget TX frame -> DRV_CMD is 18-28 ms, S1 measured 28 ms (limit 30 ms) and stick -> ESC 50 ms (limit 65 ms); RF loss -> CTRL_STOP took 0.12 s (S6a) and 0.09 s (S6b), limit 0.13 s.",
+    "source": "drawn in MATLAB from docs/architecture.md D37 and docs/icd.md 7; measured values from S1 (2026-10-23 07:25) and S6a / S6b (2026-10-23 20:34 / 20:39)",
+    "ok": true,
+    "width_px": 1332,
+    "height_px": 851
+  },
+  {
+    "file": "F20_mcu_modes.png",
+    "caption": "MCU mode state machine (ShaddadMode 0-9): BOOT -> SELFTEST (10 ms, DO1 re-arm) -> STANDBY (self-test OK at 1.0 s) -> MANUAL on an arm edge with sticks neutral, MANUAL <-> HOLD on switch SA, CTRL_STOP on class-B faults, arm off or RC loss and back to STANDBY at standstill, ESTOP (HW E-stop from any state, remote CH12) and FAULT (class A) left by a reset edge at standstill; AUTO_START / AUTO greyed as Phase 2 only.",
+    "source": "drawn in MATLAB from subsystems/electronics/mcu_mode_manager.m (transition table) and docs/icd.md sections 6 and 9",
+    "ok": true,
+    "width_px": 1286,
+    "height_px": 868
+  },
+  {
+    "file": "F21_photo_shaddad.png",
+    "caption": "Photograph of the tracked platform supplied as the Shaddad photo from nasl-tech.com (1080 x 720 px, transparent background flattened to white); the body carries a visible 'XMACHINES' label.",
+    "source": "copy of docs/report/figs/photo_shaddad.png (source nasl-tech.com per the task, no downscale needed); confirm attribution and branding before publishing",
+    "ok": true,
+    "width_px": 1080,
+    "height_px": 720
+  },
+  {
+    "file": "F22_photo_mower.jpg",
+    "caption": "Shaddad-class tracked platform with the front mower-deck implement on grass (1600 x 1067 px).",
+    "source": "docs/report/figs/photo_mower_raw.jpg (5568 x 3712 px, from nasl-tech.com per the task) downscaled with imresize, JPEG quality 85",
+    "ok": true,
+    "width_px": 1600,
+    "height_px": 1067,
+    "note": "not used from report v1.0 fix round 1: image origin and usage rights not confirmed"
+  },
+  {
+    "file": "F23_d1_dashboard.png",
+    "caption": "phase1_test_drive default demo D1 (64 s simulated in 251 s wall time, RTF 0.44, Normal mode): RC command vs actual forward speed (max 1.19 m/s) and yaw rate, the 34.8 m path, left / right track belt speeds, and pack current (peak 25 A) with the MCU mode (BOOT -> SELFTEST -> STANDBY -> MANUAL at 2.04 s).",
+    "source": "figure of phase1_test_drive('Replay', false), D1 result 2026-10-23 20:11, exportgraphics 200 dpi",
+    "ok": true,
+    "width_px": 2516,
+    "height_px": 1559
+  },
+  {
+    "file": "F24_d1_birdseye.png",
+    "caption": "Bird's-eye replay final frame of the D1 drive (t = 64.1 s, MANUAL, SoC 95.7 %): the 34.8 m driven path from the origin with the vehicle footprint at the end point; the |e_pos| = 7.75 m title field compares truth with the navigation estimate, which is not computed in Phase 1 (GNC_Stub), so it has no meaning here.",
+    "source": "shaddad_replay_birdseye(work/results/D1_20261023_201131.mat, 'Visible', false), axes zoomed to the driven area",
+    "ok": true,
+    "width_px": 1265,
+    "height_px": 1099
+  },
+  {
+    "file": "F25_s0_powerup.png",
+    "caption": "S0 power-up and automatic re-arm (11/11 PASS): DO0 MCU_SAFETY_OK high at 0.020 s, 50 ms DO1 SAFETY_RESET_REQ pulse (0.040-0.090 s), Safety_OK and Safety_HV_OK at 0.061 s, BMS HV_Ready at 0.50 s and MCU mode BOOT -> SELFTEST -> STANDBY at 1.01 s.",
+    "source": "S0 result 2026-10-23 20:47 (re-run for this report, Normal mode)",
+    "ok": true,
+    "width_px": 1215,
+    "height_px": 766
+  },
+  {
+    "file": "F26_s1_response.png",
+    "caption": "S1 RC drive (12/13 PASS, RTF criterion BLOCKED): forward speed and yaw rate vs the MCU command and shaped reference over 120 s, with the 0 -> 1.2 m/s start (90 % rise 1.51 s, no overshoot, steady error 0.007 m/s), the steer +0.5 right turn (yaw tracking error 4.9 %) and the throttle release at 52 s that stops the robot in 0.84 m (limit 0.95 m).",
+    "source": "S1 result 2026-10-23 07:25 (latest post-fix run, Normal mode)",
+    "ok": true,
+    "width_px": 1238,
+    "height_px": 922
+  },
+  {
+    "file": "F27_s1_latency.png",
+    "caption": "S1 RC latency at the 5.00 s throttle step: 12 ms to the next TX frame sample (10 ms input RT + frame phase), 14 ms radio frame, 4 ms SBUS bytes + decode poll and 10 ms Task_10 phase give TX frame -> DRV_CMD = 28 ms (budget 18-28 ms, limit 30 ms); with the 10 ms ESC RT the stick -> ESC speed reference latency is 50 ms (limit 65 ms).",
+    "source": "S1 result 2026-10-23 07:25: rc_frame / rc_dec channel 2, telem.v_ref and the S1.lat_* criteria",
+    "ok": true,
+    "width_px": 1183,
+    "height_px": 806
+  },
+  {
+    "file": "F28_s6_failsafe.png",
+    "caption": "S6c (1 % SBUS byte errors, 6/6 PASS) and S6d (5 %, 4/4 PASS) from 10 to 25 s at 1.0 m/s: S6c accepts 788 and rejects 302 frames (28 %), the link stays OK and the robot keeps driving in MANUAL; S6d rejects 937 of 1155 frames (81 %), RC_LINK_LOST triggers CTRL_STOP and the robot stops and stays in STANDBY without an E-stop.",
+    "source": "S6c result 2026-10-23 07:54 and S6d result 2026-10-23 07:56 (latest post-fix runs)",
+    "ok": true,
+    "width_px": 1208,
+    "height_px": 1081
+  },
+  {
+    "file": "F29_s8_estop.png",
+    "caption": "S8a front hardware E-stop at 10 s from 1.2 m/s (6/6 PASS): STO 15 ms after the plant-side button edge, stop in 0.21 m (limit 0.6 m), MCU ESTOP until the reset at 17 s, STANDBY, re-arm at 20 s and MANUAL driving again from 21 s, with the E-stop, Safety_OK, Safety_HV_OK (opens 1.5 s later) and BMS HV_Ready traces.",
+    "source": "S8a result 2026-10-23 07:53 (latest post-fix run)",
+    "ok": true,
+    "width_px": 1227,
+    "height_px": 884
+  },
+  {
+    "file": "F30_battery.png",
+    "caption": "Battery during D1: pack terminal voltage 53.5-53.7 V (truth) vs the BMS measurement, pack current up to 25.5 A, SOC 95.85 -> 95.79 % (10.3 Wh used) with the BMS SOC estimate, and cell temperature constant at 35.0 degC over the 64 s drive.",
+    "source": "D1 result 2026-10-23 20:11: power_truth and bms_telem",
+    "ok": true,
+    "width_px": 1181,
+    "height_px": 806
+  },
+  {
+    "file": "F31_drive_internals.png",
+    "caption": "Drive internals during D1: motor speeds up to 2168 rpm tracking the DRV_CMD references, applied motor torques between -5.3 and 4.8 N m, well inside the 16 N m MCU torque limit, track slip up to about +/-28 % in the turns, and motor winding temperatures rising from 45.0 to about 46.2 degC.",
+    "source": "D1 result 2026-10-23 20:11: drive_truth.L/R, telem.w_ref_motor / tau_lim_mot, truth.slip_LR",
+    "ok": true,
+    "width_px": 1182,
+    "height_px": 806
+  },
+  {
+    "file": "F32_s2_slope.png",
+    "caption": "S2 slope (8/11 PASS): RC drive at 0.8 m/s command up the 20 deg ramp with a full sprayer, ground speed 0.744 m/s on the ramp (limit 0.75, about 7 % track slip), body pitch -22 to -24 deg with the MCU tilt estimate up to 26 deg (TILT_WARN, torque limit derated from 16 to 8 N m), then a stop and 30 s hold at x = 18.9 m with 0.023 m roll-back; gearbox torque peak 221 N m.",
+    "source": "S2 result 2026-10-23 20:29 (re-run for this report, Normal mode)",
+    "ok": true,
+    "width_px": 1182,
+    "height_px": 844
+  },
+  {
+    "file": "F33_project_structure.png",
+    "caption": "Project folder structure of Shaddad_UGV: models, subsystems, scripts, params, buses, tests, docs and the generated work folder.",
+    "source": "drawn in MATLAB from the project folder listing (2026-10-23; regenerated in fix round 2: 39 build_*.m + helper shaddad_bu.m); build/figtools/diag_f33.m",
+    "ok": true,
+    "width_px": 1264,
+    "height_px": 954
+  },
+  {
+    "file": "F34_sbus_frame.png",
+    "caption": "One SBUS frame decoded at t = 20.010 s of D1 (0.8 m/s with a 0.3 rad/s left turn): the 16 raw channel values from the receiver (CH1 steer 623, CH2 throttle 1402, CH5 mode 172 = MANUAL, CH6 arm 1811, CH7 speed 1811, CH12 E-stop 172 = RUN) equal the values decoded by fw_sbus_decoder, shown with the 25-byte frame (0x0F header, 22 payload bytes of 16 x 11 bit LSB first, flags 0x00, end byte 0x00).",
+    "source": "D1 result 2026-10-23 20:11: rc_frame / rc_dec; bytes re-encoded with utilities/sbus_ref_encode.m",
+    "ok": true,
+    "width_px": 1238,
+    "height_px": 801
+  },
+  {
+    "file": "F01_system_top_detail.png",
+    "caption": "Detail of Shaddad_System (lower left of {fig:F01_system_top_overview.png}): the scenario input bus selector Sel_ScenarioIn feeds Operator_Console (2) and Operator_RC (3), whose SBUS byte stream goes to MCU_In; the Plant Model block (7), Sensors (9) and MissionCmd_RT (11) sit beside them. {fig:F17_simulink_editor_callouts.png} shows the MCU region of the same model.",
+    "source": "native-resolution crop(s) of F01_system_top.png (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 1790
+  },
+  {
+    "file": "F01_system_top_overview.png",
+    "caption": "Top model Shaddad_System at VC_PHASE = 1 (overview of the full diagram, print -s). The numbered callouts mark the blocks of {tab:tab_top}: Model blocks MCU (5), BMS (6) and Plant (7), the RC link (3), the CAN networks (8, 10), sensors (9), GNC_Variant holding GNC_Stub (12), monitors and logging (13, 14) and the loop-breaking Unit Delays (15).",
+    "source": "overview of F01_system_top.png (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 1686,
+    "height_px": 1560,
+    "note": "regenerated in fix round 2: overview height 11 cm, fade 0.35"
+  },
+  {
+    "file": "F03_mcu_top_detail.png",
+    "caption": "Shaddad_MCU detail: Task_1k (1) with its outputs rc_dec, do_word, wdg_kick and reset_cnt, the rate transitions RT_rc_dec and RT_reset_cnt into Task_10 (3), and the 10 ms to 1 ms transitions RT_mode_1k, RT_fault_word_1k and RT_alive10 back to the watchdog manager.",
+    "source": "native-resolution crop(s) of F03_mcu_top.png (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 2020
+  },
+  {
+    "file": "F03_mcu_top_overview.png",
+    "caption": "Shaddad_MCU top level (overview, print -s). Callouts as in {tab:tab_tasks}: the atomic task subsystems Task_1k (1), Task_5 (2), Task_10 (3), Task_50 (4) and Task_100 (5), the multirate CAN1_Codec and CAN2_Codec (6) and the IO_In / IO_Out variant subsystems (7, 8; SIM choice active). The small unlabelled blocks are the explicit Rate Transitions (RT_*) between the rates.",
+    "source": "overview of F03_mcu_top.png (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 1944,
+    "height_px": 2265,
+    "note": "regenerated in fix round 2: overview height 16 cm (page of its own), fade 0.35"
+  },
+  {
+    "file": "F04_mcu_task10_detail.png",
+    "caption": "Task_10 detail: Mode_Manager (4) outputs mode, cmd_src, drive_enable, rearm_req and bms_req to Vehicle_Ctrl (5) and to the status bus creator (7); Is_estop / Estop_active and Is_auto with Drive_ready (the `drive_ready` wiring fixed on 2026-10-23) feed the status bus.",
+    "source": "native-resolution crop(s) of F04_mcu_task10.png (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 1950
+  },
+  {
+    "file": "F04_mcu_task10_overview.png",
+    "caption": "Shaddad_MCU/Task_10 (10 ms), overview: RC_Mapping (1), odometry sens_odom_compute (2), Safety_Supervisor (3), Mode_Manager (4), Vehicle_Ctrl (5), Telemetry (6), the platform and status bus creators (7) and the alive counter (8); the logic at the lower left derives the ESC readiness from DRV_FB.",
+    "source": "overview of F04_mcu_task10.png (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2255,
+    "height_px": 2172,
+    "note": "regenerated in fix round 2: overview height 16 cm (page of its own), fade 0.35"
+  },
+  {
+    "file": "F07_drive_side_detail.png",
+    "caption": "drive_side detail, top row of {fig:F07_drive_side_overview.png}: (a) fault selection (7), the ESC (1) and the gearbox (3); (b) the brake (4), the thermal network (5), the motor plant variant SYS (2) with its DC and shaft ports, and the 1 ms re-timing blocks (6).",
+    "source": "native-resolution crop(s) of F07_drive_side.png (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 578
+  },
+  {
+    "file": "F07_drive_side_overview.png",
+    "caption": "Simulink: `drive_side`, one traction drive (overview, print -s): ESC firmware model drive_esc (1), motor plant Variant Subsystem `VC_DRIVE_FID` (2), gearbox (3), spring brake (4), thermal network (5), 1 ms re-timing of the plant signals (6), fault-injection selectors (7), power products and energy integrals (8) and the truth bus (9).",
+    "source": "overview of F07_drive_side.png (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2255,
+    "height_px": 843,
+    "note": "regenerated in fix round 2: overview height 11 cm, fade 0.35"
+  },
+  {
+    "file": "F08_drive_esc_detail.png",
+    "caption": "drive_esc detail: the control path from `ESC_SM` (6) through `Speed_Ctrl` (7) to `Output_Stage` (8), which outputs plant_cmd = [Tr; duty; w_cmd; enable] and the ESC loss P_esc.",
+    "source": "native-resolution crop(s) of F08_drive_esc.png (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 1580
+  },
+  {
+    "file": "F08_drive_esc_overview.png",
+    "caption": "Simulink: `drive_esc`, the ESC firmware model at 1 ms (overview, print -s). Callouts as in {tab:tab_esc_subsys}: command input with CAN watchdog (1), speed measurement (2), winding-sensor model (3), torque limiter (4), protections (5), `ESC_SM` state machine (6), speed controller (7), output stage (8) and feedback assembly (9).",
+    "source": "overview of F08_drive_esc.png (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 1533,
+    "height_px": 1560,
+    "note": "regenerated in fix round 2: overview height 11 cm, fade 0.35"
+  },
+  {
+    "file": "F09_power_plant_detail.png",
+    "caption": "Power_Plant details: (a) Battery_Pack (1) with the balancing input and the truth outputs, Pack_Thermal (2) and Dock_Charger (7); (b) Safety_Chain (4) with the hmi, hw_cmd and bms_cmd inputs and the Safety_OK / Safety_HV_OK outputs, and LV_Distribution (5) with the AUX48 supply, the 24 V implement rail and the rail flags.",
+    "source": "native-resolution crop(s) of F09_power_plant_arranged.png (print -s of an in-memory copy of Power_Plant after Simulink.BlockDiagram.arrangeSystem, re-printed 2026-10-23; project file unchanged) (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 1793
+  },
+  {
+    "file": "F09_power_plant_overview.png",
+    "caption": "Power_Plant top level (overview, print -s of an in-memory copy after Simulink.BlockDiagram.arrangeSystem; the project file is unchanged). Callouts as in {tab:tab_pwr_blocks}: Battery_Pack (1, VC_PACK variant), Pack_Thermal (2), PDU (3), Safety_Chain (4), LV_Distribution (5), Implement_Loads (6, VC_IMPL variant), Dock_Charger (7) and Power_Sensors (8). The hexagonal ports DC48_TracL/R and Impl_Shaft are the physical connections to the drive and structure plants.",
+    "source": "overview of F09_power_plant_arranged.png (print -s of an in-memory copy of Power_Plant after Simulink.BlockDiagram.arrangeSystem, re-printed 2026-10-23; project file unchanged) (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 1119,
+    "height_px": 1560,
+    "note": "regenerated in fix round 2: overview height 11 cm, fade 0.35"
+  },
+  {
+    "file": "F15_mode_manager_detail.png",
+    "caption": "fw_mode_manager detail: DI word masks KEY_ON 0x800, SAFETY_OK 0x4, LID_CLOSED 0x400 and DOCK_PRESENT 0x2000 (1), |v_track| for the standstill check (2), and the self-test checks (3): ESC and BMS frame freshness and the 24 / 12 / 5 V rails combined in Selftest_ok.",
+    "source": "native-resolution crop(s) of F15_mode_manager.png (print -s, 200 dpi) at a scale where 10 pt block names print at 6 pt in the 15.9 cm column, with the same callouts; build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2080,
+    "height_px": 1720
+  },
+  {
+    "file": "F15_mode_manager_overview.png",
+    "caption": "fw_mode_manager (overview, print -s): DI bit masks (1), standstill check (2), self-test checks (3), the MATLAB Function Mode_FSM (4, mcu_mode_manager.m), the BMS request vector Bms_req (5) and the parameter constants Prm_n, Prm_mask and Prm_flag (6). The port labels of Mode_FSM overlap in the authored layout.",
+    "source": "overview of F15_mode_manager.png (print -s, 200 dpi), lightened, with numbered callouts placed from get_param(...,'Position'); build/figtools/make_callout_figs.py",
+    "ok": true,
+    "width_px": 2255,
+    "height_px": 1254,
+    "note": "regenerated in fix round 2: overview height 11 cm, fade 0.35"
+  },
+  {
+    "file": "F16_matlab_desktop_crop.png",
+    "caption": "MATLAB R2026b desktop (window capture; the title bar and the side panels are cropped) with the Shaddad_UGV project open in the Project panel and the shaddad_startup report in the Command Window: data and 7 configuration sets loaded in 5.5 s; Simscape, Simscape Electrical, Simscape Battery, Embedded Coder and ROS Toolbox OK; Simulink Coder missing, so code generation is BLOCKED.",
+    "source": "F16_matlab_desktop.png with the title bar (licence text), the Copilot side panel and the status bar cropped; build/figtools/make_screens.py",
+    "ok": true,
+    "width_px": 1232,
+    "height_px": 822
+  },
+  {
+    "file": "F17_simulink_editor_callouts.png",
+    "caption": "Simulink editor with Shaddad_System open at 100 % zoom (window capture, title bar cropped): CAN1_Net (8), CAN2_Link (10), MCU_In (4), the MCU Model block (5), Sim_Monitors (13) and the loop-breaking Unit Delays (15), with the SIMULATION toolstrip (Normal mode, Stop Time, Run, Data Inspector, Bird's-Eye Scope).",
+    "source": "F17_simulink_editor.png with the title bar cropped and Table 15 callouts added; build/figtools/make_screens.py",
+    "ok": true,
+    "width_px": 1942,
+    "height_px": 1184
+  },
+  {
+    "file": "F09_power_plant_arranged.png",
+    "caption": "Power_Plant after arrangeSystem (source print of the overview and detail figures).",
+    "source": "F09_power_plant_arranged.png (print -s of an in-memory copy of Power_Plant after Simulink.BlockDiagram.arrangeSystem, re-printed 2026-10-23; project file unchanged); build/figtools/print_power_plant.m",
+    "ok": true,
+    "width_px": 4331,
+    "height_px": 6039
+  },
+  {
+    "file": "F05_rc_link_sim_split.png",
+    "caption": "RC_Link_Sim (print -s, shown in two parts so that the block names stay readable): (a) the operator input op and the fault input flt pass the 10 ms, 1 ms and 14 ms rate chain (RT_op_1k, RT_op_frame, RT_flt_1k, RT_flt_frame, BS_flt_frame) into RC_Transmitter, RC_Radio_Channel and RC_Receiver; (b) the receiver frame goes to RT_rc_frame (logging output rc_frame) and to SBUS_Encoder, and UART_Line_Sim produces the 1 ms SBUS byte stream sbus.",
+    "source": "two crops of F05_rc_link_sim.png (print -s RC_Link_Sim, 200 dpi) at one scale, 10 pt block names print at about 6 pt; build/figtools/make_f05_split.py",
+    "ok": true,
+    "width_px": 2062,
+    "height_px": 1192
+  }
+]

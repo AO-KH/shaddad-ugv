@@ -1,0 +1,35 @@
+# Outputs, logs, results, generated code and snapshots (several GB, rebuilt from the sources)
+/work/
+
+# Working notes of the earlier plan workflow (2.6 GB)
+/.superpowers/
+
+# Personal Claude Code settings
+.claude/settings.local.json
+
+# MATLAB and Simulink caches and build products
+slprj/
+sfprj/
+codegen/
+*_ert_rtw/
+*_grt_rtw/
+*.slxc
+*.mexw64
+*.mexa64
+*.mexmaci64
+*.mexmaca64
+*.asv
+*.autosave
+*.slx.r20*
+*.mdl.r20*
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Temporary, lock and system files
+*.bak
+*.tmp
+~$*
+Thumbs.db
+desktop.ini

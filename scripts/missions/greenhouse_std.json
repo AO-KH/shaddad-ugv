@@ -1,0 +1,81 @@
+{
+  "mission_id": 101,
+  "mission_type": "GREENHOUSE_COVERAGE",
+  "world_id": 4,
+  "datum": {
+    "lat": 24.1556,
+    "lon": 47.312,
+    "alt": 430
+  },
+  "work_area_lla": [
+    [
+      24.1556,
+      47.312
+    ],
+    [
+      24.1556,
+      47.312094461
+    ],
+    [
+      24.155938568,
+      47.312094461
+    ],
+    [
+      24.155938568,
+      47.312
+    ]
+  ],
+  "rows_lla": [],
+  "keep_out": [],
+  "sweep_angle_deg": 90,
+  "swath_m": 1,
+  "sidelap": 0.1,
+  "inset": {
+    "post_edge_m": 0.2,
+    "c_clear_m": 0.15,
+    "c_xte_m": 0.05
+  },
+  "turn_radius_m": 0.81,
+  "skip_rows": "auto",
+  "speed_work": 0.5,
+  "speed_transit": 1.2,
+  "speed_turn_max": 0.5,
+  "implement": {
+    "type": "MOWER",
+    "speed_rpm": 2800,
+    "height_m": 0.06
+  },
+  "allow_bypass": false,
+  "lane_halfwidth_m": 0.4,
+  "home": {
+    "lat": 24.155581943,
+    "lon": 47.312047231,
+    "yaw_enu_deg": 90
+  },
+  "dock": {
+    "lat": 24.155563886,
+    "lon": 47.312047231,
+    "yaw_enu_deg": 90,
+    "approach_m": 3
+  },
+  "via_in_lla": [
+    {
+      "lat": 24.155602709,
+      "lon": 47.312047231,
+      "yaw_enu_deg": 90
+    }
+  ],
+  "via_out_lla": [
+    {
+      "lat": 24.155602709,
+      "lon": 47.312047231,
+      "yaw_enu_deg": -90
+    },
+    {
+      "lat": 24.155577429,
+      "lon": 47.312047231,
+      "yaw_enu_deg": -90
+    }
+  ],
+  "end_action": "RTH"
+}

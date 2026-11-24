@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shaddad UGV Dashboard</title>
+<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/effra">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..500,0..1,0&display=block">
+<style>
+  /* The MARSAD x Fusion look (NASL): flat hairline-bordered surfaces, square geometry (2px only on small chips),
+     navy "marker" labels, the NASL gradient on accent lines and progress bars, Effra display type, a blueprint grid
+     behind the page. Colours are "R G B" channels so they take an alpha. Light on :root, dark under the media query
+     and [data-theme="dark"]. */
+  :root {
+    --c-canvas: 255 255 255; --c-card: 255 255 255; --c-subtle: 249 248 252; --c-raised: 243 241 248; --c-raised-2: 233 230 240;
+    --c-line: 233 230 240; --c-line-strong: 214 210 225; --c-ink: 13 11 20; --c-ink-2: 76 70 89; --c-ink-3: 122 115 137;
+    --c-brand: 95 28 184; --c-brand-soft: 243 236 252; --c-accent: 200 109 215; --c-mark: 23 39 127;
+    --c-success: 6 118 71; --c-success-soft: 236 253 243; --c-danger: 180 35 24; --c-danger-soft: 254 243 242;
+    --c-warning: 181 71 8; --c-warning-soft: 255 250 235; --c-info: 2 132 199; --c-info-soft: 236 254 255;
+    --grad: linear-gradient(90deg, #6722ba, #c86dd7);
+    --flow: linear-gradient(90deg, #17277f, #6722ba, #c86dd7);
+    --brand-gradient: linear-gradient(135deg, #6722ba, #c86dd7);
+    --grid-line: rgba(13, 11, 20, 0.035); --glow-a: rgba(103, 34, 186, 0.06); --glow-b: transparent;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --font: 'Effra', 'Effra Std', 'IBM Plex Sans Arabic', 'Segoe UI', system-ui, sans-serif;
+    --mono: 'Cascadia Mono', 'Cascadia Code', Consolas, ui-monospace, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --c-canvas: 7 6 12; --c-card: 11 10 18; --c-subtle: 17 15 25; --c-raised: 23 20 31; --c-raised-2: 31 27 42;
+      --c-line: 33 28 44; --c-line-strong: 47 42 60; --c-ink: 248 246 252; --c-ink-2: 211 206 221; --c-ink-3: 155 148 173;
+      --c-brand: 200 109 215; --c-brand-soft: 30 18 37; --c-accent: 167 123 234; --c-mark: 139 154 238;
+      --c-success: 71 205 137; --c-success-soft: 5 51 33; --c-danger: 240 118 139; --c-danger-soft: 60 18 28;
+      --c-warning: 232 163 61; --c-warning-soft: 58 36 10; --c-info: 100 210 255; --c-info-soft: 12 42 74;
+      --flow: linear-gradient(90deg, #8b9aee, #a77bea, #c86dd7);
+      --grid-line: rgba(255, 255, 255, 0.03); --glow-a: rgba(200, 109, 215, 0.09); --glow-b: rgba(23, 39, 127, 0.16);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --c-canvas: 7 6 12; --c-card: 11 10 18; --c-subtle: 17 15 25; --c-raised: 23 20 31; --c-raised-2: 31 27 42;
+    --c-line: 33 28 44; --c-line-strong: 47 42 60; --c-ink: 248 246 252; --c-ink-2: 211 206 221; --c-ink-3: 155 148 173;
+    --c-brand: 200 109 215; --c-brand-soft: 30 18 37; --c-accent: 167 123 234; --c-mark: 139 154 238;
+    --c-success: 71 205 137; --c-success-soft: 5 51 33; --c-danger: 240 118 139; --c-danger-soft: 60 18 28;
+    --c-warning: 232 163 61; --c-warning-soft: 58 36 10; --c-info: 100 210 255; --c-info-soft: 12 42 74;
+    --flow: linear-gradient(90deg, #8b9aee, #a77bea, #c86dd7);
+    --grid-line: rgba(255, 255, 255, 0.03); --glow-a: rgba(200, 109, 215, 0.09); --glow-b: rgba(23, 39, 127, 0.16);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: rgb(var(--c-canvas)); color: rgb(var(--c-ink)); font: 14px/1.5 var(--font); }
+  h1, h2, h3, p { margin: 0; }
+  a { color: rgb(var(--c-brand)); }
+  ::selection { background: rgb(var(--c-accent) / .35); }
+  :focus-visible { outline: 2px solid rgb(var(--c-brand)); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(55% 45% at 85% 0%, var(--glow-a), transparent 62%), radial-gradient(45% 40% at 10% 100%, var(--glow-b), transparent 65%),
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: auto, auto, 40px 40px, 40px 40px; }
+
+  /* Material Symbols: a ligature font, the icon name is the text. Hidden when the font did not load. */
+  .ms { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; font-size: 20px; line-height: 1; letter-spacing: normal;
+    text-transform: none; display: inline-block; white-space: nowrap; direction: inherit; -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; flex: none; }
+  .no-icons .ms { display: none; }
+
+  /* Header: brand row, section tabs, a reading-progress line along the bottom edge */
+  .hdr { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid rgb(var(--c-line)); background: rgb(var(--c-canvas) / .88);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .hdr-row { display: flex; align-items: center; gap: 12px; height: 64px; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: rgb(var(--c-ink)); }
+  .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; background: var(--brand-gradient); color: #fff; }
+  .brand-mark .ms { font-size: 22px; }
+  .brand-word { font-weight: 700; font-size: 19px; letter-spacing: .12em; text-transform: uppercase; }
+  .brand-word b { font-weight: 400; color: rgb(var(--c-ink-3)); letter-spacing: .12em; }
+  .sep { color: rgb(var(--c-line-strong)); font-size: 18px; }
+  .proj { color: rgb(var(--c-ink-2)); font-size: 14px; }
+  .hdr-end { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .live { display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; color: rgb(var(--c-ink-2)); border: 1px solid rgb(var(--c-line)); background: rgb(var(--c-subtle));
+    padding: 6px 10px; border-radius: 2px; font-variant-numeric: tabular-nums; }
+  .icon-btn { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgb(var(--c-line)); background: rgb(var(--c-card)); color: rgb(var(--c-ink-2));
+    cursor: pointer; border-radius: 0; font: inherit; }
+  .icon-btn:hover { border-color: rgb(var(--c-brand)); color: rgb(var(--c-ink)); }
+  .sig { position: relative; display: inline-block; width: 7px; height: 7px; flex: none; }
+  .sig::before, .sig::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: rgb(var(--c-brand)); }
+  .live.stale .sig::before, .live.stale .sig::after { background: rgb(var(--c-warning)); }
+  .live.down .sig::before, .live.down .sig::after { background: rgb(var(--c-danger)); }
+  @media (prefers-reduced-motion: no-preference) {
+    .sig::before { animation: sigFlick 1.05s linear infinite; }
+    .sig::after { animation: sigPing 1.05s linear infinite; }
+    .live.down .sig::before, .live.down .sig::after { animation: none; }
+  }
+  @keyframes sigPing { 0% { opacity: .65; transform: scale(1); } to { opacity: 0; transform: scale(3.2); } }
+  @keyframes sigFlick { 0%, 75%, to { opacity: 1; } 85% { opacity: .35; } }
+  .tabs { border-top: 1px solid rgb(var(--c-line)); display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding: 0 max(8px, env(safe-area-inset-right, 0px)) 0 max(8px, env(safe-area-inset-left, 0px)); }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 14px; border: 0; background: none; cursor: pointer;
+    font: inherit; font-size: 14.5px; color: rgb(var(--c-ink-2)); white-space: nowrap; }
+  .tab .ms { font-size: 18px; color: rgb(var(--c-ink-3)); }
+  .tab::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: rgb(var(--c-mark)); transform: scaleX(0);
+    transform-origin: left center; transition: transform .35s ease; }
+  .tab:hover { color: rgb(var(--c-ink)); }
+  .tab:hover::after { transform: scaleX(1); }
+  .tab[aria-selected="true"] { color: rgb(var(--c-ink)); font-weight: 600; }
+  .tab[aria-selected="true"] .ms { color: rgb(var(--c-brand)); }
+  .tab[aria-selected="true"]::after { transform: scaleX(1); background: rgb(var(--c-brand)); }
+  .read-progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--flow); pointer-events: none; }
+
+  /* Page */
+  .dash-main { position: relative; z-index: 1; max-width: 1360px; margin: 0 auto; display: grid; gap: 22px;
+    padding: 28px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
+  .page-head { display: grid; gap: 10px; }
+  .crumb { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgb(var(--c-ink-3)); }
+  .crumb b { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: rgb(var(--c-mark)); }
+  .crumb b::before { content: ''; width: 5px; height: 5px; background: currentColor; }
+  .page-head h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 700; line-height: 1.1; text-transform: uppercase; letter-spacing: .02em; }
+  .page-head h1::after { content: ''; display: block; width: 80px; height: 2px; margin-top: 14px; background: var(--grad); transform-origin: left center; }
+  .lede { color: rgb(var(--c-ink-2)); font-size: 15px; max-width: 80ch; }
+  @media (prefers-reduced-motion: no-preference) {
+    .enter > * { animation: blurIn .55s var(--ease) both; }
+    .page-head.enter h1::after { animation: accGrow .7s .25s var(--ease) both; }
+  }
+  @keyframes blurIn { from { opacity: 0; filter: blur(14px); transform: translateY(8px); } to { opacity: 1; filter: none; transform: none; } }
+  @keyframes accGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* Marker label: navy text after a small square bullet, caps and tracking */
+  .label-k { display: flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgb(var(--c-mark)); }
+  .label-k::before { content: ''; width: 5px; height: 5px; flex: none; background: currentColor; }
+
+  /* 2px seam grid: cells on the card colour, seams in the hairline colour */
+  .seam { display: grid; gap: 2px; background: rgb(var(--c-line)); border: 1px solid rgb(var(--c-line)); }
+  .seam > * { background: rgb(var(--c-card)); min-width: 0; }
+  /* Column counts the items fill: 6 figures in 6, 3, 2 or 1 columns; 8 subsystems in 4, 2 or 1 columns */
+  .kpis { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 560px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1280px) { .kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .kpi { padding: 18px 20px; display: grid; gap: 6px; align-content: start; }
+  .kpi .big { font-size: 34px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .kpi .big small { font-size: 14px; font-weight: 400; color: rgb(var(--c-ink-3)); }
+  .kpi .sub { font-size: 12.5px; color: rgb(var(--c-ink-3)); overflow-wrap: anywhere; }
+  .bar { height: 4px; background: rgb(var(--c-raised-2)); overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--flow); }
+  .bar.split { display: flex; }
+  .bar.split > .ok { background: rgb(var(--c-success)); }
+  .bar.split > .bad { background: rgb(var(--c-danger)); }
+
+  /* Panels: flat, square, hairline-bordered; hierarchy from borders and surface steps */
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); gap: 22px; align-items: start; }
+  .panel { background: rgb(var(--c-card)); border: 1px solid rgb(var(--c-line)); display: grid; gap: 14px; padding: 20px; min-width: 0; }
+  .panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .panel-head > div { display: grid; gap: 6px; min-width: 0; }
+  .panel-title { font-size: 15px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgb(var(--c-line)); border-radius: 2px; background: rgb(var(--c-subtle));
+    padding: 2px 8px; font-size: 11.5px; font-weight: 500; color: rgb(var(--c-brand)); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .note { font-size: 12.5px; color: rgb(var(--c-ink-3)); }
+  .scroll { overflow-x: auto; min-width: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-weight: 600; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: rgb(var(--c-ink-3)); padding: 8px 10px;
+    border-bottom: 1px solid rgb(var(--c-line-strong)); white-space: nowrap; background: rgb(var(--c-subtle)); }
+  td { padding: 8px 10px; border-bottom: 1px solid rgb(var(--c-line)); vertical-align: top; }
+  tbody tr:hover td { background: rgb(var(--c-subtle)); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  td.nowrap { white-space: nowrap; }
+  .mono { font-family: var(--mono); font-size: 12px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border-radius: 2px; font-size: 11.5px; font-weight: 500; white-space: nowrap; border: 1px solid transparent; }
+  .pill::before { content: ''; width: 6px; height: 6px; background: currentColor; flex: none; }
+  .k-ok { color: rgb(var(--c-success)); background: rgb(var(--c-success-soft)); border-color: rgb(var(--c-success) / .25); }
+  .k-warn { color: rgb(var(--c-warning)); background: rgb(var(--c-warning-soft)); border-color: rgb(var(--c-warning) / .25); }
+  .k-bad { color: rgb(var(--c-danger)); background: rgb(var(--c-danger-soft)); border-color: rgb(var(--c-danger) / .25); }
+  .k-run { color: rgb(var(--c-brand)); background: rgb(var(--c-brand-soft)); border-color: rgb(var(--c-brand) / .3); }
+  .k-muted { color: rgb(var(--c-ink-3)); background: rgb(var(--c-raised)); border-color: rgb(var(--c-line)); }
+  .k-info { color: rgb(var(--c-info)); background: rgb(var(--c-info-soft)); border-color: rgb(var(--c-info) / .25); }
+  .k-mark { color: rgb(var(--c-mark)); background: rgb(var(--c-raised)); border-color: rgb(var(--c-mark) / .3); }
+  .jl li { grid-template-columns: 8.5rem 7.5rem minmax(0, 1fr); }
+  .jl .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .linkish { border: 0; background: none; padding: 0; font: inherit; font-size: 12px; color: rgb(var(--c-brand)); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .day { padding-top: 10px; }
+  pre.log { font-family: var(--mono); font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 72vh; overflow: auto; margin: 0; color: rgb(var(--c-ink-2)); }
+  .reader { position: sticky; top: 124px; }
+  .gallery { grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+  .shot { display: grid; gap: 6px; padding: 10px; border: 0; margin: 0; cursor: zoom-in; text-align: left; font: inherit; color: inherit; }
+  .shot:hover { background: rgb(var(--c-subtle)); }
+  .shot img { width: 100%; height: 170px; object-fit: contain; background: #fff; border: 1px solid rgb(var(--c-line)); }
+  .lightbox { position: fixed; inset: 0; z-index: 60; background: rgb(var(--c-canvas) / .92); display: grid; place-items: center;
+    padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); }
+  .lightbox figure { margin: 0; display: grid; gap: 10px; max-width: 100%; max-height: 100%; }
+  .lightbox img { max-width: min(1400px, 96vw); max-height: 84vh; object-fit: contain; background: #fff; border: 1px solid rgb(var(--c-line-strong)); }
+  .lightbox figcaption { font-size: 13px; color: rgb(var(--c-ink-2)); }
+  .search { font: inherit; font-size: 13px; color: rgb(var(--c-ink)); background: rgb(var(--c-subtle)); border: 1px solid rgb(var(--c-line-strong));
+    border-radius: 0; padding: 8px 12px; min-width: 0; flex: 1 1 220px; }
+  select.search { flex: 0 1 200px; }
+  .search:hover { border-color: rgb(var(--c-ink-3) / .55); }
+  .search:focus { outline: none; border-color: rgb(var(--c-brand)); background: rgb(var(--c-card)); }
+  @media (max-width: 900px) { .reader { position: static; } }
+  @media (max-width: 680px) { .jl li { grid-template-columns: minmax(0, 1fr); } }
+  .t-bad { color: rgb(var(--c-danger)); }
+  .empty { color: rgb(var(--c-ink-3)); font-size: 13px; padding: 6px 0; }
+  .err { color: rgb(var(--c-danger)); font-size: 13px; }
+
+  /* Subsystem cards: a blueprint band with a glowing glyph and a readout, then the figures */
+  .subs { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 600px) { .subs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1180px) { .subs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .sub { display: flex; flex-direction: column; border: 0; padding: 0; margin: 0; text-align: left; font: inherit; color: inherit; cursor: pointer; background: rgb(var(--c-card));
+    transition: background-color .25s; }
+  .sub:hover { background: rgb(var(--c-subtle)); }
+  .sub-v { position: relative; height: 118px; display: grid; place-items: center; overflow: hidden; color: rgb(var(--c-brand)); border-bottom: 1px solid rgb(var(--c-line));
+    background: radial-gradient(ellipse 50% 62% at 50% 52%, rgb(var(--c-brand) / .12), transparent 72%),
+      linear-gradient(rgb(var(--c-ink) / .045) 1px, transparent 1px) -1px -1px / 22px 22px,
+      linear-gradient(90deg, rgb(var(--c-ink) / .045) 1px, transparent 1px) -1px -1px / 22px 22px, rgb(var(--c-subtle)); }
+  .sub-v::after { content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: var(--grad); transition: width .4s ease; }
+  .sub:hover .sub-v::after { width: 100%; }
+  .sub-v .ms { font-size: 52px; font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48; filter: drop-shadow(0 0 10px rgb(var(--c-brand) / .35)); transition: transform .45s var(--ease); }
+  .sub:hover .sub-v .ms { transform: translateY(-3px); }
+  .sub-r { position: absolute; bottom: 10px; right: 12px; font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: rgb(var(--c-brand) / .85); }
+  .sub-state { position: absolute; top: 10px; left: 12px; }
+  .sub-b { display: grid; gap: 10px; padding: 16px 18px 18px; flex: 1; }
+  .sub-t { font-size: 15px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .sub dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 12.5px; }
+  .sub dt { color: rgb(var(--c-ink-3)); } .sub dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  .cta { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: rgb(var(--c-ink-3)); transition: color .2s, gap .2s; }
+  .cta .ms { font-size: 16px; }
+  .sub:hover .cta { color: rgb(var(--c-brand)); gap: 10px; }
+
+  .list { display: grid; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+  .list li { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid rgb(var(--c-line)); }
+  .list li:last-child { border-bottom: 0; }
+  .when { color: rgb(var(--c-ink-3)); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 12px; }
+  .what { overflow-wrap: anywhere; }
+  .plan { display: grid; gap: 8px; padding: 14px 0; border-bottom: 1px solid rgb(var(--c-line)); }
+  .plan:first-child { padding-top: 0; } .plan:last-child { border-bottom: 0; padding-bottom: 0; }
+  .plan-top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+  .plan-name { font-weight: 700; }
+  .tasks { display: grid; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+  .tasks li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid rgb(var(--c-line)); }
+  .tasks li:last-child { border-bottom: 0; }
+  .tasks .n { font-size: 11px; font-weight: 600; letter-spacing: .08em; color: rgb(var(--c-mark)); font-variant-numeric: tabular-nums; }
+  .ledger { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+  .ledger li { border-left: 2px solid rgb(var(--c-line-strong)); padding: 2px 0 2px 12px; overflow-wrap: anywhere; color: rgb(var(--c-ink-2)); }
+  .ledger li:first-child { border-left-color: rgb(var(--c-brand)); color: rgb(var(--c-ink)); }
+  .seg { display: inline-flex; flex-wrap: wrap; gap: 2px; background: rgb(var(--c-line)); border: 1px solid rgb(var(--c-line)); }
+  .seg button { border: 0; background: rgb(var(--c-card)); color: rgb(var(--c-ink-2)); font: inherit; font-size: 13px; padding: 8px 14px; cursor: pointer; }
+  .seg button:hover { color: rgb(var(--c-ink)); background: rgb(var(--c-subtle)); }
+  .seg button[aria-pressed="true"] { background: var(--brand-gradient); color: #fff; font-weight: 500; }
+  details > summary { cursor: pointer; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgb(var(--c-mark)); }
+  .facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; margin: 0; font-size: 13px; }
+  .facts dt { color: rgb(var(--c-ink-3)); } .facts dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .md { font-size: 13.5px; max-height: 72vh; overflow: auto; padding-right: 8px; color: rgb(var(--c-ink-2)); }
+  .md h1 { font-size: 20px; color: rgb(var(--c-ink)); margin: 4px 0 12px; text-transform: uppercase; letter-spacing: .02em; }
+  .md h2 { font-size: 16px; color: rgb(var(--c-ink)); margin: 20px 0 8px; text-transform: uppercase; letter-spacing: .04em; }
+  .md h3 { font-size: 14px; color: rgb(var(--c-ink)); margin: 14px 0 6px; }
+  .md p, .md ul, .md ol { margin: 0 0 9px; max-width: 95ch; }
+  .md strong { color: rgb(var(--c-ink)); }
+  .md code { font-family: var(--mono); font-size: 12px; background: rgb(var(--c-raised)); padding: 0 4px; border-radius: 2px; }
+  .md table { margin: 6px 0 14px; }
+  .md figure { margin: 12px 0 18px; }
+  .md figure img { display: block; max-width: 100%; height: auto; background: #fff; border: 1px solid rgb(var(--c-line)); }
+  .md figcaption { font-size: 12.5px; color: rgb(var(--c-ink-3)); margin-top: 6px; max-width: 95ch; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--c-line-strong)); }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-ink-3)); }
+  /* ---- Project tab (tools/dashboard/project_cards.json): the gate strip, then the task cards per gate */
+  .pj-gates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 132px), 1fr)); gap: 2px; background: rgb(var(--c-line)); border: 1px solid rgb(var(--c-line)); }
+  .pj-gates button { border: 0; background: rgb(var(--c-card)); color: rgb(var(--c-ink)); font: inherit; text-align: left; padding: 12px 14px; cursor: pointer; display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .pj-gates button:hover { background: rgb(var(--c-subtle)); }
+  .pj-gates button[aria-pressed="true"] { background: rgb(var(--c-subtle)); box-shadow: inset 0 -3px 0 rgb(var(--c-brand)); }
+  .pj-gates .pill { justify-self: start; }
+  .pj-gname { font-size: 15px; font-weight: 700; }
+  .pj-gsub { font-size: 12px; color: rgb(var(--c-ink-3)); font-variant-numeric: tabular-nums; }
+  .pj-cards { display: grid; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+  .pj-cards > li { border-bottom: 1px solid rgb(var(--c-line)); }
+  .pj-cards > li:last-child { border-bottom: 0; }
+  .pj-cards details > summary { display: grid; grid-template-columns: 5.4rem minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 0; list-style: none;
+    font-size: 13px; font-weight: 400; letter-spacing: 0; text-transform: none; color: rgb(var(--c-ink)); }
+  .pj-cards details > summary::-webkit-details-marker { display: none; }
+  .pj-cards details > summary .chip { justify-self: start; }
+  .pj-cards details[open] > summary .what { font-weight: 600; }
+  .pj-body { display: grid; gap: 8px; padding: 2px 0 14px 5.4rem; }
+  .pj-body .facts dd { font-variant-numeric: normal; overflow-wrap: anywhere; }
+  .pj-links { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pj-ul { margin: 2px 0 0; padding-left: 18px; display: grid; gap: 3px; }
+  .pj-tags { display: inline-flex; gap: 6px; align-items: center; justify-self: end; }
+  .pj-desc { display: grid; gap: 6px; font-size: 13.5px; max-width: 95ch; }
+  .pj-desc p { margin: 0; }
+  .pj-crit { display: grid; gap: 10px; }
+  .pj-crit table { font-size: 12.5px; }
+  @media (max-width: 680px) {
+    .hide-narrow, .proj, .sep { display: none; }
+    .list li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .pj-body { padding-left: 0; }
+    .pj-body .facts { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  }
+  @media (max-width: 520px) { .live #live-text { display: none; } .brand-word b { display: none; } }
+  /* ---- Agents tab (tools/dashboard/agents.jsonl via /api/agents): the kanban of the work, then the timeline with handoffs */
+  .board { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px; }
+  .board-col { display: grid; gap: 8px; align-content: start; padding: 12px; background: rgb(var(--c-subtle)); border: 1px solid rgb(var(--c-line)); min-width: 0; }
+  .board-head { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgb(var(--c-ink-2)); }
+  .board-card { display: grid; gap: 4px; padding: 10px 12px; background: rgb(var(--c-card)); border: 1px solid rgb(var(--c-line)); min-width: 0; }
+  .board-card.working { border-color: rgb(var(--c-brand) / .6); background: rgb(var(--c-brand-soft)); }
+  .board-card .pill { justify-self: start; white-space: normal; }
+  .board-card .who { font-weight: 700; font-size: 14px; }
+  .board-card .what { font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+  .board-card .meta { font-size: 12px; color: rgb(var(--c-ink-3)); }
+  .board-more, .board-empty, .idle-line { font-size: 12.5px; color: rgb(var(--c-ink-3)); margin: 0; }
+  .board-more-btn { justify-self: stretch; padding: 7px 10px; font: inherit; font-size: 12.5px; font-weight: 600; color: rgb(var(--c-ink-2)); background: rgb(var(--c-card)); border: 1px dashed rgb(var(--c-line-strong)); cursor: pointer; }
+  .board-more-btn:hover, .board-more-btn:focus-visible { color: rgb(var(--c-brand)); border-color: rgb(var(--c-brand) / .6); outline: none; }
+  .rep-cats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rep-cat { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; font: inherit; font-size: 12.5px; color: rgb(var(--c-ink-2)); background: rgb(var(--c-card)); border: 1px solid rgb(var(--c-line-strong)); cursor: pointer; }
+  .rep-cat:hover, .rep-cat:focus-visible { border-color: rgb(var(--c-brand) / .6); outline: none; }
+  .rep-cat.on { color: rgb(var(--c-brand)); background: rgb(var(--c-brand-soft)); border-color: rgb(var(--c-brand)); }
+  .rep-n { font-size: 11px; color: rgb(var(--c-ink-3)); }
+  .rep-group { display: grid; gap: 8px; margin-top: 16px; min-width: 0; }
+  .rep-group-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgb(var(--c-line)); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgb(var(--c-ink-2)); }
+  .kb { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 10px; }
+  .kb-tags { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+  .kb-tag { font-size: 11px; font-weight: 600; padding: 1px 7px; color: rgb(var(--kb)); background: rgb(var(--kb) / .1); border: 1px solid rgb(var(--kb) / .35); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .board-card.review { border-color: rgb(var(--c-warning) / .6); background: rgb(var(--c-warning-soft)); }
+  .board-card.next { border-style: dashed; border-color: rgb(var(--c-brand) / .55); }
+  .team { display: grid; gap: 16px; }
+  .team-group { display: grid; gap: 8px; }
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px; }
+  .team-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-width: 0; }
+  .tl { display: grid; gap: 10px; min-width: 0; }
+  .tl svg { display: block; overflow: visible; }
+  .tl-lane { font-size: 13px; font-weight: 600; fill: rgb(var(--c-ink)); }
+  .tl-axis { font-size: 11px; fill: rgb(var(--c-ink-3)); }
+  .tl-grid { stroke: rgb(var(--c-line)); stroke-width: 1; }
+  .tl-tick { stroke: rgb(var(--c-line)); stroke-width: 1; stroke-dasharray: 2 4; }
+  .tl-bar { fill: var(--bar); }
+  .tl-bar.s-working { fill-opacity: .45; stroke: var(--bar); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .tl-bar.s-blocked, .tl-bar.s-failed { fill: rgb(var(--c-danger)); }
+  .tl-bar.s-needs-you { fill: rgb(var(--c-warning)); }
+  .tl-hand { fill: none; stroke: rgb(var(--c-ink-2)); stroke-width: 1.2; }
+  .tl-arrowhead { fill: none; stroke: rgb(var(--c-ink-2)); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .tl-now { stroke: rgb(var(--c-brand)); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .tl-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; font-size: 12.5px; color: rgb(var(--c-ink-2)); }
+  .tl-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+  .tl-note { color: rgb(var(--c-ink-3)); }
+  @media (prefers-reduced-motion: no-preference) {
+    .tl-bar.s-working { animation: tl-dash 1s linear infinite; }
+    .board-card.working .pill { animation: agent-pulse 1.6s ease-in-out infinite; }
+  }
+  @keyframes tl-dash { to { stroke-dashoffset: -14; } }
+  @keyframes agent-pulse { 50% { opacity: .55; } }
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+<header class="hdr">
+  <div class="hdr-row">
+    <a class="brand" href="#overview" aria-label="Shaddad UGV, overview"><span class="brand-mark" aria-hidden="true"><span class="ms">agriculture</span></span><span class="brand-word">Shaddad <b>UGV</b></span></a>
+    <span class="sep" aria-hidden="true">/</span><span class="proj">Project dashboard</span>
+    <div class="hdr-end">
+      <span class="live" id="live" role="status"><span class="sig" aria-hidden="true"></span><span id="live-text">Connecting…</span></span>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch theme"><span class="ms" id="theme-icon">contrast</span></button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Sections"></nav>
+  <span class="read-progress" id="progress" aria-hidden="true"></span>
+</header>
+
+<main class="dash-main">
+  <div class="page-head" id="page-head">
+    <nav class="crumb" aria-label="Breadcrumb"><span>Shaddad UGV</span><span aria-hidden="true">/</span><b id="crumb-here">Overview</b></nav>
+    <h1 id="page-title">Overview</h1>
+    <p class="lede" id="page-lede"></p>
+  </div>
+  <section class="seam kpis" id="strip" aria-label="Summary"></section>
+  <div id="view"></div>
+</main>
+
+<script>
+  const TABS = [
+    ['overview', 'Overview', 'space_dashboard', 'The whole project at a glance, read live from the files on this computer.'],
+    ['project', 'Project', 'flag', 'The task cards under the R&D life-cycle gates: what is done, what is under way and what is left until the project is done.'],
+    ['agents', 'Team', 'groups', 'The team at work: who is working on what, the steps of each task, and every pass with its time.'],
+    ['subsystems', 'Subsystems', 'deployed_code', 'Each part of the robot: its models, tests, open problems and build tasks.'],
+    ['work', 'Plans and work', 'checklist', 'The plans in docs/superpowers/plans, every task’s state, and the work logs behind them.'],
+    ['journal', 'Journal', 'history_edu', 'Everything that happened, newest first: work started and done, results, rulings, your decisions, and what the dashboard noticed by itself.'],
+    ['reports', 'Reports', 'summarize', 'Task reports and decisions, layout reports, STATUS.md and the HTML test reports, with a reader.'],
+    ['tests', 'Tests', 'science', 'The latest logged run of every test class, next to the Oct 23 acceptance.'],
+    ['models', 'Models', 'account_tree', 'Every model, subsystem and bench file, by folder.'],
+    ['scenarios', 'Scenarios', 'route', 'Saved scenario results and the documented acceptance results.'],
+    ['plots', 'Plots', 'monitoring', 'The plots earlier runs saved: live-drive logs, row tests and other figures. Select one to open it full size.'],
+    ['problems', 'Open problems', 'report', 'Open problems from STATUS.md and the open items Claude keeps.'],
+    ['docs', 'Docs', 'description', 'The project documents, newest first, with a reader for STATUS.md.'],
+    ['computer', 'Computer', 'memory', 'Memory, disk, sleeps, MATLAB runs and the toolchain on this computer.'],
+  ];
+  const DOMAIN_ICON = { structure: 'agriculture', power: 'battery_charging_full', drive: 'settings', rc: 'settings_remote',
+    electronics: 'memory', sensors: 'sensors', gnc: 'route', integration: 'hub' };
+  let DATA = null, lastOk = 0, failing = false, focusDomain = null, shownTab = null;
+  let journalFilter = 'all', readerPath = null;
+  const READER = { path: null, text: null, error: null };
+  const JKIND = { start: ['Started', 'run'], done: ['Done', 'ok'], result: ['Result', 'info'], ruling: ['Ruling', 'mark'],
+    decision: ['Your decision', 'mark'], 'needs-you': ['Needs you', 'bad'], resolved: ['Resolved', 'ok'], issue: ['Issue', 'bad'],
+    note: ['Note', 'muted'], run: ['MATLAB run', 'run'], report: ['Report', 'info'], change: ['Change', 'muted'], sleep: ['Sleep', 'warn'] };
+  const JFILTERS = [['all', 'All', () => true], ['needs-you', 'Needs you', (e) => e.kind === 'needs-you' || e.kind === 'resolved'],
+    ['results', 'Results', (e) => e.kind === 'result'], ['work', 'Started and done', (e) => e.kind === 'start' || e.kind === 'done'],
+    ['rulings', 'Rulings and decisions', (e) => e.kind === 'ruling' || e.kind === 'decision'], ['issues', 'Issues', (e) => e.kind === 'issue'],
+    ['auto', 'Noticed by the dashboard', (e) => e.by === 'dashboard']];
+  function needsYou(d) {
+    const items = ((d.notes && d.notes.items) || []).filter((i) => i.kind === 'you' || /your word|needs you/i.test(i.state || ''));
+    const j = d.journal || [];
+    const open = j.filter((e) => e.kind === 'needs-you' && !j.some((r) => r.kind === 'resolved' && r.task === e.task && r.at > e.at));
+    return { items, open, count: items.length + open.length };
+  }
+  function openReport(path) {
+    readerPath = path;
+    if (location.hash !== '#reports') location.hash = 'reports'; else draw();
+  }
+
+  // ---- helpers: every value goes in as text, never as HTML
+  function h(tag, attrs, ...kids) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v === null || v === undefined || v === false) continue;
+      if (k === 'class') el.className = v;
+      else if (k === 'on') for (const [ev, fn] of Object.entries(v)) el.addEventListener(ev, fn);
+      else if (k === 'style') el.style.cssText = v;
+      else el.setAttribute(k, v === true ? '' : v);
+    }
+    for (const k of kids.flat()) if (k !== null && k !== undefined && k !== false) el.append(k instanceof Node ? k : String(k));
+    return el;
+  }
+  const icon = (name) => h('span', { class: 'ms', 'aria-hidden': 'true' }, name);
+  const fmtN = (n) => (n === null || n === undefined ? '' : Number(n).toLocaleString('en-US'));
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function when(s, withTime = true) {
+    if (!s) return '';
+    const d = new Date(s);
+    if (isNaN(d)) return String(s);
+    const t = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    return `${MON[d.getMonth()]} ${d.getDate()}` + (withTime ? `, ${t}` : '');
+  }
+  function ago(s) {
+    if (!s) return '';
+    const sec = (Date.now() - new Date(s).getTime()) / 1000;
+    if (sec < 60) return 'just now';
+    if (sec < 3600) return `${Math.round(sec / 60)} min ago`;
+    if (sec < 86400) return `${Math.round(sec / 3600)} h ago`;
+    return `${Math.round(sec / 86400)} d ago`;
+  }
+  const pill = (text, kind) => h('span', { class: `pill k-${kind || 'muted'}` }, text);
+  const bar = (frac) => h('div', { class: 'bar', role: 'img', 'aria-label': `${Math.round(frac * 100)}%` },
+    h('span', { style: `width:${Math.max(0, Math.min(1, frac)) * 100}%` }));
+  function panel(label, title, readout, ...body) {
+    return h('section', { class: 'panel' },
+      h('div', { class: 'panel-head' }, h('div', {}, label ? h('span', { class: 'label-k' }, label) : null, h('h2', { class: 'panel-title' }, title)),
+        readout ? h('span', { class: 'chip' }, readout) : null), ...body);
+  }
+  const empty = (t) => h('p', { class: 'empty' }, t);
+  function table(cols, rows) {
+    return h('div', { class: 'scroll' }, h('table', {},
+      h('thead', {}, h('tr', {}, cols.map((c) => h('th', { class: [c.num ? 'num' : '', c.narrow ? 'hide-narrow' : ''].join(' ').trim() || null }, c.label)))),
+      h('tbody', {}, rows.map((r) => h('tr', {}, cols.map((c) =>
+        h('td', { class: [c.num ? 'num' : '', c.nowrap ? 'nowrap' : '', c.mono ? 'mono' : '', c.narrow ? 'hide-narrow' : ''].join(' ').trim() || null }, c.get(r))))))));
+  }
+  const STATUS_KIND = { done: 'ok', running: 'run', waiting: 'muted' };
+
+  // ---- summary strip
+  function kpi(label, value, sub, extra) {
+    return h('div', { class: 'kpi' }, h('span', { class: 'label-k' }, label), h('span', { class: 'big' }, value), sub ? h('span', { class: 'sub' }, sub) : null, extra || null);
+  }
+  function drawStrip(d) {
+    const m = d.machine || {};
+    const runs = (m.matlab || []).filter((p) => p.kind === 'batch');
+    const desk = (m.matlab || []).filter((p) => p.kind === 'desktop');
+    const active = (d.plans || []).find((p) => p.state === 'In progress');
+    const cls = (d.tests && d.tests.classes) || [];
+    let tp = 0, tt = 0, tf = 0;
+    cls.forEach((c) => { const r = c.latest || (c.documented && { total: c.documented.tests, ...c.documented }); if (r) { tp += r.passed; tt += r.total; tf += r.failed; } });
+    const probs = ((d.status && d.status.problems) || []).length;
+    const open = ((d.notes && d.notes.items) || []).filter((i) => i.kind === 'wait').length;
+    const ny = needsYou(d);
+    const first = ny.open[0] ? ny.open[0].text : ny.items[0] ? ny.items[0].item : '';
+    document.getElementById('strip').replaceChildren(
+      kpi('Needs you', h('span', { class: ny.count ? 't-bad' : null }, `${ny.count}`), ny.count ? first : 'Nothing to decide right now'),
+      kpi('MATLAB now', runs.length ? h('span', {}, `${runs.length}`, h('small', {}, ` batch run${runs.length > 1 ? 's' : ''}`)) : (desk.length ? 'Desktop' : 'Idle'),
+        runs.length ? runs[0].command : (m.asleep_since ? `Asleep since ${when(m.asleep_since)}` : 'No batch run')),
+      kpi('Active plan', active ? h('span', {}, `${active.done}`, h('small', {}, ` / ${active.total} tasks`)) : 'None',
+        active ? `${active.title}${active.current ? ' · Task ' + active.current.n : ''}` : 'No plan in progress', active ? bar(active.done / Math.max(1, active.total)) : null),
+      kpi('Tests passed', h('span', {}, fmtN(tp), h('small', {}, ` / ${fmtN(tt)}`)), `${fmtN(tf)} failing in ${cls.length} test classes`, tt ? bar(tp / tt) : null),
+      kpi('Open problems', h('span', {}, `${probs}`), `in STATUS.md · ${open} waiting on you or blocked`),
+      kpi('Memory free', h('span', {}, `${m.ram_free_gb ?? '–'}`, h('small', {}, ` / ${m.ram_total_gb ?? '–'} GB`)), `Disk free ${m.disk_free_gb ?? '–'} GB`,
+        m.ram_total_gb ? bar(m.ram_free_gb / m.ram_total_gb) : null),
+    );
+  }
+
+  // ---- tabs and page head
+  function currentTab() {
+    const t = location.hash.slice(1);
+    return TABS.some(([id]) => id === t) ? t : 'overview';
+  }
+  function drawTabs() {
+    const cur = currentTab();
+    document.getElementById('tabs').replaceChildren(...TABS.map(([id, label, ic]) =>
+      h('button', { class: 'tab', role: 'tab', type: 'button', 'aria-selected': String(id === cur), on: { click: () => { location.hash = id; } } }, icon(ic), label)));
+    const [, label, , lede] = TABS.find(([id]) => id === cur);
+    document.getElementById('page-title').textContent = label;
+    document.getElementById('crumb-here').textContent = label;
+    document.getElementById('page-lede').textContent = lede;
+  }
+
+  // ---- views
+  function viewOverview(d) {
+    const m = d.machine || {};
+    const runs = m.matlab || [];
+    const active = (d.plans || []).find((p) => p.state === 'In progress');
+    return h('div', { style: 'display:grid;gap:22px' },
+      h('div', { class: 'cols' },
+        panel('Live', 'Running now', m.boot ? `on since ${when(m.boot)}` : null,
+          runs.length ? table([
+            { label: 'Run', get: (p) => p.kind === 'batch' ? pill('batch', 'run') : pill('desktop', 'warn') },
+            { label: 'Command', get: (p) => h('span', { class: 'mono' }, p.command) },
+            { label: 'Started', get: (p) => when(p.started), nowrap: true },
+            { label: 'Memory', get: (p) => `${p.mem_gb} GB`, num: true },
+          ], runs) : empty(m.asleep_since ? `The computer is asleep since ${when(m.asleep_since)}.` : 'No MATLAB is running.'),
+          latestLogs(d, 5)),
+        panel('Upcoming', 'Up next', 'plans and open items', upNext(d, 8))),
+      h('div', { class: 'cols' },
+        panel('Journal', 'Latest entries', 'all entries in Journal', journalList((d.journal || []).slice(0, 8)),
+          h('button', { class: 'linkish', type: 'button', on: { click: () => { location.hash = 'journal'; } } }, 'Open the journal')),
+        panel('Plans', 'Plans in progress', 'docs/superpowers/plans', plansSummary(d))),
+      h('div', { style: 'display:grid;gap:12px' }, h('div', { class: 'panel-head' }, h('div', {}, h('span', { class: 'label-k' }, 'The robot'), h('h2', { class: 'panel-title' }, 'Subsystems')),
+        h('span', { class: 'chip' }, 'select one for its details')), subsystemCards(d)),
+      h('div', { class: 'cols' },
+        panel('Activity', 'Recent changes', 'last 72 h', activityList(d, 12)),
+        panel('Work log', active ? active.title : 'Work log', active && active.ledger_updated ? ago(active.ledger_updated) : null, ledger(d, 5))));
+  }
+  function upNext(d, n) {
+    const u = d.upcoming || [];
+    if (!u.length) return empty('Nothing queued.');
+    return h('ul', { class: 'list' }, u.slice(0, n).map((x) => h('li', {},
+      h('span', {}, pill(x.state, x.kind === 'wait' ? 'warn' : x.kind === 'you' ? 'bad' : x.kind === 'run' ? 'run' : x.state === 'Next' ? 'mark' : 'muted')),
+      h('span', { class: 'what' }, h('strong', {}, x.what), h('br'), h('span', { class: 'note' }, x.where + (x.next ? ' · ' + x.next : ''))))));
+  }
+  function journalList(entries) {
+    if (!entries.length) return empty('No entries yet.');
+    return h('ul', { class: 'list jl' }, entries.map((e) => {
+      const [label, kind] = JKIND[e.kind] || [e.kind, 'muted'];
+      const ref = e.ref ? (/\.(md|log|txt|csv)$/i.test(e.ref)
+        ? h('button', { class: 'linkish', type: 'button', on: { click: () => openReport(e.ref) } }, e.ref.split('/').pop())
+        : /^https?:/.test(e.ref) ? h('a', { href: e.ref, target: '_blank', rel: 'noopener' }, 'link') : h('span', { class: 'mono note' }, e.ref)) : null;
+      return h('li', {}, h('span', { class: 'when' }, when(e.at)), h('span', {}, pill(label, kind)),
+        h('span', { class: 'what' }, e.text,
+          (e.task || ref || e.by) ? h('span', { class: 'meta' }, e.task ? h('span', { class: 'chip' }, e.task) : null, ref,
+            e.by ? h('span', { class: 'note' }, 'by ' + e.by) : null) : null));
+    }));
+  }
+  function viewJournal(d) {
+    const all = d.journal || [];
+    const f = (JFILTERS.find(([id]) => id === journalFilter) || JFILTERS[0])[2];
+    const rows = all.filter(f);
+    const days = [];
+    rows.forEach((e) => { const k = (e.at || '').slice(0, 10); if (!days.length || days[days.length - 1][0] !== k) days.push([k, []]); days[days.length - 1][1].push(e); });
+    return h('div', { style: 'display:grid;gap:22px' },
+      h('div', { class: 'seg', role: 'group', 'aria-label': 'Show' }, JFILTERS.map(([id, label, fn]) =>
+        h('button', { type: 'button', 'aria-pressed': String(id === journalFilter), on: { click: () => { journalFilter = id; draw(); } } }, `${label} (${all.filter(fn).length})`))),
+      panel('tools/dashboard/journal.jsonl', 'Journal', `${rows.length} entries`,
+        rows.length ? days.map(([day, es]) => h('div', { class: 'day' }, h('span', { class: 'label-k' }, when(day + 'T12:00:00', false)), journalList(es))) : empty('No entries match.'),
+        h('p', { class: 'note' }, 'Add an entry: python tools/dashboard/log.py <kind> "<text>" [--task T] [--ref path]. Kinds: start, done, result, ruling, decision, needs-you, resolved, issue, note.')));
+  }
+  // ---- the reports grouped by category (the user's request, 2026-11-14): category buttons with counts on top, then one
+  //      section per category, newest first; in "All" each section shows its first 8 and a Show more button
+  const REPORT_CATS = [
+    ['engineering', 'Engineering reports (PDF)', (r) => r.kind === 'Engineering report'],
+    ['framework', 'Framework: handbook (PDF)', (r) => r.kind === 'Framework document'],
+    ['projectdocs', 'Project documents (PDF)', (r) => r.kind === 'Project document'],
+    ['specs', 'Requirements and design (PDF)', (r) => r.kind === 'Requirements specification' || r.kind === 'Design description'],
+    ['review', 'Review findings', (r) => r.kind === 'Review findings' || r.kind === 'Review section'],
+    ['agent-task', 'Agent task reports', (r) => r.kind === 'Agent task report'],
+    ['agent-step', 'Agent step reports', (r) => r.kind === 'Agent step report' || r.kind === 'Agent summary'],
+    ['plan', 'Plan tasks and reviews', (r) => ['Task report', 'Task decisions', 'Review'].includes(r.kind)],
+    ['layout', 'Layout reports', (r) => r.kind === 'Layout report'],
+    ['status', 'Project status', (r) => r.kind === 'Project status'],
+    ['tests', 'Test reports', (r) => r.kind === 'Test report'],
+    ['logs', 'Run logs', (r) => r.kind === 'Run log'],
+  ];
+  let reportCat = 'all';
+  const REP_OPEN = {};
+  function reportsByCategory(reps) {
+    const groups = REPORT_CATS.map(([id, label, f]) => ({ id, label, items: reps.filter(f) })).filter((g) => g.items.length);
+    const other = reps.filter((r) => !REPORT_CATS.some(([, , f]) => f(r)));
+    if (other.length) groups.push({ id: 'other', label: 'Other', items: other });
+    if (reportCat !== 'all' && !groups.some((g) => g.id === reportCat)) reportCat = 'all';
+    const cats = h('div', { class: 'rep-cats', role: 'group', 'aria-label': 'Report categories' },
+      [['all', 'All', reps.length], ...groups.map((g) => [g.id, g.label, g.items.length])].map(([id, label, n]) =>
+        h('button', { class: 'rep-cat' + (reportCat === id ? ' on' : ''), type: 'button', 'aria-pressed': reportCat === id ? 'true' : 'false',
+          on: { click: () => { reportCat = id; draw(); } } }, label, h('span', { class: 'rep-n' }, String(n)))));
+    const mixed = (g) => new Set(g.items.map((r) => r.kind)).size > 1;
+    const SHOWN = 8;
+    const sections = (reportCat === 'all' ? groups : groups.filter((g) => g.id === reportCat)).map((g) => {
+      const open = reportCat !== 'all' || REP_OPEN[g.id];
+      const cols = [
+        { label: 'Report', get: (r) => r.readable
+          ? h('button', { class: 'linkish', type: 'button', style: 'font-size:13px;text-align:left', on: { click: () => openReport(r.file) } }, r.title)
+          : h('a', { href: '/raw/' + r.file.split('/').map(encodeURIComponent).join('/'), target: '_blank', rel: 'noopener' }, r.title) },
+      ];
+      if (mixed(g)) cols.push({ label: 'Kind', get: (r) => h('span', { class: 'chip' }, r.kind), nowrap: true });
+      if (g.items.some((r) => r.task)) cols.push({ label: 'Task', get: (r) => r.task ? `Task ${r.task}` : '', nowrap: true, narrow: true });
+      cols.push({ label: 'Updated', get: (r) => when(r.at), nowrap: true });
+      return h('div', { class: 'rep-group' },
+        h('div', { class: 'rep-group-head' }, h('span', {}, g.label), h('span', {}, `${g.items.length}`)),
+        table(cols, open ? g.items : g.items.slice(0, SHOWN)),
+        reportCat === 'all' && g.items.length > SHOWN ? h('button', { class: 'board-more-btn', type: 'button', 'aria-expanded': open ? 'true' : 'false',
+          on: { click: () => { REP_OPEN[g.id] = !REP_OPEN[g.id]; draw(); } } }, open ? 'Show less' : `Show ${g.items.length - SHOWN} more`) : null);
+    });
+    return [cats, ...sections];
+  }
+  function viewReports(d) {
+    const reps = d.reports || [];
+    if (!readerPath) { const first = reps.find((r) => r.readable); readerPath = first ? first.file : null; }
+    if (readerPath && READER.path !== readerPath) {
+      READER.path = readerPath; READER.text = null; READER.error = null;
+      fetch('/api/text?path=' + encodeURIComponent(readerPath), { cache: 'no-store' })
+        .then((r) => (r.ok ? r.text() : Promise.reject(new Error(r.status))))
+        .then((t) => { if (READER.path === readerPath) { READER.text = t; draw(); } })
+        .catch((e) => { READER.error = String(e.message || e); draw(); });
+    }
+    const isLog = readerPath && !/\.md$/i.test(readerPath);
+    let body;
+    if (!readerPath) body = empty('Choose a report.');
+    else if (READER.error) body = h('p', { class: 'err' }, `Could not open ${readerPath} (${READER.error}).`);
+    else if (READER.text === null) body = empty('Opening…');
+    else if (isLog) body = h('pre', { class: 'log' }, READER.text.replace(/\r/g, '').split('\n').slice(-400).join('\n'));
+    else body = h('div', { class: 'md' }, markdown(READER.text));
+    const reader = panel('Reader', readerPath ? readerPath.split('/').pop() : 'Reader', readerPath ? readerPath.split('/').slice(0, -1).join('/') : null, body);
+    reader.classList.add('reader');
+    return h('div', { class: 'cols' },
+      h('div', { style: 'display:grid;gap:22px;min-width:0' },
+        panel('Reports', 'Reports by category', `${reps.length} files`, ...reportsByCategory(reps)),
+        logsPanel()),
+      reader);
+  }
+  const LOGS = { list: null, at: 0, q: '', run: 'all', loading: false };
+  function loadLogs() {
+    if (LOGS.loading || (LOGS.list && Date.now() - LOGS.at < 60000)) return;
+    LOGS.loading = true;
+    fetch('/api/logs', { cache: 'no-store' }).then((r) => r.json())
+      .then((l) => { LOGS.list = l; LOGS.at = Date.now(); LOGS.loading = false; if (currentTab() === 'reports') draw(); })
+      .catch(() => { LOGS.loading = false; });
+  }
+  function logsPanel() {
+    loadLogs();
+    if (!LOGS.list) return panel('work/layout/logs · work/reports', 'Run logs', null, empty('Reading the logs…'));
+    const count = (r) => LOGS.list.filter((l) => l.run === r).length;
+    const runs = [...new Set(LOGS.list.map((l) => l.run))];
+    const q = LOGS.q.toLowerCase();
+    const rows = LOGS.list.filter((l) => (LOGS.run === 'all' || l.run === LOGS.run) &&
+      (!q || l.name.toLowerCase().includes(q) || l.last.toLowerCase().includes(q)));
+    const input = h('input', { class: 'search', type: 'search', id: 'log-q', placeholder: 'Search a log’s name or last line',
+      'aria-label': 'Search the run logs', value: LOGS.q });
+    input.addEventListener('input', () => { LOGS.q = input.value; draw(); });
+    const sel = h('select', { class: 'search', id: 'log-run', 'aria-label': 'Run' },
+      h('option', { value: 'all' }, `All runs (${LOGS.list.length})`), runs.map((r) => h('option', { value: r }, `${r} (${count(r)})`)));
+    sel.value = LOGS.run;
+    sel.addEventListener('change', () => { LOGS.run = sel.value; draw(); });
+    return panel('work/layout/logs · work/reports', 'Run logs', `${rows.length} of ${LOGS.list.length}`,
+      h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap' }, input, sel),
+      rows.length ? table([
+        { label: 'Log', get: (l) => h('button', { class: 'linkish', type: 'button', style: 'font-size:12.5px;text-align:left', on: { click: () => openReport(l.file) } }, l.name) },
+        { label: 'Last line', get: (l) => h('span', { class: 'note' }, l.last), narrow: true },
+        { label: 'When', get: (l) => when(l.at), nowrap: true },
+      ], rows.slice(0, 300)) : empty('No log matches.'),
+      rows.length > 300 ? h('p', { class: 'note' }, 'The newest 300 are shown; narrow the search or pick a run to see older ones.') : null);
+  }
+  function plansSummary(d) {
+    const ps = d.plans || [];
+    if (!ps.length) return empty('No plans found.');
+    return h('div', {}, ps.map((p) => h('div', { class: 'plan' },
+      h('div', { class: 'plan-top' }, h('span', { class: 'plan-name' }, p.title), pill(p.state, p.state === 'Finished' ? 'ok' : p.state === 'In progress' ? 'run' : 'muted')),
+      bar(p.done / Math.max(1, p.total)),
+      h('span', { class: 'note' }, `${p.done} of ${p.total} tasks done` + (p.current ? ` · now Task ${p.current.n}: ${p.current.name}` : '') +
+        (p.ledger_updated ? ` · work log ${ago(p.ledger_updated)}` : '')))));
+  }
+  function subsystemCards(d) {
+    const subs = d.subsystems || [];
+    if (!subs.length) return empty('Not available.');
+    return h('div', { class: 'seam subs' }, subs.map((s) => {
+      const kind = s.failed ? (s.failed > 5 ? 'bad' : 'warn') : 'ok';
+      return h('button', { class: 'sub', type: 'button', on: { click: () => { focusDomain = s.domain; location.hash = 'subsystems'; draw(); } } },
+        h('div', { class: 'sub-v' }, icon(DOMAIN_ICON[s.domain] || 'deployed_code'),
+          h('span', { class: 'sub-state' }, pill(s.failed ? `${s.failed} failing` : 'no failures', kind)),
+          h('span', { class: 'sub-r' }, s.build_tasks.join(' · ') || 'shared')),
+        h('div', { class: 'sub-b' },
+          h('span', { class: 'sub-t' }, s.label),
+          h('div', { class: 'bar split', role: 'img', 'aria-label': `${s.passed} of ${s.tests} tests passed` },
+            h('span', { class: 'ok', style: `width:${s.tests ? s.passed / s.tests * 100 : 0}%` }),
+            h('span', { class: 'bad', style: `width:${s.tests ? s.failed / s.tests * 100 : 0}%` })),
+          h('dl', {},
+            h('dt', {}, 'Tests passed'), h('dd', {}, `${fmtN(s.passed)} / ${fmtN(s.tests)}` + (s.incomplete ? ` · ${s.incomplete} incomplete` : '')),
+            h('dt', {}, 'Models and benches'), h('dd', {}, fmtN(s.models)),
+            h('dt', {}, 'Open problems'), h('dd', {}, s.problems ? s.problem_ids.map((n) => '#' + n).join(' ') : 'none'),
+            h('dt', {}, 'Last model change'), h('dd', {}, s.last_change ? when(s.last_change) : '–')),
+          h('span', { class: 'cta' }, 'View details', icon('arrow_forward'))));
+    }));
+  }
+  function activityList(d, n) {
+    const a = (d.activity || []).slice(0, n);
+    if (!a.length) return empty('Nothing changed in the last 72 hours.');
+    return h('ul', { class: 'list' }, a.map((x) => h('li', {}, h('span', { class: 'when' }, when(x.at)),
+      h('span', { class: 'what' }, pill(x.kind, x.kind === 'model' ? 'run' : 'muted'), ' ', h('span', { class: 'mono' }, x.file)))));
+  }
+  function latestLogs(d, n) {
+    const l = (d.logs || []).slice(0, n);
+    if (!l.length) return null;
+    return h('details', { open: true }, h('summary', {}, 'Newest logs'),
+      h('ul', { class: 'list', style: 'margin-top:8px' }, l.map((x) => h('li', {}, h('span', { class: 'when' }, when(x.at)),
+        h('span', { class: 'what' }, h('span', { class: 'mono' }, x.file.split('/').pop()), h('br'), h('span', { class: 'note' }, x.last))))));
+  }
+  function ledger(d, n) {
+    const p = (d.plans || []).find((x) => x.state === 'In progress') || (d.plans || []).find((x) => x.ledger_tail && x.ledger_tail.length);
+    if (!p || !p.ledger_tail.length) return empty('No work log.');
+    return h('ol', { class: 'ledger' }, p.ledger_tail.slice(0, n).map((e) => h('li', {}, e)));
+  }
+
+  function viewSubsystems(d) {
+    const subs = d.subsystems || [];
+    const dom = focusDomain && subs.some((s) => s.domain === focusDomain) ? focusDomain : (subs[0] || {}).domain;
+    const s = subs.find((x) => x.domain === dom);
+    if (!s) return empty('Not available.');
+    const cls = ((d.tests && d.tests.classes) || []).filter((c) => c.domain === dom);
+    const probs = ((d.status && d.status.problems) || []).filter((p) => s.problem_ids.includes(p.n));
+    const groups = ((d.models && d.models.groups) || []).filter((g) => g.domain === dom);
+    const bp = (d.build_plan || []).filter((t) => t.domain === dom);
+    return h('div', { style: 'display:grid;gap:22px' },
+      h('div', { class: 'seg', role: 'group', 'aria-label': 'Subsystem' }, subs.map((x) =>
+        h('button', { type: 'button', 'aria-pressed': String(x.domain === dom), on: { click: () => { focusDomain = x.domain; draw(); } } }, x.label))),
+      h('div', { class: 'cols' },
+        panel(s.label, 'Tests', `${s.passed} / ${s.tests} passed`, testTable(cls)),
+        panel(s.label, 'Open problems', 'docs/STATUS.md', probs.length ? h('ul', { class: 'list' }, probs.map((p) =>
+          h('li', {}, h('span', { class: 'when' }, `#${p.n} ${p.tasks.join(' ')}`), h('span', { class: 'what' }, p.text)))) : empty('None listed.')),
+        panel(s.label, 'Models', `${s.models} files`, table([
+          { label: 'Folder', get: (g) => h('span', { class: 'mono' }, g.group) },
+          { label: 'Files', get: (g) => fmtN(g.count), num: true },
+          { label: 'MB', get: (g) => g.mb, num: true },
+          { label: 'Last change', get: (g) => `${when(g.newest)} · ${g.newest_file}` },
+        ], groups)),
+        panel(s.label, 'Build tasks', 'docs/build_plan.md', bp.length ? table([
+          { label: 'Task', get: (t) => h('span', { class: 'chip' }, t.id), nowrap: true }, { label: 'Title', get: (t) => t.title },
+        ], bp) : empty('No build task of its own.'))));
+  }
+  function result(r, total) {
+    return h('span', {}, `${r.passed} / ${total}`, r.failed ? h('span', { class: 't-bad' }, ` · ${r.failed} failed`) : null,
+      r.incomplete ? h('span', { class: 'note' }, ` · ${r.incomplete} incomplete`) : null);
+  }
+  function testTable(cls) {
+    if (!cls.length) return empty('No test classes.');
+    return table([
+      { label: 'Class', get: (c) => h('span', { class: 'mono' }, c.class) },
+      { label: 'Latest run', get: (c) => c.latest ? result(c.latest, c.latest.total) : h('span', { class: 'note' }, 'no logged run') },
+      { label: 'When', get: (c) => c.latest ? when(c.latest.at) : '', nowrap: true, narrow: true },
+      { label: 'Oct 23', get: (c) => c.documented ? result(c.documented, c.documented.tests) : '–', nowrap: true },
+    ], cls);
+  }
+
+  function viewWork(d) {
+    return h('div', { class: 'cols' },
+      (d.plans || []).map((p) => panel(p.state, p.title, `${p.done} / ${p.total}`,
+        bar(p.done / Math.max(1, p.total)),
+        p.tasks.length ? h('ol', { class: 'tasks' }, p.tasks.map((t) => h('li', {}, h('span', { class: 'n' }, String(t.n).padStart(2, '0')), h('span', {}, t.name),
+          pill(t.status === 'done' ? 'Done' : t.status === 'running' ? 'Running' : 'Waiting', STATUS_KIND[t.status])))) : empty('No tasks found.'),
+        h('span', { class: 'note mono' }, p.file),
+        p.ledger_tail && p.ledger_tail.length ? h('details', {}, h('summary', {}, 'Work log, newest first'),
+          h('ol', { class: 'ledger', style: 'margin-top:10px' }, p.ledger_tail.map((e) => h('li', {}, e)))) : null)),
+      panel('Logs', 'Newest logs', 'work/layout/logs · work/reports', latestLogs(d, 16) || empty('No logs.')));
+  }
+
+  function viewTests(d) {
+    const t = d.tests || {};
+    const cls = (t.classes || []).slice().sort((a, b) => (a.domain + a.class).localeCompare(b.domain + b.class));
+    return panel('Regression', 'Test classes', `${cls.length} classes`, table([
+      { label: 'Subsystem', get: (c) => c.domain },
+      { label: 'Class', get: (c) => h('span', { class: 'mono' }, c.class) },
+      { label: 'Latest run', get: (c) => c.latest ? result(c.latest, c.latest.total) : h('span', { class: 'note' }, 'none logged') },
+      { label: 'When', get: (c) => c.latest ? when(c.latest.at) : '', nowrap: true },
+      { label: 'Run', get: (c) => c.latest ? h('span', { class: 'note' }, c.latest.label || 'whole class') : '', narrow: true },
+      { label: 'Oct 23', get: (c) => c.documented ? result(c.documented, c.documented.tests) : '–', nowrap: true },
+      { label: 'Fast suite', get: (c) => c.fast ? `${c.fast.tests - c.fast.failed} / ${c.fast.tests}` : '–', nowrap: true, narrow: true },
+      { label: 'Notes (Oct 23)', get: (c) => h('span', { class: 'note' }, c.documented ? c.documented.notes : ''), narrow: true },
+    ], cls), h('p', { class: 'note' }, `“Run” says which tests the latest log ran; a run that left some tests out is not one-to-one comparable with the whole class. Fast suite: ${t.fast_report || 'none'}${t.fast_at ? ' (' + when(t.fast_at) + ')' : ''}.`));
+  }
+
+  function viewModels(d) {
+    const m = d.models || {};
+    return h('div', { class: 'cols' },
+      panel('Files', 'Model files by folder', `${fmtN(m.count)} .slx files`, table([
+        { label: 'Folder', get: (g) => h('span', { class: 'mono' }, g.group) },
+        { label: 'Subsystem', get: (g) => g.domain, narrow: true },
+        { label: 'Files', get: (g) => fmtN(g.count), num: true },
+        { label: 'MB', get: (g) => g.mb, num: true },
+        { label: 'Last change', get: (g) => when(g.newest), nowrap: true },
+        { label: 'Newest file', get: (g) => h('span', { class: 'mono' }, g.newest_file), narrow: true },
+      ], m.groups || [])),
+      panel('Activity', 'Recently changed models', null, table([
+        { label: 'Model', get: (f) => h('span', { class: 'mono' }, f.name) },
+        { label: 'Folder', get: (f) => f.group, narrow: true },
+        { label: 'KB', get: (f) => fmtN(f.kb), num: true },
+        { label: 'Changed', get: (f) => when(f.at), nowrap: true },
+      ], m.recent || [])));
+  }
+
+  function viewScenarios(d) {
+    const s = d.scenarios || {};
+    return h('div', { class: 'cols' },
+      panel('work/results', 'Saved scenario results', `${(s.saved || []).length} scenarios`, (s.saved || []).length ? table([
+        { label: 'Scenario', get: (r) => h('span', { class: 'chip' }, r.scenario) },
+        { label: 'Runs', get: (r) => fmtN(r.runs), num: true },
+        { label: 'Latest', get: (r) => when(r.latest), nowrap: true },
+        { label: 'File', get: (r) => h('span', { class: 'mono note' }, r.file.split('/').pop()), narrow: true },
+      ], s.saved) : empty('No saved results.')),
+      panel('docs/STATUS.md 5.2', 'Documented results', 'Oct 23 acceptance', (s.documented || []).length ? table([
+        { label: 'Scenario', get: (r) => r.scenario },
+        { label: 'Result', get: (r) => pill(r.result, /PASS/.test(r.result) ? 'ok' : /FAIL/.test(r.result) ? 'bad' : 'muted') },
+        { label: 'Key numbers', get: (r) => h('span', { class: 'note' }, r.numbers) },
+      ], s.documented) : empty('None.')));
+  }
+
+  function viewPlots(d) {
+    const sets = d.plots || [];
+    if (!sets.length) return panel('work/reports', 'Plots', null, empty('No saved plots found.'));
+    return h('div', { style: 'display:grid;gap:22px' }, sets.map((s) => panel(s.folder, s.title,
+      `${s.images.length} plot${s.images.length === 1 ? '' : 's'}` + (s.figs ? ` · ${s.figs} .fig` : '') + ` · ${when(s.at)}`,
+      h('div', { class: 'seam gallery' }, s.images.map((im) => {
+        const src = '/raw/' + im.file.split('/').map(encodeURIComponent).join('/');
+        return h('button', { class: 'shot', type: 'button', 'aria-label': `Open ${im.name} full size`, on: { click: () => openShot(src, `${s.title}: ${im.name}`) } },
+          h('img', { src, alt: im.name, loading: 'lazy' }), h('span', { class: 'note' }, im.name));
+      })),
+      s.figs ? h('p', { class: 'note' }, `The .fig files beside them open in MATLAB with openfig, for zooming and data tips: ${s.folder}/`) : null)));
+  }
+  function openShot(src, caption) {
+    let box = document.getElementById('lightbox');
+    if (!box) {
+      box = h('div', { id: 'lightbox', class: 'lightbox', role: 'dialog', 'aria-modal': 'true', tabindex: '-1',
+        on: { click: (e) => { if (e.target === box) box.hidden = true; } } });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') box.hidden = true; });
+      document.body.append(box);
+    }
+    box.replaceChildren(h('figure', {}, h('img', { src, alt: caption }),
+      h('figcaption', {}, caption, ' · ', h('a', { href: src, target: '_blank', rel: 'noopener' }, 'open in a new tab'),
+        ' · ', h('button', { class: 'linkish', type: 'button', on: { click: () => { box.hidden = true; } } }, 'close'))));
+    box.hidden = false;
+    box.focus();
+  }
+
+  function viewProblems(d) {
+    const probs = (d.status && d.status.problems) || [];
+    const items = (d.notes && d.notes.items) || [];
+    const groups = [...new Set(probs.map((p) => p.group))];
+    return h('div', { class: 'cols' },
+      panel('Kept by Claude', 'Open items', d.notes && d.notes.updated ? `updated ${when(d.notes.updated)}` : 'tools/dashboard/notes.json', items.length ? table([
+        { label: 'Item', get: (i) => h('strong', {}, i.item) },
+        { label: 'Area', get: (i) => i.area, narrow: true },
+        { label: 'State', get: (i) => pill(i.state, { wait: 'warn', run: 'run', bad: 'bad', ok: 'ok' }[i.kind] || 'muted') },
+        { label: 'Since', get: (i) => i.since ? when(i.since, false) : '', nowrap: true, narrow: true },
+        { label: 'What happens next', get: (i) => h('span', { class: 'note' }, i.next) },
+      ], items) : empty('No items.')),
+      panel('docs/STATUS.md 6', 'Open problems', d.status && d.status.updated ? `file updated ${when(d.status.updated)}` : null,
+        probs.length ? groups.map((g) => h('div', { style: 'display:grid;gap:6px' }, h('span', { class: 'label-k' }, g || 'Other'),
+          h('ul', { class: 'list' }, probs.filter((p) => p.group === g).map((p) => h('li', {}, h('span', { class: 'when' }, `#${p.n} ${p.tasks.join(' ')}`), h('span', { class: 'what' }, p.text)))))) : empty('None listed.')));
+  }
+
+  function viewDocs(d) {
+    const st = d.status || {};
+    return h('div', { class: 'cols' },
+      panel('docs', 'Documents', `${(d.docs || []).length} files`, table([
+        { label: 'Title', get: (x) => x.title },
+        { label: 'File', get: (x) => h('span', { class: 'mono note' }, x.file), narrow: true },
+        { label: 'Updated', get: (x) => when(x.at), nowrap: true },
+      ], d.docs || [])),
+      panel('Reader', 'docs/STATUS.md', st.updated ? `updated ${when(st.updated)}` : null, h('div', { class: 'md' }, markdown(st.markdown || ''))));
+  }
+
+  function viewComputer(d) {
+    const m = d.machine || {};
+    const tc = d.toolchain || {};
+    return h('div', { class: 'cols' },
+      panel('Machine', 'This computer', m.boot ? `on since ${when(m.boot)}` : null,
+        h('dl', { class: 'facts' },
+          h('dt', {}, 'Memory free'), h('dd', {}, `${m.ram_free_gb} of ${m.ram_total_gb} GB`),
+          h('dt', {}, 'Disk free'), h('dd', {}, `${m.disk_free_gb} of ${m.disk_total_gb} GB`),
+          h('dt', {}, 'MATLAB runs'), h('dd', {}, String((m.matlab || []).length)),
+          h('dt', {}, 'Asleep now'), h('dd', {}, m.asleep_since ? `since ${when(m.asleep_since)}` : 'no')),
+        (m.sleeps || []).length ? h('div', { style: 'display:grid;gap:8px' }, h('span', { class: 'label-k' }, 'Sleeps, last 4 days · batch runs pause while it sleeps'),
+          table([{ label: 'From', get: (s) => when(s.from), nowrap: true }, { label: 'To', get: (s) => when(s.to), nowrap: true }, { label: 'Hours', get: (s) => s.hours, num: true }], m.sleeps)) : null),
+      panel('Toolchain', 'As MATLAB last reported it', tc.at ? when(tc.at) : 'no startup report', (tc.items || []).length ? table([
+        { label: 'Item', get: (i) => i.item },
+        { label: 'State', get: (i) => pill(i.state, i.state === 'OK' ? 'ok' : i.state === 'MISSING' ? 'bad' : 'warn') },
+        { label: 'Note', get: (i) => h('span', { class: 'note' }, i.note), narrow: true },
+      ], tc.items) : empty('None.')),
+      panel('docs/STATUS.md 3', 'Environment, as documented', 'Oct 23', table([
+        { label: 'Item', get: (e) => e.item }, { label: 'State', get: (e) => h('span', { class: 'note' }, e.state) },
+      ], (d.status && d.status.environment) || [])));
+  }
+
+  // ---- a small markdown reader for STATUS.md and the reports: headings, tables, lists, paragraphs, **bold**, `code`,
+  //      and figures (a line ![caption](path), the path relative to the project root, served by /raw/)
+  function inline(text) {
+    const out = [];
+    const re = /(\*\*[^*]+\*\*|`[^`]+`)/g;
+    let last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) out.push(text.slice(last, m.index));
+      const t = m[0];
+      out.push(t.startsWith('**') ? h('strong', {}, t.slice(2, -2)) : h('code', {}, t.slice(1, -1)));
+      last = m.index + t.length;
+    }
+    if (last < text.length) out.push(text.slice(last));
+    return out;
+  }
+  function markdown(src) {
+    const lines = src.replace(/\r/g, '').split('\n');
+    const out = [];
+    let i = 0;
+    while (i < lines.length) {
+      const ln = lines[i];
+      const hd = ln.match(/^(#{1,4})\s+(.*)$/);
+      if (hd) { out.push(h('h' + Math.min(3, hd[1].length), {}, inline(hd[2]))); i++; continue; }
+      if (ln.startsWith('|')) {
+        const rows = [];
+        while (i < lines.length && lines[i].startsWith('|')) { rows.push(lines[i]); i++; }
+        const cells = rows.filter((r) => !/^\|\s*:?-{2,}/.test(r)).map((r) => r.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim()));
+        if (cells.length) out.push(h('div', { class: 'scroll' }, h('table', {}, h('thead', {}, h('tr', {}, cells[0].map((c) => h('th', {}, inline(c))))),
+          h('tbody', {}, cells.slice(1).map((r) => h('tr', {}, r.map((c) => h('td', {}, inline(c)))))))));
+        continue;
+      }
+      if (/^\s*([*-]|\d+\.)\s+/.test(ln)) {
+        const ordered = /^\s*\d+\./.test(ln);
+        const items = [];
+        while (i < lines.length && /^\s*([*-]|\d+\.)\s+/.test(lines[i])) {
+          let item = lines[i].replace(/^\s*([*-]|\d+\.)\s+/, '');
+          i++;
+          while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !/^\s*([*-]|\d+\.)\s+/.test(lines[i])) { item += ' ' + lines[i].trim(); i++; }
+          items.push(h('li', {}, inline(item)));
+        }
+        out.push(h(ordered ? 'ol' : 'ul', {}, items));
+        continue;
+      }
+      const im = ln.match(/^!\[([^\]]*)\]\(([^)]+)\)\s*$/);
+      if (im) {
+        const src = /^(https?:|\/)/.test(im[2]) ? im[2] : '/raw/' + im[2].split('/').map(encodeURIComponent).join('/');
+        out.push(h('figure', {}, h('img', { src, alt: im[1], loading: 'lazy' }), im[1] ? h('figcaption', {}, inline(im[1])) : null));
+        i++; continue;
+      }
+      if (!ln.trim()) { i++; continue; }
+      const para = [];
+      while (i < lines.length && lines[i].trim() && !/^(#{1,4}\s|\||\s*([*-]|\d+\.)\s|!\[)/.test(lines[i])) { para.push(lines[i].trim()); i++; }
+      out.push(h('p', {}, inline(para.join(' '))));
+    }
+    return out;
+  }
+
+  // ---- drawing, polling, theme, reading progress
+  // ---- agents (tools/dashboard/agents.jsonl via /api/agents, read every 4 s): the kanban of the work, then the timeline with handoffs
+  let AG = null;
+  async function pollAgents() {
+    try {
+      const r = await fetch('/api/agents', { cache: 'no-store' });
+      if (!r.ok) return;
+      AG = await r.json();
+      if (currentTab() === 'agents') draw();
+    } catch (e) { /* the status poll reports a dead server */ }
+  }
+  const AG_KIND = { working: 'run', running: 'run', done: 'ok', blocked: 'bad', failed: 'bad', 'needs-you': 'warn', waiting: 'muted', skipped: 'muted', idle: 'muted' };
+  const AG_LABEL = { working: 'Working', running: 'In progress', done: 'Done', blocked: 'Blocked', failed: 'Failed', 'needs-you': 'Needs you', waiting: 'Waiting', skipped: 'Skipped', idle: 'Idle' };
+  const shortName = (n) => String(n || '').replace(/^shaddad-/, '');
+  const fmtTok = (n) => (!n ? '' : n >= 1e6 ? `${(n / 1e6).toFixed(2)}M` : `${Math.round(n / 1000)}k`);
+  function fmtDur(s) {
+    if (s === null || s === undefined || isNaN(s)) return '';
+    s = Math.round(s);
+    if (s < 60) return `${s} s`;
+    if (s < 3600) return `${Math.floor(s / 60)} min${s % 60 ? ' ' + (s % 60) + ' s' : ''}`;
+    return `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} min`;
+  }
+  const clock = (t) => { const d = new Date(t); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+  const runSeconds = (r) => (r.seconds ? r.seconds : ((r.end ? new Date(r.end).getTime() : Date.now()) - new Date(r.start).getTime()) / 1000);
+  const isToday = (t) => new Date(t).toDateString() === new Date().toDateString();
+  // the kanban (the user's pick, 2026-11-14: one board, each piece of work moves left to right). A card is an
+  // engineer's step together with the reviewer step right after it; a queued task is one To do card; 'you' steps show
+  // only while they need you; the lead's own steps stay off the board
+  const KB_COLS = [['todo', 'To do', 'Nothing queued'], ['progress', 'In progress', 'No agent working'],
+    ['review', 'In review', 'Nothing in review'], ['you', 'Needs you', 'Nothing waiting on you'], ['done', 'Done', 'Nothing done yet']];
+  const KB_STOP = ['needs-you', 'blocked', 'failed'];
+  const KB_OPEN = {};   // To do / Done opened past their first cards with the Show more button (the user's request, 2026-11-14)
+  function kanban(ag) {
+    const tasks = ag.tasks || [], runs = ag.runs || [];
+    const order = tasks.slice().reverse();
+    const tone = (id) => TASK_COLORS[Math.max(0, order.findIndex((t) => t.id === id)) % TASK_COLORS.length];
+    const runById = Object.fromEntries(runs.map((r) => [r.id, r]));
+    const stepRuns = (s) => (s && s.runs ? s.runs.map((id) => runById[id]).filter(Boolean) : []);
+    const live = (x) => [`since ${clock(x.start)}`, fmtDur(runSeconds(x)), x.model].filter(Boolean).join(' · ');
+    const cols = { todo: [], progress: [], review: [], you: [], done: [] }, queued = [];
+    order.forEach((t) => {
+      const tag = { text: t.title, tone: tone(t.id) };
+      if (t.status === 'queued') {
+        const who = [...new Set(t.steps.map((s) => s.agent).filter((a) => !['you', 'lead', 'shaddad-reviewer'].includes(a)).map(shortName))];
+        queued.push({ tag, what: t.summary || `${t.steps.length} steps`, who: who.length > 4 ? `${who.length} agents` : who.join(', '), meta: `queued · ${t.steps.length} steps` });
+        return;
+      }
+      let first = true;
+      t.steps.forEach((e, i) => {
+        if (e.agent === 'shaddad-reviewer' || e.agent === 'lead' || e.status === 'skipped') return;
+        if (e.agent === 'you') {
+          if (e.status === 'needs-you') cols.you.push({ tag, what: e.what, who: 'you', badge: ['Needs you', 'warn'] });
+          return;
+        }
+        const r = t.steps[i + 1] && t.steps[i + 1].agent === 'shaddad-reviewer' ? t.steps[i + 1] : null;
+        const er = stepRuns(e), rr = stepRuns(r), all = er.concat(rr);
+        const tokens = all.reduce((n, x) => n + (x.tokens || 0), 0);
+        const last = all.slice().sort((a, b) => (a.start < b.start ? -1 : 1)).pop();
+        const end = all.map((x) => x.end).filter(Boolean).sort().pop() || null;
+        const moved = t.steps.slice(i + 1).some((s) => s.agent !== 'shaddad-reviewer' && s.agent !== 'lead' && !['waiting', 'skipped'].includes(s.status));
+        const card = { tag, what: e.what, who: shortName(e.agent) + (r ? ' + reviewer' : ''), summary: last ? last.summary : '', end };
+        const doneMeta = [end ? clock(end) : '', fmtTok(tokens)].filter(Boolean).join(' · ');
+        if (e.status === 'working') {
+          const x = er.filter((q) => q.status === 'working').pop() || er[er.length - 1];
+          cols.progress.push(Object.assign(card, { kind: 'working', meta: x ? live(x) : '' }));
+        } else if (e.status === 'waiting') {
+          if (t.status !== 'running') return;
+          cols.todo.push(Object.assign(card, { next: first }));
+          first = false;
+        } else if (KB_STOP.includes(e.status)) {
+          if (moved) cols.done.push(Object.assign(card, { badge: ['Stopped', 'muted'], meta: doneMeta }));
+          else cols.you.push(Object.assign(card, { badge: [AG_LABEL[e.status], AG_KIND[e.status]], meta: fmtTok(tokens) }));
+        } else if (e.status === 'done') {
+          if (r && r.status === 'working') {
+            const x = rr.filter((q) => q.status === 'working').pop();
+            cols.review.push(Object.assign(card, { kind: 'review', meta: x ? `reviewer ${live(x)}` : 'reviewer working' }));
+          } else if (r && r.status === 'waiting' && !moved && t.status === 'running') {
+            cols.review.push(Object.assign(card, { kind: 'review', meta: 'waiting for the reviewer' }));
+          } else if (r && KB_STOP.includes(r.status) && !moved) {
+            cols.you.push(Object.assign(card, { badge: [AG_LABEL[r.status], AG_KIND[r.status]], meta: 'after the review' }));
+          } else {
+            cols.done.push(Object.assign(card, { meta: doneMeta }));
+          }
+        }
+      });
+    });
+    cols.todo = cols.todo.concat(queued);
+    cols.done.sort((a, b) => ((a.end || '') < (b.end || '') ? 1 : -1));
+    const SHOW = 6;
+    const kbCard = (c) => h('div', { class: `board-card${c.kind === 'working' ? ' working' : c.kind === 'review' ? ' review' : ''}${c.next ? ' next' : ''}`, title: c.summary || null },
+      h('div', { class: 'kb-tags' },
+        h('span', { class: 'kb-tag', style: `--kb: var(--c-${c.tag.tone})` }, c.tag.text),
+        c.next ? pill('Next', 'run') : null,
+        c.badge ? pill(c.badge[0], c.badge[1]) : null),
+      h('span', { class: 'what' }, c.what ? c.what[0].toUpperCase() + c.what.slice(1) : ''),
+      h('span', { class: 'meta' }, [c.who, c.meta].filter(Boolean).join(' · ')));
+    return h('div', { class: 'kb' }, KB_COLS.map(([key, label, emptyText]) => {
+      const cards = cols[key], cap = key === 'done' || key === 'todo';
+      return h('div', { class: 'board-col' },
+        h('div', { class: 'board-head' }, h('span', {}, label), h('span', {}, `${cards.length}`)),
+        cards.length ? cards.slice(0, cap && !KB_OPEN[key] ? SHOW : cards.length).map(kbCard) : h('p', { class: 'board-empty' }, emptyText),
+        cap && cards.length > SHOW ? h('button', { class: 'board-more-btn', type: 'button', 'aria-expanded': KB_OPEN[key] ? 'true' : 'false',
+          on: { click: () => { KB_OPEN[key] = !KB_OPEN[key]; draw(); } } }, KB_OPEN[key] ? 'Show less' : `Show ${cards.length - SHOW} more`) : null);
+    }));
+  }
+  // the team (the user's request, 2026-11-14): every agent of .claude/agents, grouped, with its model, what it is
+  // doing now and its runs and tokens so far
+  function teamList(ag) {
+    const team = (ag.team || []).filter((a) => a.name !== 'lead');
+    const runs = ag.runs || [];
+    const model = (m) => (m ? m[0].toUpperCase() + m.slice(1) : 'model ?');
+    const card = (a) => {
+      const live = runs.filter((r) => r.agent === a.name && r.status === 'working').pop();
+      const used = a.runs ? `${a.runs} run${a.runs === 1 ? '' : 's'}${a.tokens ? ' · ' + fmtTok(a.tokens) + ' tokens' : ''}` : 'no runs yet';
+      return h('div', { class: `board-card${live ? ' working' : ''}`, title: a.role || null },
+        h('div', { class: 'team-top' }, h('span', { class: 'who' }, shortName(a.name)), pill(model(a.model), live ? 'run' : 'muted')),
+        h('span', { class: 'what' }, a.title),
+        h('span', { class: 'meta' }, live ? `working now · since ${clock(live.start)} · ${used}` : used));
+    };
+    const groups = [['Subsystem engineers', team.filter((a) => a.group === 'subsystem')],
+      ['Specialists', team.filter((a) => a.group === 'specialist')],
+      ['Other agents', team.filter((a) => a.group !== 'subsystem' && a.group !== 'specialist')]].filter(([, list]) => list.length);
+    return h('div', { class: 'team' }, groups.map(([label, list]) => h('div', { class: 'team-group' },
+      h('div', { class: 'board-head' }, h('span', {}, label), h('span', {}, `${list.length}`)),
+      h('div', { class: 'team-grid' }, list.map(card)))),
+      h('p', { class: 'idle-line' }, 'The lead (the main Claude session) hands out the tasks and checks the results.'));
+  }
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  function sv(tag, attrs, ...kids) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const [k, v] of Object.entries(attrs || {})) if (v !== null && v !== undefined && v !== false) el.setAttribute(k, v);
+    for (const k of kids.flat()) if (k !== null && k !== undefined && k !== false) el.append(k instanceof Node ? k : document.createTextNode(String(k)));
+    return el;
+  }
+  const TASK_COLORS = ['info', 'brand', 'accent', 'mark', 'success', 'warning'];
+  function timeline(ag) {
+    const runs = (ag.runs || []).filter((r) => isToday(r.start));
+    if (!runs.length) return empty('No agent runs today.');
+    const tasks = ag.tasks || [];
+    const order = tasks.slice().reverse();
+    const colorOf = (id) => { const i = Math.max(0, order.findIndex((t) => t.id === id)); return `rgb(var(--c-${TASK_COLORS[i % TASK_COLORS.length]}))`; };
+    const lanes = (ag.team || []).filter((a) => runs.some((r) => r.agent === a.name)).map((a) => a.name);
+    runs.forEach((r) => { if (!lanes.includes(r.agent)) lanes.push(r.agent); });
+    const HALF = 30 * 60000;
+    const t0 = Math.floor(Math.min(...runs.map((r) => new Date(r.start).getTime())) / HALF) * HALF;
+    const tEnd = Math.max(Date.now(), ...runs.map((r) => (r.end ? new Date(r.end).getTime() : Date.now())));
+    const t1 = Math.ceil((tEnd + 60000) / HALF) * HALF;
+    const view = document.getElementById('view');
+    const W = Math.max(560, Math.min(1600, (view ? view.clientWidth : 1000) - 44));
+    const X0 = 150, X1 = W - 12, LH = 30, TOP = 26, BOT = TOP + lanes.length * LH, H = BOT + 26;
+    const x = (t) => X0 + ((t - t0) / (t1 - t0)) * (X1 - X0);
+    const kids = [];
+    lanes.forEach((n, i) => {
+      kids.push(sv('line', { x1: X0, y1: TOP + i * LH, x2: X1, y2: TOP + i * LH, class: 'tl-grid' }));
+      kids.push(sv('text', { x: 0, y: TOP + i * LH + LH / 2, class: 'tl-lane', 'dominant-baseline': 'central' }, shortName(n)));
+    });
+    kids.push(sv('line', { x1: X0, y1: BOT, x2: X1, y2: BOT, class: 'tl-grid' }));
+    const steps = Math.round((t1 - t0) / HALF), every = Math.max(1, Math.ceil(64 / ((X1 - X0) / Math.max(1, steps))));
+    for (let k = 0; k <= steps; k += every) {
+      const t = t0 + k * HALF, xx = x(t);
+      kids.push(sv('line', { x1: xx, y1: TOP, x2: xx, y2: BOT, class: 'tl-tick' }));
+      kids.push(sv('text', { x: xx, y: BOT + 16, class: 'tl-axis', 'text-anchor': 'middle' }, clock(t)));
+    }
+    const pos = {};
+    runs.forEach((r) => {
+      const st = new Date(r.start).getTime(), en = r.end ? new Date(r.end).getTime() : Date.now();
+      const y = TOP + lanes.indexOf(r.agent) * LH + 7, bx = x(st), bw = Math.max(4, x(en) - x(st));
+      pos[r.id] = { s: bx, e: bx + bw, y: y + 8 };
+      kids.push(sv('rect', { x: bx, y, width: bw, height: 16, class: `tl-bar s-${r.status}`, style: `--bar:${colorOf(r.task)}` },
+        sv('title', {}, `${r.what}\n${AG_LABEL[r.status] || r.status} · ${clock(st)} to ${r.end ? clock(en) : 'now'} · ${fmtDur(runSeconds(r))}` +
+          `${r.tokens ? ' · ' + fmtTok(r.tokens) + ' tokens' : ''}${r.summary ? '\n' + r.summary : ''}`)));
+    });
+    // a handoff links a run to the latest run of the same task that ended before it started (parallel runs get none)
+    tasks.forEach((t) => {
+      const rs = runs.filter((r) => r.task === t.id);
+      for (const r of rs) {
+        const prev = rs.filter((q) => q !== r && q.end && q.end <= r.start).sort((p, q) => (p.end < q.end ? 1 : -1))[0];
+        if (!prev || prev.agent === r.agent) continue;
+        const a = pos[prev.id], b = pos[r.id];
+        if (!a || !b) continue;
+        const bend = Math.max(10, Math.min(40, Math.abs(b.s - a.e) / 2));
+        kids.push(sv('path', { d: `M${a.e} ${a.y} C${a.e + bend} ${a.y}, ${b.s - bend} ${b.y}, ${b.s - 3} ${b.y}`, class: 'tl-hand', 'marker-end': 'url(#tl-arrow)' }));
+      }
+    });
+    const xn = Math.min(X1, x(Date.now()));
+    kids.push(sv('line', { x1: xn, y1: TOP - 6, x2: xn, y2: BOT, class: 'tl-now' }));
+    kids.push(sv('text', { x: xn, y: TOP - 10, class: 'tl-axis', 'text-anchor': 'middle' }, 'now'));
+    const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, width: '100%', role: 'img', 'aria-label': 'Agent runs today, one lane per agent, with the handoffs between them' },
+      sv('defs', {}, sv('marker', { id: 'tl-arrow', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' },
+        sv('path', { d: 'M2 1L8 5L2 9', class: 'tl-arrowhead' }))),
+      kids);
+    const legend = h('div', { class: 'tl-legend' },
+      order.filter((t) => runs.some((r) => r.task === t.id)).map((t) => h('span', {}, h('i', { style: `background:${colorOf(t.id)}` }), t.title)),
+      h('span', { class: 'tl-note' }, 'arrows: handoffs · dashed: working · hover a bar for details'));
+    return h('div', { class: 'tl' }, svg, legend);
+  }
+  function viewAgents() {
+    if (!AG) return panel('tools/dashboard/agents.jsonl', 'Agents', null, empty('Reading the agents\u2026'));
+    const team = AG.team || [], tasks = AG.tasks || [], runs = AG.runs || [];
+    const working = runs.filter((r) => r.status === 'working').length;
+    const tokens = runs.reduce((sum, r) => sum + (r.tokens || 0), 0);
+    const members = team.filter((a) => a.name !== 'lead');
+    const taskTitle = (id) => (tasks.find((t) => t.id === id) || {}).title || id;
+    return h('div', { style: 'display:grid;gap:22px' },
+      panel('tools/dashboard/agents.jsonl', 'The work now', `${members.length} agents · ${working} working · ${runs.length} runs · ${fmtTok(tokens) || 0} tokens`,
+        kanban(AG)),
+      panel('.claude/agents', 'The team', `${members.length} agents · ${members.filter((a) => a.group === 'subsystem').length} subsystem engineers · ${members.filter((a) => a.group === 'specialist').length} specialists`,
+        teamList(AG)),
+      panel('Timeline', 'Runs today, with handoffs', `${tasks.length} task${tasks.length === 1 ? '' : 's'}`, timeline(AG)),
+      panel('tools/dashboard/agents.jsonl', 'Every run', `${runs.length} runs`, runs.length ? table([
+        { label: 'Start', get: (r) => when(r.start), nowrap: true },
+        { label: 'Agent', get: (r) => shortName(r.agent), nowrap: true },
+        { label: 'Task', get: (r) => taskTitle(r.task), narrow: true },
+        { label: 'Work', get: (r) => r.what },
+        { label: 'State', get: (r) => pill(AG_LABEL[r.status] || r.status, AG_KIND[r.status] || 'muted') },
+        { label: 'Time', get: (r) => fmtDur(runSeconds(r)), num: true, nowrap: true },
+        { label: 'Tokens', get: (r) => fmtTok(r.tokens), num: true },
+        { label: 'Result', get: (r) => r.summary, narrow: true },
+      ], runs.slice().reverse()) : empty('No runs yet.')));
+  }
+  // ---- Project tab: the task cards under the tailored life-cycle gates (docs/lifecycle.md, tools/dashboard/project_cards.json)
+  let projGate = 'all', projState = 'all';
+  const projOpen = new Set();   // the cards the user opened stay open across the refreshes
+  const projCrit = new Set();   // the gates whose criteria list is open
+  const GATE_ST = { open: ['Open', 'muted'], 'in review': ['In review', 'warn'], passed: ['Passed', 'ok'],
+    'passed with actions': ['Passed with actions', 'ok'], 'delta review': ['Delta review', 'bad'], 'no-go': ['No-go', 'bad'] };
+  const SCORE_KIND = { met: 'ok', waived: 'info', partly: 'warn', 'not met': 'bad', 'n/a': 'muted', 'not assessed': 'muted' };
+  const CARD_KIND = { done: 'ok', 'in progress': 'run', 'needs you': 'bad', todo: 'muted' };
+  const CARD_LABEL = { done: 'Done', 'in progress': 'In progress', 'needs you': 'Needs you', todo: 'To do' };
+  const CARD_ORDER = ['needs you', 'in progress', 'todo', 'done'];
+  const gateLabel = (g) => (g.id === 'BUILD' ? 'Build' : g.id);
+  const rawLink = (path, text) => h('a', { href: '/raw/' + path.split('/').map(encodeURIComponent).join('/'), target: '_blank', rel: 'noopener' },
+    text || path.split('/').pop());
+  const PRIO = { now: 'Now', next: 'Next', later: 'Later', done: 'Done' };
+  const SIZE = { S: 'S, one engineer, one pass', M: 'M, two or three engineers or two passes', L: 'L, several engineers and system runs',
+    XL: 'XL, every subsystem or several safety chains' };
+  const LVL = { L: 'low', M: 'medium', H: 'high' };
+  function cardItem(c, byId) {
+    const list = (xs) => (xs && xs.length ? h('ul', { class: 'pj-ul' }, xs.map((x) => h('li', {}, x))) : null);
+    const ref = (id) => h('span', {}, h('b', {}, id), byId[id] ? ` ${byId[id].title}` : '');
+    const gate = (g) => (g ? h('div', {}, h('b', {}, g.gate || ''), list(g.criteria)) : null);
+    const rows = [
+      ['Lead', c.lead ? h('b', {}, c.lead) : null], ['Support', list(c.support)], ['Purpose', c.purpose],
+      ['Entry gate', gate(c.entry)], ['Exit gate', gate(c.exit)],
+      ['Predecessors', list((c.predecessors || []).map(ref)) || 'None'], ['Successors', list((c.successors || []).map(ref)) || 'None'],
+      ['Inputs', list(c.inputs)], ['Outputs', list(c.outputs)], ['Verification', c.verification],
+      ['Risks', list((c.risks || []).map((r) => `${r.risk} (likelihood ${LVL[r.likelihood] || r.likelihood}, impact ${LVL[r.impact] || r.impact}). Mitigation: ${r.mitigation}`))],
+      ['Escalation', list((c.escalation || []).map((e) => `${e.when}: to ${e.to}`))],
+      ['Your decisions', (c.decisions || []).length ? c.decisions.join(', ') : null], ['Effort', c.effort],
+    ];
+    const foot = [c.report ? ['Report: ', rawLink(c.report)] : null, c.report && c.task ? ' · ' : null, c.task ? `Work log: ${c.task}` : null];
+    const meta = [c.wbs ? `WBS ${c.wbs}` : null, c.size ? `size ${SIZE[c.size] || c.size}` : null,
+      c.priority && c.priority !== 'done' ? `priority ${(PRIO[c.priority] || c.priority).toLowerCase()}` : null]
+      .filter(Boolean).join(' · ');
+    return h('li', {}, h('details', { open: projOpen.has(c.id),
+      on: { toggle: (e) => { if (e.target.open) projOpen.add(c.id); else projOpen.delete(c.id); } } },
+      h('summary', {}, h('span', { class: 'chip mono' }, c.id), h('span', { class: 'what' }, c.title),
+        h('span', { class: 'pj-tags' }, c.priority === 'next' ? pill('Next', 'info') : null, pill(CARD_LABEL[c.status] || c.status, CARD_KIND[c.status]))),
+      h('div', { class: 'pj-body' },
+        meta ? h('p', { class: 'note' }, meta) : null,
+        c.description ? h('div', { class: 'pj-desc' }, c.description.split('\n\n').map((blk) => {
+          const ls = blk.split('\n').filter((x) => x.trim());
+          const items = ls.filter((x) => x.startsWith('- ')).map((x) => x.slice(2));
+          const text = ls.filter((x) => !x.startsWith('- ')).join(' ');
+          return [text ? h('p', {}, text) : null, items.length ? h('ul', { class: 'pj-ul' }, items.map((x) => h('li', {}, x))) : null];
+        }).flat()) : null,
+        h('dl', { class: 'facts' }, rows.filter(([, v]) => v !== null && v !== undefined && v !== '').map(([k, v]) => [h('dt', {}, k), h('dd', {}, v)]).flat()),
+        c.note ? h('p', { class: 'note' }, c.note) : null,
+        (c.links || []).length ? h('div', { class: 'pj-links', 'aria-label': 'Linked items' }, c.links.map((l) => h('span', { class: 'chip' }, l))) : null,
+        c.report || c.task ? h('p', { class: 'note' }, foot.flat()) : null)));
+  }
+  function viewProject(d) {
+    const p = d.project;
+    if (!p) return empty('No project cards: tools/dashboard/project_cards.json is missing.');
+    const cards = p.cards || [], gates = p.gates || [], n = p.counts || {};
+    const byId = Object.fromEntries(cards.map((c) => [c.id, c]));
+    const total = p.total || cards.length, done = n.done || 0;
+    const passed = gates.filter((g) => g.status === 'passed').length;
+    const match = (c) => projState === 'all' || c.status === projState;
+    const shown = gates.filter((g) => (projGate === 'all' || g.id === projGate) && (projState === 'all' || cards.some((c) => c.gate === g.id && match(c))));
+    const gateBtn = (g) => h('button', { type: 'button', 'aria-pressed': String(projGate === g.id),
+      on: { click: () => { projGate = projGate === g.id ? 'all' : g.id; draw(); } } },
+      h('span', { class: 'label-k' }, gateLabel(g)), h('span', { class: 'pj-gname' }, g.name),
+      h('span', { class: 'pj-gsub' }, `${g.counts.done} / ${g.cards} cards done`), bar(g.cards ? g.counts.done / g.cards : 0),
+      g.readiness && g.readiness.mandatory ? h('span', { class: 'pj-gsub' }, `readiness ${g.readiness.ok} / ${g.readiness.mandatory}`) : null,
+      pill(GATE_ST[g.status] ? GATE_ST[g.status][0] : 'Open', GATE_ST[g.status] ? GATE_ST[g.status][1] : 'muted'));
+    const stateBtn = ([k, t]) => h('button', { type: 'button', 'aria-pressed': String(projState === k), on: { click: () => { projState = k; draw(); } } }, t);
+    return h('div', { style: 'display:grid;gap:22px' },
+      panel('Life cycle', 'Project progress', `${done} / ${total} cards done · ${passed} / ${gates.length} gates passed`,
+        h('p', { class: 'note' }, p.complete ? 'Every card is done and every gate is passed: the project is done.'
+          : 'The project is done when every card is done and every gate is passed (docs/lifecycle.md). Select a gate to show only its cards; select a card to open it.'),
+        bar(total ? done / total : 0),
+        h('div', { class: 'pj-gates', role: 'group', 'aria-label': 'Gates' }, gates.map(gateBtn)),
+        h('div', { class: 'seg', role: 'group', 'aria-label': 'Card status' },
+          [['all', `All ${total}`], ...CARD_ORDER.map((s) => [s, `${CARD_LABEL[s]} ${n[s] || 0}`])].map(stateBtn)),
+        h('p', { class: 'note' }, p.pdf ? ['Every card defined in full (entry and exit gates, inputs, outputs, risks, escalation) as a PDF: ',
+          rawLink(p.pdf)] : 'Build the PDF of the cards with python tools/reports/build_task_cards.py.'),
+        h('span', { class: 'note mono' }, `${p.path} · updated ${when(p.updated || p.file_updated)}`)),
+      shown.length ? h('div', { class: 'cols' }, shown.map((g) => {
+        const cs = cards.filter((c) => c.gate === g.id && match(c));
+        return panel(`${gateLabel(g)} · ${g.name} · ${g.scope}`, g.title, `${g.counts.done} / ${g.cards} done`,
+          bar(g.cards ? g.counts.done / g.cards : 0),
+          h('dl', { class: 'facts' }, h('dt', {}, 'Question'), h('dd', {}, g.question), h('dt', {}, 'Locks'), h('dd', {}, g.locks),
+            h('dt', {}, 'Status'), h('dd', {}, pill(GATE_ST[g.status] ? GATE_ST[g.status][0] : 'Open', GATE_ST[g.status] ? GATE_ST[g.status][1] : 'muted'),
+              g.decision ? ` ${g.decision.outcome || ''} · ${g.decision.date || ''}` : ''),
+            h('dt', {}, 'Where it stands'), h('dd', {}, g.assessment || '')),
+          (g.criteria || []).length ? h('details', { class: 'pj-crit', open: projCrit.has(g.id) || null,
+            on: { toggle: (e) => { if (e.target.open) projCrit.add(g.id); else projCrit.delete(g.id); } } },
+            h('summary', {}, `Success criteria · readiness ${g.readiness.ok} / ${g.readiness.mandatory} mandatory`),
+            table([
+              { label: 'ID', get: (k) => h('span', { class: 'mono' }, k.id), nowrap: true },
+              { label: 'Criterion', get: (k) => k.criterion },
+              { label: 'Class', get: (k) => k['class'], nowrap: true },
+              { label: 'Score', get: (k) => pill(k.score || 'not assessed', SCORE_KIND[k.score] || 'muted'), nowrap: true },
+              { label: 'Evidence or note', get: (k) => k.note || k.evidence, narrow: true },
+            ], g.criteria)) : null,
+          cs.length ? h('ul', { class: 'pj-cards' }, cs.map((c) => cardItem(c, byId))) : empty('No cards.'));
+      })) : empty('No cards match this filter.'));
+  }
+  const VIEWS = { overview: viewOverview, project: viewProject, agents: viewAgents, subsystems: viewSubsystems, work: viewWork, journal: viewJournal, reports: viewReports,
+    tests: viewTests, models: viewModels, scenarios: viewScenarios, plots: viewPlots, problems: viewProblems, docs: viewDocs,
+    computer: viewComputer };
+  function draw() {
+    drawTabs();
+    if (!DATA) return;
+    drawStrip(DATA);
+    const view = document.getElementById('view');
+    const head = document.getElementById('page-head');
+    const tab = currentTab();
+    const fresh = tab !== shownTab;   // the enter animation plays on a tab change, not on a refresh
+    shownTab = tab;
+    const y = window.scrollY;
+    // keep the focus and the caret of a field across a redraw (a refresh must not interrupt typing)
+    const act = document.activeElement;
+    const actId = act && act.id && view.contains(act) ? act.id : null;
+    const caret = actId && typeof act.selectionStart === 'number' ? [act.selectionStart, act.selectionEnd] : null;
+    const parts = [VIEWS[tab](DATA)];
+    if ((DATA.errors || []).length) parts.push(h('p', { class: 'err' }, 'Some parts could not be read: ' + DATA.errors.join('; ')));
+    view.replaceChildren(...parts);
+    view.classList.toggle('enter', fresh);
+    head.classList.toggle('enter', fresh);
+    if (!fresh) window.scrollTo(0, y);
+    if (actId) {
+      const el = document.getElementById(actId);
+      if (el) { el.focus({ preventScroll: true }); if (caret && el.setSelectionRange) el.setSelectionRange(caret[0], caret[1]); }
+    }
+  }
+  function drawLive() {
+    const live = document.getElementById('live');
+    const text = document.getElementById('live-text');
+    if (failing) { live.className = 'live down'; text.textContent = 'Dashboard server not answering'; return; }
+    if (!DATA) return;
+    const age = (Date.now() - lastOk) / 1000;
+    live.className = 'live' + (age > 120 ? ' stale' : '');
+    text.textContent = `Live · read ${ago(DATA.meta.generated)} · checked ${age < 60 ? Math.round(age) + ' s' : Math.round(age / 60) + ' min'} ago`;
+  }
+  async function poll(force) {
+    try {
+      const r = await fetch('/api/status' + (force ? '?refresh=1' : ''), { cache: 'no-store' });
+      if (!r.ok) throw new Error(r.status);
+      DATA = await r.json();
+      lastOk = Date.now();
+      failing = false;
+      draw();
+    } catch (e) {
+      failing = true;
+    }
+    drawLive();
+  }
+  const THEMES = ['auto', 'light', 'dark'];
+  const THEME_ICON = { auto: 'contrast', light: 'light_mode', dark: 'dark_mode' };
+  function applyTheme(t) {
+    if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('theme-icon').textContent = THEME_ICON[t];
+    document.getElementById('theme').setAttribute('aria-label', `Theme: ${t}. Switch theme`);
+  }
+  let theme = 'auto';
+  try { theme = localStorage.getItem('shaddad-theme') || 'auto'; } catch (e) { /* storage blocked */ }
+  applyTheme(theme);
+  document.getElementById('theme').addEventListener('click', () => {
+    theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+    applyTheme(theme);
+    try { localStorage.setItem('shaddad-theme', theme); } catch (e) { /* storage blocked */ }
+  });
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = `${max > 0 ? Math.min(100, window.scrollY / max * 100) : 0}%`;
+  }, { passive: true });
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('20px "Material Symbols Outlined"').then((f) => { if (!f.length) document.documentElement.classList.add('no-icons'); })
+      .catch(() => document.documentElement.classList.add('no-icons'));
+  }
+  window.addEventListener('hashchange', draw);
+  drawTabs();
+  poll(false);
+  setInterval(() => poll(false), 20000);
+  setInterval(drawLive, 1000);
+  pollAgents();
+  setInterval(pollAgents, 4000);
+</script>
+</body>
+</html>

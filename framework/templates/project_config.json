@@ -1,0 +1,24 @@
+{
+ "about": "The project's configuration for the framework's tools (NASL-EMS-HBK-001 chapter 12). Copy to the project root as project.json and fill it in.",
+ "project": "<Project name, e.g. Shaddad UGV>",
+ "code": "<three-letter project code, e.g. SHD>",
+ "entity": "NASL Technologies (<unit>)",
+ "doc_prefix": "NASL-<code>",
+ "owner": "<the project owner: the approval authority and the change board>",
+ "classification": "Internal",
+ "subsystems": [
+  {"wbs": "3.1", "id": "<SUB1>", "name": "<Subsystem 1>", "lead": "<role>"},
+  {"wbs": "3.2", "id": "<SUB2>", "name": "<Subsystem 2>", "lead": "<role>"}
+ ],
+ "paths": {
+  "cards": "tools/dashboard/project_cards.json",
+  "registers": "docs/registers",
+  "requirements": "docs/requirements",
+  "documents": "docs",
+  "reports": "work/reports"
+ },
+ "life_cycle": {
+  "gates": ["G0", "G1", "G2", "G3", "BUILD", "G4", "G5", "G6", "G7"],
+  "tailoring": "<one line per tailoring choice, with its reason; the full list is in the project plan>"
+ }
+}

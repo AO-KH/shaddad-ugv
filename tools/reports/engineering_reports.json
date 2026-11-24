@@ -1,0 +1,130 @@
+{
+ "about": "The PDF engineering reports of the task groups (the project owner's rule of 2026-11-15). Build one with: python tools/reports/build_engineering_report.py <id> (after task_report.py has written work/agentic/reports/<id>.md). Document numbers NASL-SHD-ER-NNN in order of the tasks.",
+ "reports": [
+  {
+   "id": "s4fix",
+   "doc_no": "NASL-SHD-ER-001",
+   "title": "Shaddad UGV: S4 greenhouse fixes",
+   "subtitle": "Task group of 13-14 November 2026",
+   "footer": "Shaddad UGV S4 Fixes",
+   "summary": "Why the S4 greenhouse scenario stopped in its rows, how the MCU, the GNC and the navigation were fixed one after another with an independent review of each change, and how the full S4 run now completes.",
+   "version": "1.1",
+   "date": "2026-11-16",
+   "history": [
+    [
+     "1.0",
+     "2026-11-15",
+     "First issue as an engineering report (from ATR-s4fix)"
+    ],
+    [
+     "1.1",
+     "2026-11-16",
+     "Editorial: the team named by its roles; effort in engineering passes"
+    ]
+   ],
+   "request": "The project owner, 2026-11-14: \"All three, MCU first\" (the three causes of the S4 row stops found in the diagnosis: s4pivot, s4navdeg, s4replan); later \"Yes, GNC then nav\" and \"As you recommend\"",
+   "scope": "Shaddad_MCU yaw control at standstill (D66), the GNC drive-loss debounce, resume alignment and replan fallback (D67), the navigation velocity and scan-match covariance (D68), the T7 sigma pause (D69), and the full S4 run",
+   "file": "NASL_ER-001_Shaddad_S4_Fixes_2026-11-16_v1.1"
+  },
+  {
+   "id": "mfplan",
+   "doc_no": "NASL-SHD-ER-002",
+   "title": "Shaddad UGV: MATLAB Function conversion",
+   "subtitle": "Task group of 14-15 November 2026",
+   "footer": "Shaddad UGV MATLAB Function Conversion",
+   "summary": "How five large block diagrams (three collision monitors and two drive ESC functions) were turned into MATLAB Functions that give bit-identical results with far fewer blocks and line crossings, and why one task was deferred.",
+   "version": "1.1",
+   "date": "2026-11-16",
+   "history": [
+    [
+     "1.0",
+     "2026-11-15",
+     "First issue as an engineering report (from ATR-mfplan)"
+    ],
+    [
+     "1.1",
+     "2026-11-16",
+     "Editorial: the team named by its roles; effort in engineering passes"
+    ]
+   ],
+   "request": "The project owner, 2026-11-14: \"maltab function before the review\" and \"Start it now\" (the plan docs/superpowers/plans/2026-11-01-matlab-function-conversion.md)",
+   "scope": "Sim_Monitors collision monitors (FE_Box, FE_Cyl, FE_Dyn) and drive_esc Feedback and Torque_Limiter as MATLAB Functions (D70); Task 4, the GNC managers, deferred to the Companion build",
+   "file": "NASL_ER-002_Shaddad_MATLAB_Function_Conversion_2026-11-16_v1.1"
+  },
+  {
+   "id": "review",
+   "doc_no": "NASL-SHD-ER-003",
+   "title": "Shaddad UGV: review phase",
+   "subtitle": "Task group of 15 November 2026",
+   "footer": "Shaddad UGV Review Phase",
+   "summary": "How ten section reviews and one system and integration review of the Shaddad digital twin were organised, merged into 87 ranked improvement areas and turned into decisions; the findings themselves are in the NASL review report.",
+   "version": "1.1",
+   "date": "2026-11-16",
+   "history": [
+    [
+     "1.0",
+     "2026-11-15",
+     "First issue as an engineering report (from ATR-review)"
+    ],
+    [
+     "1.1",
+     "2026-11-16",
+     "Editorial: the team named by its roles; effort in engineering passes"
+    ]
+   ],
+   "request": "The project owner, 2026-11-14: \"each [section owner] should review its section and task and after that a system review for the whole system and integration should conducted, and after the review a report should be produced\" (Critical, High, Mid, Low); started 2026-11-15 with \"Start the review\"",
+   "scope": "The Shaddad_UGV models, builders, parameters, tests and docs as of 2026-11-15, reviewed read only by the ten section owners and the integration engineer",
+   "file": "NASL_ER-003_Shaddad_Review_Phase_2026-11-16_v1.1"
+  },
+  {
+   "id": "critfix",
+   "doc_no": "NASL-SHD-ER-004",
+   "title": "Shaddad UGV: critical fixes R-01 to R-05",
+   "subtitle": "Task group of 15 November 2026",
+   "footer": "Shaddad UGV Critical Fixes",
+   "summary": "How the five Critical items of the review were fixed: the slope stop, the lost LiDAR, the implement in a person hold and one IMU fault; how the sealed battery pack was checked; and what the system runs and the independent review found.",
+   "version": "1.1",
+   "date": "2026-11-16",
+   "history": [
+    [
+     "1.0",
+     "2026-11-15",
+     "First issue as an engineering report (from ATR-critfix)"
+    ],
+    [
+     "1.1",
+     "2026-11-16",
+     "Editorial: the team named by its roles; effort in engineering passes"
+    ]
+   ],
+   "request": "The project owner, 2026-11-15: \"Yes, start\" (start the critical fixes with the recommended options), with the decisions \"Brakes first, STO as backup\", \"Keep it, fix the turns next\" and \"Check physics, then cap speed\"",
+   "scope": "Review items R-01 (slope stop), R-02 (lost scan), R-03 (implement in a hold), R-05 (one IMU fault), R-34 (pivot standstill) and the R-04 sealed-pack check; decisions D71 to D73",
+   "file": "NASL_ER-004_Shaddad_Critical_Fixes_2026-11-16_v1.1"
+  },
+  {
+   "id": "descent",
+   "doc_no": "NASL-SHD-ER-005",
+   "title": "Shaddad UGV: the downhill speed cap",
+   "subtitle": "Task group of 15 to 16 November 2026",
+   "footer": "Shaddad UGV Downhill Speed Cap",
+   "summary": "How the always-on descent cap was built and verified: the physics of the S2c pitch-over, the safe speeds per implement indexed by the measured pitch, the MCU cap and trip with its hill-start window, the GNC governor, the system runs per CR-001, the independent review, and the owner's decisions on CR-003 and the IMU bound.",
+   "version": "1.1",
+   "date": "2026-11-16",
+   "history": [
+    [
+     "1.0",
+     "2026-11-16",
+     "First issue (from the task report ATR-descent)"
+    ],
+    [
+     "1.1",
+     "2026-11-16",
+     "Editorial: the approver named by its role, with the Approver column in document control; no change to the content"
+    ]
+   ],
+   "request": "The project owner, 2026-11-15: \"Check physics, then cap speed (Recommended)\", then \"Real loads first, then always on (Recommended)\"; CR-001: \"Limit sprayer to ~18.5° (Recommended)\"; 2026-11-16: \"Finish; trip to G2-MCU (Recommended)\", \"Adopt 0.75 degrees (Recommended)\", \"Restate by the safe-stop rule (Recommended)\"",
+   "scope": "Card G2-DSC: the descent cap; CR-001 and CR-003; decision rows D74, D75 and D81 to D83",
+   "file": "NASL_ER-005_Shaddad_Downhill_Speed_Cap_2026-11-16_v1.1"
+  }
+ ]
+}

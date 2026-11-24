@@ -1,0 +1,66 @@
+component elastoplastic_brake
+% Elasto-Plastic Brake
+% Friction brake with a bristle (LuGre-type) state between R and C. Below the static
+% capacity mu_s*r_eff*N the brake sticks: the bristle acts as a torsional spring k_b
+% with damping c_b near standstill, so the shaft holds without visible creep and the
+% torque does not change sign at every step of a fixed-step solver. Above the capacity
+% the bristle saturates and the brake slides with the Stribeck curve from mu_s*r_eff*N
+% to mu_c*r_eff*N. The torque is scaled by the engagement N/(N + N_eps), so a released
+% brake transmits nothing, and the bristle relaxes at the rate w_r*k_b*z/g (about 20 ms
+% when released, a creep of w_r*T/g when holding). N is the normal force; output T is
+% the brake torque acting on R.
+
+  nodes
+    R = foundation.mechanical.rotational.rotational; % R:left
+    C = foundation.mechanical.rotational.rotational; % C:right
+  end
+
+  inputs
+    N = {0, 'N'}; % N:left
+  end
+
+  outputs
+    T = {0, 'N*m'}; % T:right
+  end
+
+  parameters
+    r_eff = {0.05, 'm'};          % Effective friction radius
+    mu_s  = {0.40, '1'};          % Static friction coefficient
+    mu_c  = {0.333, '1'};         % Coulomb friction coefficient
+    w_st  = {0.1, 'rad/s'};       % Stribeck velocity
+    k_b   = {50, 'N*m/rad'};      % Bristle stiffness
+    c_b   = {0.3, 'N*m*s/rad'};   % Bristle damping near standstill
+    w_d   = {1, 'rad/s'};         % Speed scale of the bristle damping
+    T_eps = {1e-4, 'N*m'};        % Capacity floor (division guard of the released brake)
+    w_eps = {1e-3, 'rad/s'};      % Smoothing of |w| around zero speed
+    w_r   = {1e-4, 'rad/s'};      % Bristle relaxation speed
+    N_eps = {1, 'N'};             % Normal force of half engagement
+  end
+
+  variables
+    t = {0, 'N*m'};                                      % Torque through the brake, R to C
+    w_rel = {0, 'rad/s'};                                % Relative angular velocity R - C
+    z = {value = {0, 'rad'}, priority = priority.high};  % Bristle deflection
+  end
+
+  branches
+    t : R.t -> C.t;
+  end
+
+  intermediates
+    g = N*r_eff*(mu_c + (mu_s - mu_c)*exp(-(w_rel/w_st)^2)) + T_eps;   % capacity at speed w
+    wa = sqrt(w_rel^2 + w_eps^2) - w_eps;                                % smooth |w|
+    zdot = w_rel - (wa + w_r)*k_b*z/g;                                   % bristle rate
+    eta = N/(N + N_eps);                                             % engagement 0..1
+  end
+
+  equations
+    assert(k_b > 0, 'Bristle stiffness must be positive');
+    assert(T_eps > 0, 'Capacity floor must be positive');
+    assert(N_eps > 0, 'N_eps must be positive');
+    w_rel == R.w - C.w;
+    z.der == zdot;
+    t == eta*(k_b*z + c_b*w_rel*exp(-(w_rel/w_d)^2));
+    T == -t;
+  end
+end

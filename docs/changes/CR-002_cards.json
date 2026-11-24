@@ -1,0 +1,1305 @@
+{
+ "cr": "CR-002",
+ "about": "The card set of CR-002, merged into tools/dashboard/project_cards.json when the owner approves the change.",
+ "drafted": "2026-11-16",
+ "new_cards": [
+  {
+   "status": "todo",
+   "priority": "next",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002",
+    "ISO 12100",
+    "ISO 18497",
+    "ISO 25119",
+    "ISO 13849-1"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the lead systems engineer",
+    "the integration engineer",
+    "every subsystem engineer (its hazards)",
+    "the project owner (the operating context)"
+   ],
+   "inputs": [
+    "The charter (the operating concept, CR-001)",
+    "The as-built record docs/hardware/real_robot_components.md",
+    "The safety functions in the specs: the E-stop chain, STO, the spring brakes, the person stop, the tilt stop, the descent cap",
+    "ISO 12100, ISO 18497, ISO 25119 and ISO 13849-1, at the editions G1-01 confirms"
+   ],
+   "outputs": [
+    "The hazard log NASL-SHD-HAZ-001 (a Safety Analysis Manager file and its PDF)",
+    "The safety plan NASL-SHD-SAF-001",
+    "The safety goals, as top-level safety requirements for G1-01"
+   ],
+   "risks": [
+    {
+     "risk": "A hazard is missed because the operating concept is incomplete",
+     "likelihood": "M",
+     "impact": "H",
+     "mitigation": "A walk-through of every mode and abnormal case of the charter; the operator's and the maintainer's view at the review"
+    },
+    {
+     "risk": "A required performance level is higher than the as-built hardware can give, for example a single-channel stop path",
+     "likelihood": "M",
+     "impact": "H",
+     "mitigation": "Escalate at once: a hardware change is the owner's decision"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A safety goal the as-built hardware cannot meet",
+     "to": "the project owner (class 1)"
+    },
+    {
+     "when": "A standard's edition or the jurisdiction unknown",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G1-07",
+   "gate": "G1",
+   "wbs": "2",
+   "title": "Hazard analysis, risk assessment and the safety plan",
+   "lead": "the functional safety engineer",
+   "purpose": "Know every hazard of the robot in this phase, and how safe each safety function must be",
+   "description": "The robot works near people, on slopes and in greenhouse aisles, and no hazard analysis exists yet: the specs cite ISO 18497, but there is no hazard log. The functional safety engineer:\n- writes the safety plan: the safety life cycle tailored to the project, the independence of the safety assessment, and the safety deliverables at each gate;\n- identifies the hazards of every operating mode and abnormal case of the charter (ISO 12100, with the hazard list of ISO 18497), in the Safety Analysis Manager;\n- rates each hazard, and sets its safety goal and the performance level it needs (the risk graph of ISO 25119 or ISO 13849-1);\n- names the safety function that meets each goal.\n\nThe hazard log feeds the requirements baseline (G1-01) and the SRR (G1-05).",
+   "entry": {
+    "gate": "G0 passed",
+    "criteria": [
+     "The charter NASL-SHD-CHR-001 approved: the operating concept and the CR-001 envelope",
+     "The functional safety engineer in the team (CR-002)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds G1-01 and G1-05",
+    "criteria": [
+     "Every operating mode and abnormal case of the charter walked through for hazards",
+     "Every hazard rated, with its safety goal, its required performance level and the safety function that meets it",
+     "The safety plan: the safety life cycle, the independence of the assessment, the deliverables per gate",
+     "The independent reviewer's check: no Critical or Major finding open",
+     "The project owner approves the safety plan and accepts the safety goals"
+    ]
+   },
+   "predecessors": [
+    "G0-02"
+   ],
+   "verification": "Inspection (the independent reviewer) and the owner's approval",
+   "size": "L"
+  },
+  {
+   "status": "todo",
+   "priority": "now",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the lead systems engineer",
+    "the integration engineer (the MATLAB project and model compare)"
+   ],
+   "inputs": [
+    "The project folder",
+    "The snapshot folders, whose history stays as files"
+   ],
+   "outputs": [
+    "The git repository with LFS",
+    "The tag G0",
+    "The updated work rules"
+   ],
+   "risks": [
+    {
+     "risk": "The repository grows too big from results and logs",
+     "likelihood": "M",
+     "impact": "M",
+     "mitigation": "Ignore the results and logs; LFS for the binaries that are kept"
+    },
+    {
+     "risk": "Git and the MATLAB project disagree on the files",
+     "likelihood": "L",
+     "impact": "M",
+     "mitigation": "The project's source control integration; the restore test"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A remote host for the repository",
+     "to": "the project owner"
+    },
+    {
+     "when": "A tool install",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G1-08",
+   "gate": "G1",
+   "wbs": "6",
+   "title": "Version control and configuration baselines",
+   "lead": "the configuration and documentation engineer",
+   "purpose": "Every change recorded, and every gate baseline restorable as a whole",
+   "description": "The project has no version control: every change is tracked by copying files to a snapshot folder by hand. The configuration and documentation engineer:\n- puts the project folder under git, with Git LFS for the models, data and documents (.slx, .mat, .docx, .pdf) and a .gitignore for the generated, cache and results folders;\n- sets up the MATLAB project's source control and the Simulink model compare;\n- tags the G0 baseline, the state the owner approved on 2026-11-16, and adds a tag at each gate;\n- changes the work rules: a commit per step in place of the manual snapshots, and a separate working copy for each engineer, so two engineers never edit the same files.\n\nA remote copy, for example a private repository, is the owner's choice.",
+   "entry": {
+    "gate": "G0 passed",
+    "criteria": [
+     "Git and Git LFS available on the project computer",
+     "No engineer editing project files while the repository is created"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds G1-05: the G1 baseline is a tag",
+    "criteria": [
+     "The whole project under git: the binaries in LFS, the generated folders ignored",
+     "The tag G0 on the approved baseline",
+     "A restore test: a clean checkout of the tag opens the project and builds the parameters",
+     "The work rules and the handbook's configuration section updated (G1-09)",
+     "The owner decides on a remote copy"
+    ]
+   },
+   "predecessors": [
+    "G0-02"
+   ],
+   "verification": "Demonstration (the restore test)",
+   "size": "M"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the independent reviewer"
+   ],
+   "inputs": [
+    "NASL-SHD-GRR-001 section 6",
+    "This change request"
+   ],
+   "outputs": [
+    "NASL-EMS-HBK-001 v1.2",
+    "New templates: the safety plan, the hazard log, the safety case outline, the parameter register"
+   ],
+   "risks": [
+    {
+     "risk": "The handbook drifts from the project's practice",
+     "likelihood": "M",
+     "impact": "L",
+     "mitigation": "Change the project and the handbook in the same issue"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A change to the gate structure or the approval rule",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G1-09",
+   "gate": "G1",
+   "wbs": "1",
+   "title": "Handbook v1.2: the lessons of G0 and this change",
+   "lead": "the lead systems engineer",
+   "purpose": "The company's way of working learns from its first gate",
+   "description": "The G0 gate review (NASL-SHD-GRR-001) recorded lessons for the handbook, and CR-002 adds a role and deliverables that belong in the company's framework, not only in this project. The lead systems engineer issues NASL-EMS-HBK-001 v1.2 with:\n- the G0 lessons: the charter before the first readiness check, and the counts taken from the registers;\n- the functional safety engineer in the roles and the RACI, and the safety deliverables at each gate: the hazard log at G1, the safety concept at G2, the FMEA at G3, fault injection at G4, the safety case at G5;\n- the model credibility deliverables at G2: the estimated-parameter register and the validation plan;\n- version control in place of the manual snapshots;\n- the schedule fields of a card, and the critical path.",
+   "entry": {
+    "gate": "CR-002 approved",
+    "criteria": [
+     "The G0 lessons (NASL-SHD-GRR-001 section 6)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds G1-05",
+    "criteria": [
+     "NASL-EMS-HBK-001 v1.2 issued, with the templates it names",
+     "The independent reviewer's check",
+     "The project owner approves it"
+    ]
+   },
+   "predecessors": [
+    "G0-02"
+   ],
+   "verification": "Inspection (the independent reviewer) and the owner's approval",
+   "size": "S"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the project owner (the target dates)"
+   ],
+   "inputs": [
+    "The cards and their predecessors",
+    "The dates of the cards done so far (the journal)"
+   ],
+   "outputs": [
+    "The schedule fields in the cards",
+    "framework/tools/critical_path.py",
+    "The schedule section of the project plan v1.3"
+   ],
+   "risks": [
+    {
+     "risk": "Durations from the size alone are rough",
+     "likelihood": "H",
+     "impact": "L",
+     "mitigation": "Calibrate on the cards done; re-project at every gate"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A gate target date slips by more than a week",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G1-10",
+   "gate": "G1",
+   "wbs": "1",
+   "title": "Schedule baseline: target dates and the critical path",
+   "lead": "the lead systems engineer",
+   "purpose": "Know when each gate is due, and which cards set the date",
+   "description": "The cards have predecessors but no dates. The lead systems engineer:\n- adds planned and actual start and finish dates to the card fields, and a target date to each gate;\n- writes a tool that computes the critical path from the predecessors and the card sizes, with durations calibrated on the cards done so far;\n- shows the planned dates against the actual ones on the dashboard's Project tab;\n- re-projects the dates at every gate review.\n\nThe owner's decision cards are milestones on the path, with their own target dates.",
+   "entry": {
+    "gate": "CR-002 approved",
+    "criteria": [
+     "The card set of CR-002 in the cards file (v1.4)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds G1-05",
+    "criteria": [
+     "Every open card with a planned start and finish; every gate with a target date",
+     "The critical path computed and shown",
+     "The project owner accepts the gate target dates"
+    ]
+   },
+   "predecessors": [
+    "G0-02"
+   ],
+   "verification": "Inspection and the owner's acceptance",
+   "size": "M"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the MCU firmware engineer",
+    "the power and BMS engineer",
+    "the drive engineer",
+    "the sensors and navigation engineer",
+    "the GNC engineer",
+    "the integration engineer"
+   ],
+   "inputs": [
+    "The hazard log and the safety goals (G1-07)",
+    "The as-built record",
+    "The subsystem specs"
+   ],
+   "outputs": [
+    "The functional safety concept NASL-SHD-FSC-001",
+    "The safety requirements in the register"
+   ],
+   "risks": [
+    {
+     "risk": "A safety function needs a second channel the robot does not have",
+     "likelihood": "M",
+     "impact": "H",
+     "mitigation": "Escalate as a hardware change (class 1)"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A safety function that needs new hardware",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G2-FSC",
+   "gate": "G2",
+   "wbs": "2",
+   "title": "Functional safety concept",
+   "lead": "the functional safety engineer",
+   "purpose": "Every safety goal met by named safety functions, allocated to the parts that carry them",
+   "description": "The functional safety engineer turns the safety goals of G1-07 into the functional safety concept. For each safety function (the E-stop chain, STO, the spring brakes, the person stop, the tilt stop, the descent cap, the lost-link stop, the watchdog) it states:\n- the safe state and the time to reach it;\n- the performance level, and the architecture that gives it: the channels, the diagnostics, the diagnostic coverage;\n- its allocation to the hardware, the MCU firmware and the companion;\n- how it is verified.\n\nThe safety requirements go into the requirements register, traced to the goals. The CDRs of the safety-relevant subsystems design to them.",
+   "entry": {
+    "gate": "G1 passed",
+    "criteria": [
+     "G1-05 passed: the safety goals in the requirements baseline",
+     "The hazard log (G1-07)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds G3-FME and the CDRs of the safety-relevant subsystems",
+    "criteria": [
+     "Every safety goal met by one or more safety functions",
+     "Every safety function with its safe state, reaction time, performance level, architecture, allocation and verification method",
+     "The safety requirements in the register, traced to the goals and allocated",
+     "The independent reviewer's check: no Critical or Major finding open"
+    ]
+   },
+   "predecessors": [
+    "G1-05"
+   ],
+   "verification": "Inspection (the independent reviewer) and Analysis",
+   "size": "L"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "every subsystem engineer (its parameters)",
+    "the data analyst (sensitivity)",
+    "the integration engineer"
+   ],
+   "inputs": [
+    "The [EST] marks in params/",
+    "The verification matrix (G1-02)",
+    "The supplier data (G1-04)"
+   ],
+   "outputs": [
+    "The estimated-parameter register NASL-SHD-PRM-001 (docs/registers/parameters.json)",
+    "The model validation plan NASL-SHD-MVP-001"
+   ],
+   "risks": [
+    {
+     "risk": "A key estimate cannot be measured on the robot",
+     "likelihood": "M",
+     "impact": "M",
+     "mitigation": "Supplier data (G1-04) or a conservative bound, recorded"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A test that needs equipment or a site the project lacks",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G2-VAL",
+   "gate": "G2",
+   "wbs": "2",
+   "title": "Model credibility: the estimated-parameter register and the validation plan",
+   "lead": "the lead systems engineer",
+   "purpose": "Know how far each simulation result can be trusted before it is used as evidence",
+   "description": "The model is the main verification tool, but 65 parameter values are marked [EST] in params/, and the audit of the robot against the model comes only at G7 (P-01). The lead systems engineer, with each subsystem engineer for its domain:\n- lists every estimated value in a register: its owner, its basis, its uncertainty, and the test or data that will replace it;\n- ranks them by the sensitivity of the outputs that safety and the goals rest on: the stop distance and the tip margin on a slope, the person-stop distance, the energy per shift, the tracking error;\n- states, for each use of the model in the verification matrix, the credibility it needs and the validation evidence that gives it, in the manner of NASA-STD-7009A;\n- specifies the identification tests on the bench and in the field (the slope brake test, the pitch settle, the track-soil parameters, the motor efficiency), which go into the test procedures (T-04).",
+   "entry": {
+    "gate": "G1 passed",
+    "criteria": [
+     "G1-05 passed: the verification matrix (G1-02)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds T-04, V-01 and P-01",
+    "criteria": [
+     "Every estimated value in the register, with its owner and the test or data that closes it, or an accepted reason to keep it",
+     "The 20 most sensitive values ranked, with the outputs they move",
+     "A credibility level stated for each simulation claim of the verification matrix",
+     "The identification tests specified for the test procedures",
+     "The independent reviewer's check"
+    ]
+   },
+   "predecessors": [
+    "G1-05"
+   ],
+   "verification": "Analysis (sensitivity) and Inspection",
+   "size": "L"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the MCU firmware engineer",
+    "the power and BMS engineer",
+    "the drive engineer",
+    "the sensors and navigation engineer",
+    "the integration engineer"
+   ],
+   "inputs": [
+    "The functional safety concept (G2-FSC)",
+    "The CDR designs"
+   ],
+   "outputs": [
+    "The FMEA and fault trees NASL-SHD-FMA-001 (Safety Analysis Manager files and their PDF)",
+    "The list of failure modes for fault injection"
+   ],
+   "risks": [
+    {
+     "risk": "A single point of failure in the as-built stop path",
+     "likelihood": "M",
+     "impact": "H",
+     "mitigation": "Escalate: a design or hardware change through a CR"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A single point of failure that needs a hardware change",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G3-FME",
+   "gate": "G3",
+   "wbs": "2",
+   "title": "FMEA and fault-tree analysis of the safety chain",
+   "lead": "the functional safety engineer",
+   "purpose": "Every way the safety chain can fail is known, and each one is detected or tolerated",
+   "description": "The functional safety engineer analyses the designs of the safety functions in the Safety Analysis Manager:\n- an FMEA of every element of each safety function (the sensors, the MCU logic, the CAN links, the STO of the ESCs, the spring brakes, the E-stop relay, the power rails): each failure mode with its effect, its detection and the diagnostic in the design;\n- a fault tree for each top hazard (a person struck, a tip-over on a slope, a runaway downhill), with the single points of failure shown;\n- the diagnostic coverage achieved, against the performance level of the concept.\n\nEvery gap becomes a card or a change request. The failure modes the design detects are the cases of the fault-injection campaign (T-06).",
+   "entry": {
+    "gate": "G2 passed for the safety-relevant subsystems",
+    "criteria": [
+     "The functional safety concept (G2-FSC)",
+     "The CDR designs of the safety functions in review"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds the CDRs (G3-SC2, every required analysis closed), T-06 and V-05",
+    "criteria": [
+     "An FMEA row for every element of every safety function",
+     "A fault tree for each top hazard, with no unmitigated single point of failure",
+     "The diagnostic coverage meets the performance level of each function, or a card or CR for the gap",
+     "The independent reviewer's check"
+    ]
+   },
+   "predecessors": [
+    "G2-FSC"
+   ],
+   "verification": "Analysis and Inspection (the independent reviewer)",
+   "size": "L"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the functional safety engineer",
+    "the test engineer",
+    "every subsystem engineer of the safety chain"
+   ],
+   "inputs": [
+    "The failure-mode list (G3-FME)",
+    "The reaction times of the concept (G2-FSC)"
+   ],
+   "outputs": [
+    "The fault-injection test report",
+    "The faults kept as reusable test cases"
+   ],
+   "risks": [
+    {
+     "risk": "A fault the model cannot represent",
+     "likelihood": "M",
+     "impact": "M",
+     "mitigation": "Cover it on the bench (V-02) or by analysis"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A safety function that misses its safe state",
+     "to": "the project owner, through a nonconformance report"
+    }
+   ],
+   "id": "T-06",
+   "gate": "G4",
+   "wbs": "4",
+   "title": "Fault-injection campaign on the safety functions",
+   "lead": "the integration engineer",
+   "purpose": "Show in the model that each detected failure reaches its safe state in time",
+   "description": "From the FMEA (G3-FME), the integration engineer injects each failure mode that the design claims to detect into the system model with Simulink Fault Analyzer: a stuck, noisy or frozen sensor, a lost scan, a lost CAN link, an ESC fault, a brake that does not engage, a stale IMU, a lost RC link. For each fault it checks that the safe state is reached within the reaction time of the concept, and records the margin. A failure that does not reach its safe state is a nonconformance.",
+   "entry": {
+    "gate": "The TRR of the fault-injection campaign (T-05)",
+    "criteria": [
+     "The FMEA's failure-mode list (G3-FME)",
+     "A fresh test baseline (T-02)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds V-05, the safety case",
+    "criteria": [
+     "Every failure mode the design detects injected at least once",
+     "The safe state reached within its reaction time, with the margin recorded",
+     "Every failure recorded as a nonconformance, with its disposition",
+     "The test report (PDF)"
+    ]
+   },
+   "predecessors": [
+    "G3-FME",
+    "T-02"
+   ],
+   "verification": "Test (simulation with fault injection)",
+   "size": "L"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the lead systems engineer",
+    "the independent reviewer (the assessment)",
+    "the project owner (accepts the residual risks)"
+   ],
+   "inputs": [
+    "Every safety record of G1 to G5"
+   ],
+   "outputs": [
+    "The safety case NASL-SHD-SCS-001",
+    "The list of operating limits"
+   ],
+   "risks": [
+    {
+     "risk": "Thin field evidence, because only the owner runs the robot",
+     "likelihood": "H",
+     "impact": "M",
+     "mitigation": "Plan the field tests early (T-04, V-03); bound the claims by the evidence"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A residual risk the owner does not accept",
+     "to": "the project owner: a design change or a narrower envelope"
+    }
+   ],
+   "id": "V-05",
+   "gate": "G5",
+   "wbs": "2",
+   "title": "Safety case",
+   "lead": "the functional safety engineer",
+   "purpose": "A reasoned argument, with its evidence, that the robot is acceptably safe for mowing within its envelope",
+   "description": "The functional safety engineer writes the safety case: a structured argument, in goal structuring notation, that each safety goal is met. Its evidence: the hazard log, the safety concept, the FMEA and fault trees, the fault-injection results, the verification campaigns in simulation, on the bench and in the field, and the field-test records. It lists the residual risks and the operating limits, the CR-001 envelope among them. The independent reviewer assesses it, and the owner accepts the residual risks.",
+   "entry": {
+    "gate": "The verification campaigns done",
+    "criteria": [
+     "V-01, V-02 and V-03 done",
+     "The fault-injection report (T-06)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds V-04, the FCA/SVR",
+    "criteria": [
+     "Every safety goal argued with its evidence",
+     "The residual risks listed, and accepted by the project owner",
+     "The operating limits listed for the operator's manual; the owner decides when the manual changes",
+     "The independent assessment: no Critical or Major finding open"
+    ]
+   },
+   "predecessors": [
+    "T-06",
+    "V-01",
+    "V-02",
+    "V-03"
+   ],
+   "verification": "Inspection (the independent assessment) and the owner's acceptance",
+   "size": "L"
+  },
+  {
+   "status": "todo",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the project owner (downloads and installs)"
+   ],
+   "inputs": [
+    "The controller board (G1-04)",
+    "The generated code"
+   ],
+   "outputs": [
+    "The installed toolchain and its versions",
+    "A compile log"
+   ],
+   "risks": [
+    {
+     "risk": "The board differs from the one the model targets",
+     "likelihood": "M",
+     "impact": "H",
+     "mitigation": "G1-04 confirms the board first"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A download, an install or a license",
+     "to": "the project owner"
+    }
+   ],
+   "id": "B-00",
+   "gate": "BUILD",
+   "wbs": "5",
+   "title": "The embedded toolchain for the MCU firmware",
+   "lead": "the MCU firmware engineer",
+   "purpose": "The firmware generated from the model compiles for the robot's board",
+   "description": "STM32CubeMX, STM32CubeCLT and the GNU Arm toolchain are not installed, so the generated MCU code cannot be compiled for the board (VC_TARGET 1), and the code-generation test is left out. The owner installs the tools (downloads and installs are the owner's to approve). The MCU firmware engineer then checks that the generated code compiles, runs the code-generation test, and records the tool versions for the software version description (P-03). The board itself is confirmed under G1-04.",
+   "entry": {
+    "gate": "The owner approves the downloads and installs",
+    "criteria": [
+     "The controller board confirmed (G1-04)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds B-01",
+    "criteria": [
+     "The tools installed, with their versions recorded",
+     "The generated code compiles for the board with no error",
+     "The code-generation test runs"
+    ]
+   },
+   "predecessors": [
+    "G1-04"
+   ],
+   "verification": "Demonstration (the compile)",
+   "size": "M"
+  },
+  {
+   "status": "proposed",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002",
+    "CR-001",
+    "G2-DSC"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the drive engineer",
+    "the structure engineer",
+    "the power and BMS engineer"
+   ],
+   "inputs": [
+    "The structure reports of G2-DSC",
+    "CR-001"
+   ],
+   "outputs": [
+    "The design and its analysis",
+    "A change request"
+   ],
+   "risks": [
+    {
+     "risk": "The drive cannot absorb the energy at CCL 0",
+     "likelihood": "H",
+     "impact": "H",
+     "mitigation": "A braking resistor (hardware: the owner's)"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A hardware change",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G2-BRK",
+   "gate": "G2",
+   "wbs": "3.4",
+   "title": "A controlled stop without skidding (later phase)",
+   "lead": "the MCU firmware engineer",
+   "purpose": "Win back the 20 deg design slope for the full-tank sprayer",
+   "description": "CR-001 limits the full-tank sprayer to about 18.5 deg, because a brakes-locked stop skids the tracks and can tip the robot over its front. A controlled stop that does not skid, with the drive braking the robot to standstill before the brakes close, would raise the safe speed and could restore the 20 deg slope (the structure engineer's proposal on card G2-DSC). Without regeneration (a full battery, CCL 0), the drive needs another way to absorb the energy, such as a braking resistor: a hardware question for the owner and the supplier.",
+   "entry": {
+    "gate": "The owner starts the card",
+    "criteria": [
+     "G2-DSC closed",
+     "The owner's view on a braking resistor or another energy path"
+    ]
+   },
+   "exit": {
+    "gate": "A change request that restores the envelope (class 1)",
+    "criteria": [
+     "A stop without skidding shown in the full vehicle model on 20 deg with the full-tank sprayer",
+     "The energy path without regeneration settled",
+     "A CR to restore the 20 deg slope for the sprayer"
+    ]
+   },
+   "predecessors": [
+    "G2-DSC"
+   ],
+   "verification": "Analysis and Test (system runs)",
+   "size": "L"
+  },
+  {
+   "status": "proposed",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the functional safety engineer",
+    "the GNC engineer"
+   ],
+   "inputs": [
+    "The link design (G2-COM)",
+    "The hazard log (G1-07)"
+   ],
+   "outputs": [
+    "The threat analysis report"
+   ],
+   "risks": [
+    {
+     "risk": "A protection needs new hardware or a supplier change",
+     "likelihood": "M",
+     "impact": "M",
+     "mitigation": "Escalate to the owner"
+    }
+   ],
+   "escalation": [
+    {
+     "when": "A protection that changes the hardware or a supplier",
+     "to": "the project owner"
+    }
+   ],
+   "id": "G2-CYB",
+   "gate": "G2",
+   "wbs": "2",
+   "title": "Cybersecurity threat analysis (later phase)",
+   "lead": "the electronics and comms engineer",
+   "purpose": "Know how the robot's links could be misused, and what protects them",
+   "description": "The robot is driven by RC, takes corrections over LTE (NTRIP), and links the MCU and the companion over CAN. No one has yet asked how these links could be jammed, spoofed or misused. The electronics and comms engineer runs a threat analysis of the RC link, the LTE and NTRIP link, the CAN buses and the companion's services, rates each threat and proposes the protections. A threat that could defeat a safety function goes into the hazard log. The reference standard (IEC 62443, or one for agricultural machinery) is the owner's to confirm.",
+   "entry": {
+    "gate": "The owner starts the card",
+    "criteria": [
+     "The link design of G2-COM"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds G3-COM",
+    "criteria": [
+     "Every external link and service with its threats rated",
+     "A protection or an accepted risk for each threat",
+     "The threats that touch safety in the hazard log"
+    ]
+   },
+   "predecessors": [
+    "G2-COM"
+   ],
+   "verification": "Analysis and Inspection",
+   "size": "M"
+  },
+  {
+   "status": "proposed",
+   "priority": "later",
+   "effort": null,
+   "report": null,
+   "task": null,
+   "decisions": [],
+   "links": [
+    "CR-002"
+   ],
+   "note": "Added by CR-002 (the plan after G0).",
+   "support": [
+    "the lead systems engineer",
+    "the functional safety engineer"
+   ],
+   "inputs": [
+    "The safety case (V-05)",
+    "NASL-SHD-MAN-001"
+   ],
+   "outputs": [
+    "NASL-SHD-MAN-001 updated",
+    "The maintenance procedures"
+   ],
+   "risks": [],
+   "escalation": [
+    {
+     "when": "Always: the manual changes only when the owner decides",
+     "to": "the project owner"
+    }
+   ],
+   "id": "V-06",
+   "gate": "G5",
+   "wbs": "2",
+   "title": "The operator's and the maintainer's manuals for the mowing phase (later)",
+   "lead": "the technical writer",
+   "purpose": "The people who run and service the robot have the limits and procedures of this phase",
+   "description": "The manual NASL-SHD-MAN-001 predates the as-built robot and the CR-001 envelope. When the owner decides to change it, the technical writer updates the operator's manual for mowing (the modes, the holds, the faults and the operating limits of the safety case) and writes the maintainer's procedures (charging, implements, brakes, tracks and sensors).",
+   "entry": {
+    "gate": "The owner decides to update the manual",
+    "criteria": [
+     "The operating limits of the safety case (V-05)"
+    ]
+   },
+   "exit": {
+    "gate": "Feeds V-04",
+    "criteria": [
+     "The operator's manual with every operating limit",
+     "The maintainer's procedures",
+     "Reviewed, and approved by the owner"
+    ]
+   },
+   "predecessors": [
+    "V-05"
+   ],
+   "verification": "Inspection",
+   "size": "M"
+  }
+ ],
+ "changes": [
+  {
+   "id": "G1-01",
+   "text": "Lead: the lead systems engineer (was the configuration and documentation engineer, who now supports). Predecessor added: G1-07. Exit criterion added: the safety goals in the baseline.",
+   "ops": [
+    {
+     "op": "set",
+     "field": "lead",
+     "value": "the lead systems engineer"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the configuration and documentation engineer"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the functional safety engineer"
+    },
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G1-07"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The safety goals of the hazard log (G1-07) in the baseline as top-level safety requirements"
+    }
+   ]
+  },
+  {
+   "id": "G1-02",
+   "text": "Lead: the lead systems engineer (was the test engineer, who now supports).",
+   "ops": [
+    {
+     "op": "set",
+     "field": "lead",
+     "value": "the lead systems engineer"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the test engineer"
+    }
+   ]
+  },
+  {
+   "id": "G1-05",
+   "text": "Predecessors added: G1-07, G1-08 and G1-10. The SRR needs the hazard log, a tagged baseline and the schedule.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G1-07"
+    },
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G1-08"
+    },
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G1-10"
+    }
+   ]
+  },
+  {
+   "id": "T-01",
+   "text": "Gate G4 to G1, priority now: the regression checks are needed by every change from now on. The id stays.",
+   "ops": [
+    {
+     "op": "set",
+     "field": "gate",
+     "value": "G1"
+    },
+    {
+     "op": "set",
+     "field": "priority",
+     "value": "now"
+    }
+   ]
+  },
+  {
+   "id": "T-02",
+   "text": "Gate G4 to G1: a fresh test baseline before the G2 design work. It is run again before each campaign (G4-SC6). The id stays.",
+   "ops": [
+    {
+     "op": "set",
+     "field": "gate",
+     "value": "G1"
+    },
+    {
+     "op": "set",
+     "field": "priority",
+     "value": "next"
+    }
+   ]
+  },
+  {
+   "id": "T-03",
+   "text": "Gate G4 to G1: the stale and empty tests fixed before the design work relies on them. The id stays.",
+   "ops": [
+    {
+     "op": "set",
+     "field": "gate",
+     "value": "G1"
+    }
+   ]
+  },
+  {
+   "id": "T-04",
+   "text": "Predecessor added: G2-VAL. Exit criteria added: the identification tests of the validation plan, and the field-test safety plan (G4-SC4).",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-VAL"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The identification tests of the validation plan (G2-VAL) in the procedures"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "A field-test safety plan: who is present, the exclusion zone, the E-stop holder; the owner as the only operator (the charter; G4-SC4)"
+    }
+   ]
+  },
+  {
+   "id": "T-05",
+   "text": "Scope: the fault-injection campaign (T-06) gets its own TRR.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "A TRR for the fault-injection campaign (T-06)"
+    }
+   ]
+  },
+  {
+   "id": "G2-GNC",
+   "text": "Exit criterion added (the open point of CR-001): a slope limit per fitted implement in mission planning.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "A slope limit per fitted implement in mission planning: no mission plans a full-tank sprayer descent steeper than about 18.5 deg (CR-001)"
+    }
+   ]
+  },
+  {
+   "id": "G2-NAV",
+   "text": "Exit criterion added (from G2-DSC): the IMU pitch error bound confirmed for the descent table.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The IMU pitch error bound confirmed (0.5 or 0.75 deg) for the descent table (from G2-DSC)"
+    }
+   ]
+  },
+  {
+   "id": "G2-STR",
+   "text": "Exit criterion added (from G2-DSC): a 2.5 deg breakpoint in the descent table weighed.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "A 2.5 deg breakpoint in the descent table weighed: it would lift the 1.40 m/s level-ground limit of the sprayer, keeping the columns the GNC tests use (from G2-DSC)"
+    }
+   ]
+  },
+  {
+   "id": "G3-MCU",
+   "text": "Predecessor added: G2-FSC. Exit criterion added: the safety requirements met, and the FMEA findings closed or on a card.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-FSC"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the functional safety engineer"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The safety requirements of the concept (G2-FSC) met by the design, and the FMEA findings (G3-FME) for this subsystem closed or on a card"
+    }
+   ]
+  },
+  {
+   "id": "G3-PWR",
+   "text": "Predecessor added: G2-FSC. Exit criterion added: the safety requirements met, and the FMEA findings closed or on a card.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-FSC"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the functional safety engineer"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The safety requirements of the concept (G2-FSC) met by the design, and the FMEA findings (G3-FME) for this subsystem closed or on a card"
+    }
+   ]
+  },
+  {
+   "id": "G3-DRV",
+   "text": "Predecessor added: G2-FSC. Exit criterion added: the safety requirements met, and the FMEA findings closed or on a card.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-FSC"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the functional safety engineer"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The safety requirements of the concept (G2-FSC) met by the design, and the FMEA findings (G3-FME) for this subsystem closed or on a card"
+    }
+   ]
+  },
+  {
+   "id": "G3-NAV",
+   "text": "Predecessor added: G2-FSC. Exit criterion added: the safety requirements met, and the FMEA findings closed or on a card.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-FSC"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the functional safety engineer"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The safety requirements of the concept (G2-FSC) met by the design, and the FMEA findings (G3-FME) for this subsystem closed or on a card"
+    }
+   ]
+  },
+  {
+   "id": "G3-GNC",
+   "text": "Predecessor added: G2-FSC. Exit criterion added: the safety requirements met, and the FMEA findings closed or on a card.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-FSC"
+    },
+    {
+     "op": "add",
+     "field": "support",
+     "value": "the functional safety engineer"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The safety requirements of the concept (G2-FSC) met by the design, and the FMEA findings (G3-FME) for this subsystem closed or on a card"
+    }
+   ]
+  },
+  {
+   "id": "V-01",
+   "text": "Predecessor added: G2-VAL. Exit criterion added: each simulation claim cites its credibility level.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-VAL"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "Each simulation claim cites its credibility level from the validation plan (G2-VAL)"
+    }
+   ]
+  },
+  {
+   "id": "V-04",
+   "text": "Predecessor added: V-05. The FCA/SVR needs the safety case.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "V-05"
+    }
+   ]
+  },
+  {
+   "id": "B-01",
+   "text": "Predecessor added: B-00. The firmware cannot be built for the board without the toolchain.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "B-00"
+    }
+   ]
+  },
+  {
+   "id": "P-01",
+   "text": "Predecessor added: G2-VAL. The final audit confirms the validation evidence the plan set out.",
+   "ops": [
+    {
+     "op": "add",
+     "field": "predecessors",
+     "value": "G2-VAL"
+    },
+    {
+     "op": "add",
+     "field": "exit.criteria",
+     "value": "The validation evidence of the plan (G2-VAL) confirmed on the as-built robot"
+    }
+   ]
+  }
+ ],
+ "gate_criteria": {
+  "G1": [
+   {
+    "id": "G1-SC9",
+    "criterion": "The hazard log and the safety goals exist, with the safety plan approved",
+    "evidence": "the hazard log; the safety plan",
+    "threshold": "every mode and abnormal case of the charter covered",
+    "class": "M",
+    "card": "G1-07"
+   },
+   {
+    "id": "G1-SC10",
+    "criterion": "The baseline is under version control and tagged",
+    "evidence": "the repository; the tag",
+    "threshold": "a restore test passes",
+    "class": "M",
+    "card": "G1-08"
+   },
+   {
+    "id": "G1-SC11",
+    "criterion": "Every gate has a target date, and the critical path is known",
+    "evidence": "the schedule in the cards",
+    "threshold": "the owner accepts the dates",
+    "class": "D",
+    "card": "G1-10"
+   }
+  ],
+  "G2": [
+   {
+    "id": "G2-SC8",
+    "criterion": "The functional safety concept allocates every safety goal",
+    "evidence": "the functional safety concept",
+    "threshold": "100 % of the goals",
+    "class": "M",
+    "card": "G2-FSC"
+   },
+   {
+    "id": "G2-SC9",
+    "criterion": "Every estimated parameter has an owner and a closing test, and each simulation claim a credibility level",
+    "evidence": "the parameter register; the validation plan",
+    "threshold": "100 %",
+    "class": "M",
+    "card": "G2-VAL"
+   }
+  ],
+  "G3": [
+   {
+    "id": "G3-SC7",
+    "criterion": "The FMEA and the fault trees of the safety chain are done",
+    "evidence": "the FMEA and fault trees",
+    "threshold": "every gap closed or on a card",
+    "class": "M",
+    "card": "G3-FME"
+   }
+  ],
+  "G5": [
+   {
+    "id": "G5-SC5",
+    "criterion": "The safety case is assessed, and the owner accepts the residual risks",
+    "evidence": "the safety case; the assessment",
+    "threshold": "no Critical or Major finding open",
+    "class": "M",
+    "card": "V-05"
+   }
+  ]
+ },
+ "role": {
+  "role": "the functional safety engineer",
+  "agent": "shaddad-safety",
+  "title": "Functional safety engineer",
+  "does": "Leads the safety life cycle: the safety plan, the hazard log, the functional safety concept, the FMEA and fault trees, and the safety case. Sets the required performance levels; checks that each safety requirement is met and verified; works with the subsystem engineers who design the safety functions; escalates a safety gap to the owner.",
+  "never": "Designs or changes the safety functions it assesses: the subsystem engineers do, which keeps the assessment independent. Edits the models or the code. Closes a safety gap that needs a hardware change without the owner.",
+  "owns": "docs/safety/: the safety plan, the hazard log, the safety concept, the FMEA and fault trees, the safety case; the Safety Analysis Manager files"
+ }
+}

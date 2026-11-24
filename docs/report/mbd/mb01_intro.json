@@ -1,0 +1,167 @@
+{
+ "id": "mb01_intro",
+ "title": "Purpose, Scope and Sources",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "This report describes the Shaddad robot as it really is: the **XMachines MAX** tracked platform used by NASL, with its sprayer module, battery, traction drive and electronics. For each component it sets the real part and its specification next to the way the component is represented in the `Shaddad_UGV` MATLAB/Simulink/Simscape digital twin. It also explains the model-based design (MBD) method: one parameter source drives generated models, and tests check every change."
+  },
+  {
+   "type": "p",
+   "text": "The model was re-parameterised to the real robot on 27 October 2026 from the data received that day: the dimension and weight sheet of the platform, the traction-motor nameplate, the battery specification sheet and battery-box drawing, and photos of the sprayer pump and the electronics. Before that date the model used design estimates for a generic tracked carrier."
+  },
+  {
+   "type": "h2",
+   "text": "Source data"
+  },
+  {
+   "type": "table",
+   "id": "tab_sources",
+   "caption": "Source data received on 2026-10-27 (copies in `docs/hardware/source/`)",
+   "header": [
+    "Source",
+    "Content",
+    "Used for"
+   ],
+   "widths": [
+    30,
+    38,
+    32
+   ],
+   "rows": [
+    [
+     "Platform spec sheet (photo)",
+     "XMachines MAX: 1730 x 780 x 570 mm (robot with towed module), robot 220 kg, module 50 kg",
+     "Body size, total mass, sprayer-module mass"
+    ],
+    [
+     "Motor nameplate (photo)",
+     "Movematic BLDC, P/N 080-240-0x, 48 V DC, 750 W, 3000 rpm, S/N CFH0136",
+     "Motor ratings, gear ratio for the top speed"
+    ],
+    [
+     "Drive layout (user)",
+     "four motors, two per track on the front and rear sprockets; one dual-channel ESC per side",
+     "Drive architecture and mass layout"
+    ],
+    [
+     "Battery spec sheet (PDF)",
+     "13S15P Molicel P42A, 46.8 V, 63 Ah, about 3 kWh; BMS 120-150 A cont. / 200-300 A peak, CAN; charger 54.6 V 20 A; SB120 / SB50 / GX-12 connectors",
+     "Cell model, pack, BMS limits, charger"
+    ],
+    [
+     "Battery box drawing XMT-P1-E01-000 (PDF)",
+     "393 x 358.5 x 87 mm, 3 mm aluminium sheet",
+     "Pack mass split, position, thermal model"
+    ],
+    [
+     "Electronics photos",
+     "XT_PS V1.0 board with STM32 Nucleo-32, STM32 USB-C board, FT232RL USB-UART, ADS1115 ADC, LM2596 buck module, SPR V1.3 sprayer board",
+     "Controller architecture, I/O, supply rails (3-D renders in {sec:mb06_electronics})"
+    ],
+    [
+     "Sprayer photo",
+     "Brass piston pump with pressure regulator, 12 x 8 mm high-pressure hose",
+     "Sprayer hydraulics"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Value tags"
+  },
+  {
+   "type": "p",
+   "text": "Every number in the data sheet `docs/hardware/real_robot_components.md` and in this report carries one of two tags:"
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**[DATA]**: read from a source file (the file is named);",
+    "**[EST]**: estimated from the drawings, the photos or typical parts of this class. An [EST] value stays in the model until a measurement or a data sheet replaces it ({sec:mb10_open})."
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "The robot at a glance"
+  },
+  {
+   "type": "figure",
+   "file": "M16_real_components_collage.jpg",
+   "caption": "Real components of the robot: (a) traction motor nameplate, (b) battery in its XMachines box, (c) sprayer pump under the chassis; (d)-(f) electronics as 3-D renders built from the photos, because the boards are glued into their box (section 6)."
+  },
+  {
+   "type": "table",
+   "id": "tab_glance",
+   "caption": "Key specifications: real robot and model",
+   "header": [
+    "Item",
+    "Real robot",
+    "Model (params/)",
+    "Tag"
+   ],
+   "widths": [
+    24,
+    30,
+    32,
+    14
+   ],
+   "rows": [
+    [
+     "Platform",
+     "XMachines MAX, 2 rubber tracks, 3 road wheels per side",
+     "6-DOF body on 2 x 7 track contact points",
+     "[DATA]"
+    ],
+    [
+     "Size (robot)",
+     "1.00 x 0.78 x 0.57 m",
+     "gauge 0.60 m, track 0.13 x 0.75 m",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Mass",
+     "220 kg robot + 50 kg module",
+     "226 kg with the 1.0 kW drives; 276 / 316 kg with empty / full tank",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Drive",
+     "4 x Movematic BLDC 48 V, 750 W (two per track), dual ESC per side",
+     "4 x 1.0 kW BLDC (proposed upgrade), gearbox 20:1, one equivalent drive per side",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Top speed",
+     "about 5 km/h",
+     "1.41 m/s at 3000 rpm",
+     "[EST]"
+    ],
+    [
+     "Battery",
+     "13S15P Molicel P42A, 46.8 V, 63 Ah",
+     "Simscape Battery, 13 cell groups",
+     "[DATA]"
+    ],
+    [
+     "BMS / charger",
+     "150 / 250 A, CAN; charger 54.6 V 20 A",
+     "Shaddad_BMS, CC-CV charge",
+     "[DATA]"
+    ],
+    [
+     "Controller",
+     "XT_PS V1.0 board, STM32 Nucleo-32",
+     "Shaddad_MCU firmware model",
+     "[DATA]"
+    ],
+    [
+     "Implement",
+     "sprayer module, piston pump",
+     "Impl_Sprayer, 40 L tank, 8 nozzles",
+     "[DATA] / [EST]"
+    ]
+   ]
+  }
+ ]
+}

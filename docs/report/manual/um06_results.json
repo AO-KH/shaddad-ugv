@@ -1,0 +1,168 @@
+{
+ "id": "um06_results",
+ "title": "Look at the Results",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "`phase1_test_drive`, `phase1_live_drive` and `run_scenario` return a struct `res` and save the run in `work/results/<ID>_<date>_<time>.mat`. The most useful fields: `res.S` (all logged signals), `res.eval` (criteria), `res.ok`/`res.msg` (errors), `res.rtf` (speed) and `res.file` (saved log)."
+  },
+  {
+   "type": "h2",
+   "text": "Plot a run with plot_run"
+  },
+  {
+   "type": "p",
+   "text": "`plot_run` draws every logged signal of a run on six figure pages: **drive**, **tracks**, **battery**, **power**, **rc** and **nav**. It works for any saved run (live drive, test drive, scenarios); all six pages take about a minute."
+  },
+  {
+   "type": "code",
+   "text": "plot_run(res)                                 % the run just finished\nplot_run('L1')                                % newest live drive (also 'D1', 'S1', ... or a log name)\nplot_run(res, 'Pages', {'drive', 'battery'})  % some pages only\nplot_run(res, 'TimeRange', [200 236])         % zoom; the time axes of a page move together\nplot_run(res, 'Save', true)                   % PNGs in work/reports/plots_<log name>/"
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "Background bands on every time plot: **grey** = not armed (BOOT, SELFTEST, STANDBY), **yellow** = HOLD, **red** = ESTOP or FAULT.",
+    "A tile whose signals the run did not log, or that stay at zero in the chosen model variant, shows a note instead of an empty line.",
+    "Zoom and pan with the axes toolbar; all time plots of the page follow."
+   ]
+  },
+  {
+   "type": "p",
+   "text": "The figures below come from a 236 s live drive with the PS5 controller (log `L1_20261027_011510`): 141.7 m driven, top speed 2.0 m/s, no E-stop, no fault. The explanations say what each tile shows, what normal looks like and what this run shows."
+  },
+  {
+   "type": "h3",
+   "text": "Page 1 - drive: commands and response"
+  },
+  {
+   "type": "figure",
+   "file": "F38_plot_drive.png",
+   "caption": "plot_run page drive: operator commands, speed and yaw-rate command vs response, path on the field and MCU mode."
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**Operator commands:** throttle (CH2), steering (CH1) and the speed scale (CH7) as the MCU decoded them from the SBUS frames. Here the speed scale was 75 % from 20 s (L1) and 100 % from 212 s (R1).",
+    "**Forward speed:** MCU target = stick x speed scale x 2.0 m/s; MCU reference = the target after the acceleration ramp; actual = true speed of the robot. The actual speed should follow the reference within a fraction of a second. A lasting gap means slip, a torque limit (page 2) or a battery limit (page 3).",
+    "**Yaw rate:** the same for turning (+ = left), plus the gyro reading the MCU uses. In this run the gyro reading lags after hard turns and reads about -0.4 rad/s from 207 s while the robot drives straight; this is an open model issue (IMU model or gyro-bias correction) and goes with the IMU_FAULT warnings on page 5.",
+    "**Path:** true path, coloured by speed; green dot = start, red square = end. The dashed green line is the edge of the field map (60 x 60 m in world 1); red points are outside the map, as in the last 17 s of this run.",
+    "**MCU mode:** BOOT -> SELFTEST -> STANDBY within 1.1 s, MANUAL from arming (21.6 s) to the end. HOLD, ESTOP or FAULT would show here and as bands on all pages."
+   ]
+  },
+  {
+   "type": "h3",
+   "text": "Page 2 - tracks: tracks and motors"
+  },
+  {
+   "type": "figure",
+   "file": "F39_plot_tracks.png",
+   "caption": "plot_run page tracks: track speeds, motor speeds, torques and limits, slip and motor power."
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**Left / right track speed:** MCU reference (from the speed and yaw-rate references), measured (motor encoder), true belt speed and true ground speed. Belt faster than ground = slip. Negative values on one side are pivot turns.",
+    "**Motor speed:** ESC setpoint (dashed) and actual motor speed in rpm; 2.0 m/s track speed is about 3,600 rpm.",
+    "**Motor torque:** actual torque, MCU feed-forward torque (dotted) and the MCU motoring limit (dashed, 16 N m; lower when the MCU derates). Torque sitting on the limit means the robot cannot follow the reference.",
+    "**Slip and traction control:** true slip = (belt - ground) / belt speed. Short spikes at low speed and in pivot turns are normal; long slip above about 0.2 while driving means poor traction. Traction factor 1 = no traction-control action.",
+    "**Motor DC power and losses:** electrical input of each drive (negative = regenerative braking) and the losses in motor, ESC and gearbox (dotted)."
+   ]
+  },
+  {
+   "type": "h3",
+   "text": "Page 3 - battery: battery and energy"
+  },
+  {
+   "type": "figure",
+   "file": "F40_plot_battery.png",
+   "caption": "plot_run page battery: SOC, pack voltage, current and power, energy breakdown, cells, BMS limits and remaining energy."
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**State of charge:** true SOC, BMS estimate, BMS coulomb count and the value the MCU receives over CAN. The BMS estimate should stay within a few tenths of a percent of the truth. Here: 95.0 % -> 94.7 %.",
+    "**Pack voltage and current:** terminal voltage (truth and BMS) and pack current (+ = discharge). The voltage sags about 0.3 V at 45 A.",
+    "**Power:** pack power = traction (both motors) + LV electronics (about 60 W) + losses.",
+    "**Energy (cumulative):** energy out of the pack and where it went (traction, implement, LV electronics, losses). The title gives the total and the consumption per km: here 47.6 Wh, 336 Wh/km. Use it to compare drives, implements and soils.",
+    "**Cell voltages:** the 16 cell groups (thin grey) and the BMS minimum and maximum. A spread below about 10 mV means a balanced pack.",
+    "**Cell temperatures:** cells (thin), BMS maximum, pack air and ambient (45 degC in world 1).",
+    "**BMS current limits:** discharge limit (DCL, 300 A) and charge limit (CCL, 100 A); the pack current must stay below them. The BMS lowers them with the cell temperature, near the cell voltage limits and (discharge) at low SOC.",
+    "**Remaining energy and runtime:** BMS remaining energy (about 13 kWh) and the runtime at the present load (shown up to 24 h)."
+   ]
+  },
+  {
+   "type": "h3",
+   "text": "Page 4 - power: power electronics, safety chain and temperatures"
+  },
+  {
+   "type": "figure",
+   "file": "F41_plot_power.png",
+   "caption": "plot_run page power: low-voltage rails, HV bus, contactors and safety chain, conversion losses and temperatures."
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**Low-voltage rails:** 24 V, 24 V implement, 12 V, 5 V and 3.3 V. A rail below its minimum sets the RAIL_UV bit (page 5).",
+    "**HV bus and rail currents:** HV bus and pack voltage; 24 V and 12 V rail currents (about 1 A and 3.4 A here).",
+    "**Contactors, safety chain and power flags:** one row per flag; a thick bar = true (green = normal, red = a problem flag, blue = information), a thin grey line = false. Normal driving: key on, K1 closed, BMS HV ready, MCU power ready, all rails OK, safety relay and both E-stop channels OK. The red mark at 0 s is the start-up.",
+    "**Conversion losses:** DC/DC converter, power distribution unit (PDU) and the two drives.",
+    "**Temperatures:** motor windings, housings and ESCs, enclosure (MCU) and ambient. Here the windings warmed from 45 degC to 53-56 degC in 4 minutes of driving."
+   ]
+  },
+  {
+   "type": "h3",
+   "text": "Page 5 - rc: RC link and MCU health"
+  },
+  {
+   "type": "figure",
+   "file": "F42_plot_rc.png",
+   "caption": "plot_run page rc: all RC channels, radio link, SBUS counters, MCU fault and warning bits, command source and ESC states."
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**RC channels:** all 14 channels after SBUS decoding (-1 to 1 around each line). Sticks move continuously; switches show as steps: here CH6 arm at 21.6 s, CH7 speed scale steps and CH11 lift pulses (L2 / R2, no effect without an implement).",
+    "**Radio link quality and frame age:** link quality 0-1, lost single frames (red triangles; the simulated radio drops a few) and the age of the last good frame. Normal: below 30 ms. The MCU sets RC_LINK_LOST above 100 ms and stops the robot.",
+    "**SBUS counters:** frames accepted (here 16,821 in 236 s, one frame every 14 ms); frames rejected, frames skipped and MCU task overruns should stay at 0.",
+    "**MCU fault and warning bits:** only the bits that were set, by number and name (`docs/icd.md`). Orange = warning (condition present), red = fault (persisted or latched; stops or limits the robot). Here: start-up bits at 0 s (RC_LINK_LOST, RAIL_UV) and three short IMU_FAULT warnings at 214-225 s.",
+    "**Command source and ESC states:** command source 1 = RC after arming; both ESCs go READY -> OPERATION when armed. FAULT or STO here explains a robot that stops."
+   ]
+  },
+  {
+   "type": "h3",
+   "text": "Page 6 - nav: navigation and vehicle dynamics"
+  },
+  {
+   "type": "figure",
+   "file": "F43_plot_nav.png",
+   "caption": "plot_run page nav: navigation estimate vs truth, roll and pitch, accelerations, GNSS, navigation flags, slip and ground contact."
+  },
+  {
+   "type": "bullets",
+   "items": [
+    "**Position estimate error and heading:** navigation estimate vs truth. In Phase 1 the navigation fusion does not run, so the position tile shows a note and only the true heading is drawn; Phase 2 runs show both.",
+    "**Roll and pitch:** true attitude, the MCU estimate and the terrain grade. The fast preset has a kinematic chassis (true roll and pitch stay 0); the MCU estimate shows about +2 / -2 deg from the IMU. Tilt warnings start at 22 deg.",
+    "**Body accelerations:** MCU acceleration reference, true forward and lateral acceleration, raw IMU x and y (they include a gravity part when the IMU is tilted).",
+    "**GNSS:** fix type (4 = RTK fixed, reached after 4 s here), satellites (28) and the reported horizontal accuracy.",
+    "**Navigation flags:** as on page 4. In Phase 1 only GNSS heading valid is true.",
+    "**Track slip and ground contact:** true slip (plus the estimate in Phase 2) and the normal force on each track (constant 16.1 kN with the kinematic chassis; it changes on slopes with `'Fidelity','full'`)."
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Raw signals"
+  },
+  {
+   "type": "p",
+   "text": "For your own plots: signals are grouped, for example `truth` (true vehicle motion), `telem` (MCU telemetry such as `mode`, `v_target`), `power_truth` (battery) and `drive_truth` (motors). Each signal has `.t` and `.v`."
+  },
+  {
+   "type": "code",
+   "text": "S = res.S;                      % or: r = load(res.file); S = r.S;\nfieldnames(S.telem)             % list the signals of one group\nfigure; plot(S.truth.speed_fwd.t, S.truth.speed_fwd.v); grid on\nxlabel('time [s]'); ylabel('forward speed [m/s]');\nshaddad_replay_birdseye(res.file);   % replay the run from above"
+  },
+  {
+   "type": "p",
+   "text": "MCU mode numbers in `S.telem.mode`: 0 BOOT, 1 SELFTEST, 2 STANDBY, 3 MANUAL, 4 HOLD, 5 AUTO_START, 6 AUTO, 7 CTRL_STOP, 8 ESTOP, 9 FAULT."
+  }
+ ]
+}

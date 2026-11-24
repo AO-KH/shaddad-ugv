@@ -1,0 +1,190 @@
+{
+ "id": "mb11_appendix",
+ "title": "Appendix: Data and Sources",
+ "blocks": [
+  {
+   "type": "h2",
+   "text": "Mass table"
+  },
+  {
+   "type": "table",
+   "id": "tab_mass",
+   "caption": "Mass table of the robot (226 kg with the 1.0 kW drive units; 220 kg as built)",
+   "header": [
+    "Component",
+    "Mass [kg]",
+    "Note",
+    "Tag"
+   ],
+   "widths": [
+    36,
+    12,
+    38,
+    14
+   ],
+   "rows": [
+    [
+     "Chassis frame",
+     "81.7",
+     "remainder to the as-built 220 kg",
+     "[EST]"
+    ],
+    [
+     "Body panels, deck rail",
+     "20",
+     "",
+     "[EST]"
+    ],
+    [
+     "Track assembly, left / right",
+     "22 / 22",
+     "rubber track, sprocket, idler, 3 road wheels, frame",
+     "[EST]"
+    ],
+    [
+     "Drive units (4, one at each sprocket)",
+     "4 x 9.7",
+     "1.0 kW motor 4.5, gearbox 3.5, brake 0.5, half dual ESC 0.8, cables 0.4 (as built 4 x 8.2)",
+     "[EST]"
+    ],
+    [
+     "Battery pack 13S15P",
+     "18.5",
+     "cells 13.7, 3 mm aluminium box 3.3, BMS and busbars 1.5",
+     "[DATA] count / [EST]"
+    ],
+    [
+     "Electronics box",
+     "6",
+     "boards, enclosure, harness",
+     "[EST]"
+    ],
+    [
+     "Sensor mast (Phase 2)",
+     "3",
+     "GNSS / LiDAR, model addition",
+     "[EST]"
+    ],
+    [
+     "Cooling, misc.",
+     "4",
+     "",
+     "[EST]"
+    ],
+    [
+     "Front coupler / rear hitch",
+     "4 / 6",
+     "",
+     "[EST]"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Battery specification sheet"
+  },
+  {
+   "type": "figure",
+   "file": "M15_battery_spec_p1.png",
+   "caption": "Battery specification sheet, page 1 (source PDF)."
+  },
+  {
+   "type": "figure",
+   "file": "M15_battery_spec_p2.png",
+   "caption": "Battery specification sheet, page 2 (source PDF)."
+  },
+  {
+   "type": "h2",
+   "text": "Figures and how they are made"
+  },
+  {
+   "type": "table",
+   "id": "tab_figsrc",
+   "caption": "Figure sources (all in `docs/report/figs/`)",
+   "header": [
+    "Figures",
+    "Made by"
+   ],
+   "widths": [
+    34,
+    66
+   ],
+   "rows": [
+    [
+     "Photos M01-M03, drawing M10, spec pages M15",
+     "`figtools/prep_real_photos.py` from `docs/hardware/source/`"
+    ],
+    [
+     "Collage M16",
+     "`figtools/make_real_collage.py` (photos and label-free renders)"
+    ],
+    [
+     "Engineering figures M20-M29",
+     "`figtools/real_mbd_figs.m` from `P`, `scripts/motor_sizing.m`, the drive benches (M24) and the S8a logs (M29)"
+    ],
+    [
+     "Model views M30-M34",
+     "`figtools/real_mbd_screens.m` (Simscape Battery chart, model print, `Robot3DView`)"
+    ],
+    [
+     "Test-drive and scenario figures M42-M45",
+     "`figtools/real_mbd_figs.m` from the D1, S2 and S6a run logs of the Full suite"
+    ],
+    [
+     "Electronics renders M50-M55",
+     "`figtools/real_electronics_3d.m` (MATLAB 3-D, built from the electronics photos)"
+    ],
+    [
+     "Model screenshots F01, F07, F12, F14 and diagram F20",
+     "earlier Phase 1 report (structure unchanged by the re-parameterisation)"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "Data sheet with every value and its source: `docs/hardware/real_robot_components.md`. Source files: `docs/hardware/source/`."
+  },
+  {
+   "type": "h2",
+   "text": "Sign-off"
+  },
+  {
+   "type": "table",
+   "id": "tab_signoff",
+   "caption": "Sign-off",
+   "signoff": true,
+   "header": [
+    "Role",
+    "Name",
+    "Signature",
+    "Date"
+   ],
+   "widths": [
+    22,
+    30,
+    28,
+    20
+   ],
+   "rows": [
+    [
+     "Prepared by",
+     "[TBD - author]",
+     "",
+     ""
+    ],
+    [
+     "Reviewed by",
+     "[TBD - reviewer]",
+     "",
+     ""
+    ],
+    [
+     "Approved by",
+     "[TBD - approver]",
+     "",
+     ""
+    ]
+   ]
+  }
+ ]
+}

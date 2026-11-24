@@ -1,0 +1,2435 @@
+{
+ "about": "Test results the agentic test-and-fix workflow compares new runs against. Rebuilt by tools/agentic/test_baseline.py build; a class note says why its failures are known.",
+ "updated": "2026-11-15T15:59:02",
+ "classes": {
+  "tScenarios": {
+   "label": "tScenarios",
+   "total": 15,
+   "passed": 6,
+   "failed": 8,
+   "incomplete": 1,
+   "seconds": 971,
+   "log": "work/layout/logs/full_tScenarios.log",
+   "date": "2026-11-08",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). Most compare against old saved results in which the robot does not move; S4 no longer waits on implement-ready since the Nov 12 fix (switch 2 in S3 and S4), but still fails: the full rerun of Nov 13 (work/agentic/logs/20261112_1758_s4_full.log) pauses for NAV_DEGRADED in the rows, then for PLANNER_FAIL from 464 s, coverage 0.16; S3, S7wet and S7temp were never run. Nov 14, after the S4 fixes D66-D69 (work/agentic/logs/20261114_s4fix_s4_full.log): S4 completes in 13.7 min; it still fails only on S4.xte_max (0.252 m against 0.15 m, at the row entries after the headland turns). 2026-11-15 (critfix): testS6a/testS6b also miss the 1.5 s standstill criterion (1.61 s), a threshold coincidence (minimum 0.0100 vs 0.0101 m/s at +1.12 s, the same speed tail before and after; integration report); testS2 fails on v_mean and the T-INT-04 pitch as on 11-14.",
+   "updates": [
+    {
+     "log": "work/agentic/logs/20261115_critfix_integration_reruns.log",
+     "date": "2026-11-15",
+     "tests": 8
+    }
+   ]
+  },
+  "t_drive": {
+   "label": "t_drive",
+   "total": 34,
+   "passed": 29,
+   "failed": 0,
+   "incomplete": 5,
+   "seconds": 985,
+   "log": "work/agentic/logs/20261115_critfix_drive_full.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). Five tests stop as incomplete."
+  },
+  "t_elec_plant": {
+   "label": "t_elec_plant",
+   "total": 15,
+   "passed": 15,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 253,
+   "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). All pass."
+  },
+  "t_framework": {
+   "label": "t_framework without testBuildIdempotent",
+   "total": 29,
+   "passed": 25,
+   "failed": 3,
+   "incomplete": 2,
+   "seconds": 910,
+   "log": "work/layout/logs/full_t_framework.log",
+   "date": "2026-11-08",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). testFixedVsRef, testMonitorBoxOracle and testJoystickPlaceholder fail, testOperatingPointRestart is incomplete; testBuildIdempotent is left out (it rebuilds model files).",
+   "updates": [
+    {
+     "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+     "date": "2026-11-15",
+     "tests": 13
+    }
+   ]
+  },
+  "t_gnc_mission": {
+   "label": "t_gnc_mission",
+   "total": 32,
+   "passed": 30,
+   "failed": 2,
+   "incomplete": 0,
+   "seconds": 1048,
+   "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). testT12SocRth and testT7BypassTeb fail."
+  },
+  "t_gnc_tracking": {
+   "label": "t_gnc_tracking",
+   "total": 16,
+   "passed": 11,
+   "failed": 5,
+   "incomplete": 0,
+   "seconds": 153,
+   "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). Five tests compare against stale saved results."
+  },
+  "t_infra": {
+   "label": "t_infra without tags Build and Codegen",
+   "total": 20,
+   "passed": 14,
+   "failed": 6,
+   "incomplete": 1,
+   "seconds": 793,
+   "log": "work/layout/logs/full_t_infra.log",
+   "date": "2026-11-08",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). testStartup and testStartupFreshProcess count 87 Bus objects against 88; testSystemPhase1 and testSystemPhase2 fail on time on this laptop (Phase2 update 299 s against a 180 s limit); testRunScenarioRef and testPlantStructure fail; tags Build and Codegen are left out.",
+   "updates": [
+    {
+     "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+     "date": "2026-11-15",
+     "tests": 11
+    }
+   ]
+  },
+  "t_layout": {
+   "label": "t_layout Layout",
+   "total": 58,
+   "passed": 57,
+   "failed": 1,
+   "incomplete": 0,
+   "seconds": 420,
+   "log": "work/layout/logs/t17_t_layout.log",
+   "date": "2026-11-12",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). Refresh from the direct-links checks (work/layout/logs/t17_*): testTopStructure was rewritten for the direct links.",
+   "updates": [
+    {
+     "log": "work/agentic/logs/20261115_critfix_drive_full.log",
+     "date": "2026-11-15",
+     "tests": 1
+    },
+    {
+     "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+     "date": "2026-11-15",
+     "tests": 42
+    },
+    {
+     "log": "work/agentic/logs/20261115_critfix_mcu_p3_checks.log",
+     "date": "2026-11-15",
+     "tests": 1
+    }
+   ]
+  },
+  "t_mcu_control": {
+   "label": "t_mcu_control",
+   "total": 44,
+   "passed": 43,
+   "failed": 0,
+   "incomplete": 1,
+   "seconds": 720,
+   "log": "work/agentic/logs/20261115_critfix_mcu_p3_checks.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). testTEL27_NoPulses fails; testRebuildIdempotent needs its flag; testCodegenBlocked is left out (no STM32 tools). 2026-11-15 (critfix): testTEL27_NoPulses passes, by timing only (parking ends 0.09 s after its 6.0 s check) until R-64 fixes its sequence."
+  },
+  "t_mcu_platform": {
+   "label": "t_mcu_platform",
+   "total": 25,
+   "passed": 19,
+   "failed": 4,
+   "incomplete": 2,
+   "seconds": 377,
+   "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). Four tests fail; testSystemUpdate and testHwVariantCompile need T08_LONG; testCodegenBlocked is left out (no STM32 tools).",
+   "updates": [
+    {
+     "log": "work/agentic/logs/20261115_critfix_mcu_p3_checks.log",
+     "date": "2026-11-15",
+     "tests": 1
+    }
+   ]
+  },
+  "t_mf_equiv": {
+   "label": "t_mf_equiv",
+   "total": 6,
+   "passed": 6,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 24,
+   "log": "work/agentic/logs/20261115_critfix_tester_final.log",
+   "date": "2026-11-15"
+  },
+  "t_nav": {
+   "label": "t_nav",
+   "total": 27,
+   "passed": 27,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 3806,
+   "log": "work/layout/logs/full_t_nav.log",
+   "date": "2026-11-08",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). All pass.",
+   "updates": [
+    {
+     "log": "work/agentic/logs/20261114_s4fix_nav2_t_nav.log",
+     "date": "2026-11-14",
+     "tests": 14
+    },
+    {
+     "log": "work/agentic/logs/20261115_critfix_sensors-nav_t_nav_fast.log",
+     "date": "2026-11-15",
+     "tests": 13
+    },
+    {
+     "log": "work/agentic/logs/20261115_critfix_sensors-nav_t_nav_tNAV13_ImuLoss_d.log",
+     "date": "2026-11-15",
+     "tests": 1
+    },
+    {
+     "log": "work/agentic/logs/20261115_critfix_sensors-nav_t_nav_tNAV01_StaticAlignment_d.log",
+     "date": "2026-11-15",
+     "tests": 1
+    }
+   ]
+  },
+  "t_pack_bms": {
+   "label": "t_pack_bms",
+   "total": 27,
+   "passed": 18,
+   "failed": 9,
+   "incomplete": 2,
+   "seconds": 13664,
+   "log": "work/layout/logs/full_t_pack_bms.log",
+   "date": "2026-11-12",
+   "note": "Rerun of 2026-11-12 on the layout-cleanup models, whole class with its long tests and codegen_GenARM (3 h 48 min): the same status for every test as before the layout work (work/layout/logs/t6_before_t_pack_bms.log). capacity_T01, cccv_T09, hot_charge_T10, hot_charge_T10c_no_dock_air, soc_estimation_T11, balancing_T12, eol_endurance_T13_T13b_T17, eol_endurance_till_T13 and speed_T19 fail; precharge_bench was incomplete until 2026-11-12; it passes since T-PWR-03.g was decided as <= 30 ms (its 20 ms T04 assumption became a log line).",
+   "updates": [
+    {
+     "log": "work/agentic/logs/precharge_bench_after_g.log",
+     "date": "2026-11-12",
+     "tests": 1
+    }
+   ]
+  },
+  "t_perception": {
+   "label": "t_perception",
+   "total": 17,
+   "passed": 13,
+   "failed": 4,
+   "incomplete": 0,
+   "seconds": 256,
+   "log": "work/agentic/logs/20261115_critfix_sensors-nav_t_perception.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). tCompiledTiming fails on time on this laptop (44.3 ms against 40 ms); tFull3dCloud2Scan and tSM00_ScanMatchTiming fail; tCodegen is left out. On 2026-11-14 (nav round 2) tCompiledTiming passed at 26.2 ms, against 44.3 ms before, while the change adds matcher work, so it stays listed as failing: the time depends on the load of the PC. 2026-11-15 (critfix): tPER05_TebVfh fails because Windows Code Integrity now blocks MATLAB from loading the unsigned accelerator MEX work/tb_per_tebvfh_msf.mexw64 (environment, a Windows security setting that only the user may change); its bench does not use protectiveStop."
+  },
+  "t_power_plant": {
+   "label": "t_power_plant",
+   "total": 26,
+   "passed": 21,
+   "failed": 4,
+   "incomplete": 4,
+   "seconds": 1178,
+   "log": "work/layout/logs/full_t_power_plant.log",
+   "date": "2026-11-08",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). overload_T06b, energy_audit_1h, shift_cycle_T20_45C and shift_cycle_T20_50C fail and shift_bench_speed is incomplete (as in layout Task 6)."
+  },
+  "t_rc_link": {
+   "label": "t_rc_link",
+   "total": 13,
+   "passed": 13,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 39,
+   "log": "work/layout/logs/full_t_rc_link.log",
+   "date": "2026-11-07",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). All pass."
+  },
+  "t_row_driver": {
+   "label": "t_row_driver",
+   "total": 48,
+   "passed": 48,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 70,
+   "log": "work/layout/logs/full_t_row_driver.log",
+   "date": "2026-11-07",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). All pass."
+  },
+  "t_row_test_system": {
+   "label": "t_row_test_system",
+   "total": 3,
+   "passed": 3,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 386,
+   "log": "work/layout/logs/full_t_row_test_system.log",
+   "date": "2026-11-07",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). All pass."
+  },
+  "t_sensors": {
+   "label": "t_sensors",
+   "total": 19,
+   "passed": 15,
+   "failed": 3,
+   "incomplete": 3,
+   "seconds": 452,
+   "log": "work/agentic/logs/20261115_critfix_sensors-nav_t_sensors.log",
+   "date": "2026-11-15",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). tSEN03_LeverArm, tSEN07_PalmRow, tSEN13_Fast2dVsFull3d and tSEN14_Performance fail."
+  },
+  "t_structure": {
+   "label": "t_structure",
+   "total": 20,
+   "passed": 18,
+   "failed": 2,
+   "incomplete": 0,
+   "seconds": 512,
+   "log": "work/layout/logs/full_t_structure.log",
+   "date": "2026-11-07",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). T10_steady_turn and T19_performance fail."
+  },
+  "t_targets": {
+   "label": "t_targets without the four build tests",
+   "total": 17,
+   "passed": 14,
+   "failed": 0,
+   "incomplete": 3,
+   "seconds": 334,
+   "log": "work/layout/logs/full_t_targets.log",
+   "date": "2026-11-08",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). The three preflight tests are incomplete: no STM32 tools; the four build tests are left out."
+  },
+  "t_world": {
+   "label": "t_world without tag Build",
+   "total": 17,
+   "passed": 17,
+   "failed": 0,
+   "incomplete": 0,
+   "seconds": 25,
+   "log": "work/layout/logs/full_t_world.log",
+   "date": "2026-11-07",
+   "note": "Full run of 2026-11-11 on the layout-cleanup models (before the direct-links top level); every failure was already there before the layout work (work/layout/report.md). All pass."
+  }
+ },
+ "tests": {
+  "tScenarios/testS0": {
+   "status": "PASSED",
+   "seconds": 290.4
+  },
+  "tScenarios/testS1": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "tScenarios/testS2": {
+   "status": "FAILED",
+   "seconds": 554.9
+  },
+  "tScenarios/testS3": {
+   "status": "INCOMPLETE",
+   "seconds": 0.2
+  },
+  "tScenarios/testS4": {
+   "status": "FAILED",
+   "seconds": 1.1
+  },
+  "tScenarios/testS5": {
+   "status": "FAILED",
+   "seconds": 0.4
+  },
+  "tScenarios/testS6a": {
+   "status": "FAILED",
+   "seconds": 276.0
+  },
+  "tScenarios/testS6b": {
+   "status": "FAILED",
+   "seconds": 262.0
+  },
+  "tScenarios/testS6c": {
+   "status": "PASSED",
+   "seconds": 230.6
+  },
+  "tScenarios/testS6d": {
+   "status": "PASSED",
+   "seconds": 227.8
+  },
+  "tScenarios/testS7farm": {
+   "status": "FAILED",
+   "seconds": 0.3
+  },
+  "tScenarios/testS7temp": {
+   "status": "FAILED",
+   "seconds": 351.8
+  },
+  "tScenarios/testS7wet": {
+   "status": "FAILED",
+   "seconds": 613.5
+  },
+  "tScenarios/testS8a": {
+   "status": "PASSED",
+   "seconds": 220.5
+  },
+  "tScenarios/testS8b": {
+   "status": "PASSED",
+   "seconds": 182.7
+  },
+  "t_drive/testAlgebraicLoops": {
+   "status": "PASSED",
+   "seconds": 101.3
+  },
+  "t_drive/testCodecTypes": {
+   "status": "PASSED",
+   "seconds": 4.0
+  },
+  "t_drive/testCodegenBlocked": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_drive/testIdealVariant": {
+   "status": "PASSED",
+   "seconds": 19.8
+  },
+  "t_drive/testInterfaces": {
+   "status": "PASSED",
+   "seconds": 11.8
+  },
+  "t_drive/testT01_ramp": {
+   "status": "PASSED",
+   "seconds": 12.6
+  },
+  "t_drive/testT02_step": {
+   "status": "INCOMPLETE",
+   "seconds": 13.7
+  },
+  "t_drive/testT03_climb": {
+   "status": "PASSED",
+   "seconds": 18.6
+  },
+  "t_drive/testT04_stall": {
+   "status": "PASSED",
+   "seconds": 79.9
+  },
+  "t_drive/testT05_thermal": {
+   "status": "INCOMPLETE",
+   "seconds": 0.4
+  },
+  "t_drive/testT06_efficiency": {
+   "status": "INCOMPLETE",
+   "seconds": 0.3
+  },
+  "t_drive/testT07_regen": {
+   "status": "PASSED",
+   "seconds": 34.1
+  },
+  "t_drive/testT08_brakeHold": {
+   "status": "INCOMPLETE",
+   "seconds": 0.3
+  },
+  "t_drive/testT09_sto": {
+   "status": "PASSED",
+   "seconds": 31.0
+  },
+  "t_drive/testT10_canTimeout": {
+   "status": "PASSED",
+   "seconds": 13.0
+  },
+  "t_drive/testT11_undervoltage": {
+   "status": "PASSED",
+   "seconds": 17.5
+  },
+  "t_drive/testT12_contactor": {
+   "status": "PASSED",
+   "seconds": 13.0
+  },
+  "t_drive/testT13_energy": {
+   "status": "PASSED",
+   "seconds": 21.8
+  },
+  "t_drive/testT14_sides": {
+   "status": "PASSED",
+   "seconds": 43.8
+  },
+  "t_drive/testT15_focEquivalence": {
+   "status": "PASSED",
+   "seconds": 182.3
+  },
+  "t_drive/testT16_codec": {
+   "status": "PASSED",
+   "seconds": 5.9
+  },
+  "t_drive/testT17_speed": {
+   "status": "INCOMPLETE",
+   "seconds": 0.6
+  },
+  "t_drive/testT18_frameDrops": {
+   "status": "PASSED",
+   "seconds": 30.0
+  },
+  "t_drive/testT19_noRegen": {
+   "status": "PASSED",
+   "seconds": 15.4
+  },
+  "t_drive/testT19b_parkOnDescent": {
+   "status": "PASSED",
+   "seconds": 26.8
+  },
+  "t_drive/testT19c_disableOnDescent": {
+   "status": "PASSED",
+   "seconds": 27.8
+  },
+  "t_drive/testT19d_canTimeoutOnDescent": {
+   "status": "PASSED",
+   "seconds": 27.8
+  },
+  "t_drive/testT20_encoderFault": {
+   "status": "PASSED",
+   "seconds": 12.9
+  },
+  "t_drive/testT21_twoMass": {
+   "status": "PASSED",
+   "seconds": 106.6
+  },
+  "t_drive/testT22_stopProfile": {
+   "status": "PASSED",
+   "seconds": 13.6
+  },
+  "t_drive/testT23_gearbox": {
+   "status": "PASSED",
+   "seconds": 21.7
+  },
+  "t_drive/testT24_hvOffAfterSto": {
+   "status": "PASSED",
+   "seconds": 14.7
+  },
+  "t_drive/testTauScaleTrip": {
+   "status": "PASSED",
+   "seconds": 12.3
+  },
+  "t_drive/testVariantsCompile": {
+   "status": "PASSED",
+   "seconds": 49.1
+  },
+  "t_elec_plant/testActuatorsAndElecEnv": {
+   "status": "PASSED",
+   "seconds": 2.3
+  },
+  "t_elec_plant/testAdcCounts": {
+   "status": "PASSED",
+   "seconds": 4.0
+  },
+  "t_elec_plant/testCan1DropMaskBusoffReset": {
+   "status": "PASSED",
+   "seconds": 3.3
+  },
+  "t_elec_plant/testClosedLoopBenchNoAlgebraicLoops": {
+   "status": "PASSED",
+   "seconds": 52.0
+  },
+  "t_elec_plant/testCompanionHwVariantCompiles": {
+   "status": "PASSED",
+   "seconds": 23.1
+  },
+  "t_elec_plant/testCompanionRoundTrip": {
+   "status": "PASSED",
+   "seconds": 4.7
+  },
+  "t_elec_plant/testDiWord16Cases": {
+   "status": "PASSED",
+   "seconds": 13.6
+  },
+  "t_elec_plant/testElecHwLagsFrontEnd1ms": {
+   "status": "PASSED",
+   "seconds": 2.2
+  },
+  "t_elec_plant/testEnclosureThermal": {
+   "status": "PASSED",
+   "seconds": 31.1
+  },
+  "t_elec_plant/testInterfacesAndFiles": {
+   "status": "PASSED",
+   "seconds": 85.6
+  },
+  "t_elec_plant/testLinkDelayAndDrops": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_elec_plant/testLoopBreakersWithFeedthroughMcu": {
+   "status": "PASSED",
+   "seconds": 9.5
+  },
+  "t_elec_plant/testLvDemand4hDayAuto": {
+   "status": "PASSED",
+   "seconds": 15.3
+  },
+  "t_elec_plant/testMcuStatusValidTimeout": {
+   "status": "PASSED",
+   "seconds": 2.0
+  },
+  "t_elec_plant/testWatchdogResetAndDoGating": {
+   "status": "PASSED",
+   "seconds": 2.4
+  },
+  "t_framework/testBirdsEyeOffline": {
+   "status": "PASSED",
+   "seconds": 9.6
+  },
+  "t_framework/testConventionsFromResults": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_framework/testDeterminism": {
+   "status": "PASSED",
+   "seconds": 114.0
+  },
+  "t_framework/testEvalCriteria": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_framework/testFixedVsRef": {
+   "status": "FAILED",
+   "seconds": 98.5
+  },
+  "t_framework/testInterfaces": {
+   "status": "PASSED",
+   "seconds": 6.3
+  },
+  "t_framework/testJoystickPlaceholder": {
+   "status": "FAILED",
+   "seconds": 2.0
+  },
+  "t_framework/testKinematicOracle": {
+   "status": "PASSED",
+   "seconds": 18.6
+  },
+  "t_framework/testKpiCoverageXte": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_framework/testLoggingAndEnergyFromResults": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_framework/testLoggingManifest": {
+   "status": "PASSED",
+   "seconds": 2.7
+  },
+  "t_framework/testMonitorBoxOracle": {
+   "status": "FAILED",
+   "seconds": 41.4
+  },
+  "t_framework/testMonitorCollisionStop": {
+   "status": "PASSED",
+   "seconds": 7.4
+  },
+  "t_framework/testMonitorNaNAssertion": {
+   "status": "PASSED",
+   "seconds": 6.4
+  },
+  "t_framework/testMonitorSepDist": {
+   "status": "PASSED",
+   "seconds": 38.0
+  },
+  "t_framework/testNearestKBruteForce": {
+   "status": "PASSED",
+   "seconds": 6.5
+  },
+  "t_framework/testOperatingPointRestart": {
+   "status": "INCOMPLETE",
+   "seconds": 41.0
+  },
+  "t_framework/testRateAudit": {
+   "status": "PASSED",
+   "seconds": 33.8
+  },
+  "t_framework/testScenarioInputs": {
+   "status": "PASSED",
+   "seconds": 9.1
+  },
+  "t_framework/testSpeed": {
+   "status": "PASSED",
+   "seconds": 94.1
+  },
+  "t_framework/testSystemUpdate": {
+   "status": "PASSED",
+   "seconds": 79.4
+  },
+  "t_framework/testVariantMatrix(vm=r1)": {
+   "status": "PASSED",
+   "seconds": 106.9
+  },
+  "t_framework/testVariantMatrix(vm=r2)": {
+   "status": "PASSED",
+   "seconds": 36.9
+  },
+  "t_framework/testVariantMatrix(vm=r3)": {
+   "status": "PASSED",
+   "seconds": 32.5
+  },
+  "t_framework/testVariantMatrix(vm=r4)": {
+   "status": "PASSED",
+   "seconds": 41.2
+  },
+  "t_framework/testVariantMatrix(vm=r5)": {
+   "status": "PASSED",
+   "seconds": 56.7
+  },
+  "t_framework/testVariantMatrix(vm=r6)": {
+   "status": "PASSED",
+   "seconds": 50.0
+  },
+  "t_framework/testVariantMatrix(vm=r7)": {
+   "status": "PASSED",
+   "seconds": 44.5
+  },
+  "t_framework/testVariantMatrix(vm=r8)": {
+   "status": "PASSED",
+   "seconds": 37.8
+  },
+  "t_gnc_mission/testCodegenCompanion": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_gnc_mission/testInterfacesAndLoops": {
+   "status": "PASSED",
+   "seconds": 84.6
+  },
+  "t_gnc_mission/testPersonHoldMowerOff": {
+   "status": "PASSED",
+   "seconds": 19.3
+  },
+  "t_gnc_mission/testPersonHoldTillerOff": {
+   "status": "PASSED",
+   "seconds": 19.3
+  },
+  "t_gnc_mission/testReadyAndStartGating": {
+   "status": "PASSED",
+   "seconds": 19.9
+  },
+  "t_gnc_mission/testRejoinGlobalFallback": {
+   "status": "PASSED",
+   "seconds": 5.8
+  },
+  "t_gnc_mission/testResumeAlignHeading": {
+   "status": "PASSED",
+   "seconds": 4.6
+  },
+  "t_gnc_mission/testScanLostFsm": {
+   "status": "PASSED",
+   "seconds": 8.9
+  },
+  "t_gnc_mission/testScanLostInHold": {
+   "status": "PASSED",
+   "seconds": 20.8
+  },
+  "t_gnc_mission/testScanLostOnRow": {
+   "status": "PASSED",
+   "seconds": 10.7
+  },
+  "t_gnc_mission/testSsrPortContract": {
+   "status": "PASSED",
+   "seconds": 4.1
+  },
+  "t_gnc_mission/testT10Solar": {
+   "status": "PASSED",
+   "seconds": 126.0
+  },
+  "t_gnc_mission/testT11ClosedLoop": {
+   "status": "PASSED",
+   "seconds": 13.7
+  },
+  "t_gnc_mission/testT11ModeLogic": {
+   "status": "PASSED",
+   "seconds": 16.4
+  },
+  "t_gnc_mission/testT12SocRth": {
+   "status": "FAILED",
+   "seconds": 120.1
+  },
+  "t_gnc_mission/testT13RtkDegradation": {
+   "status": "PASSED",
+   "seconds": 12.6
+  },
+  "t_gnc_mission/testT14NavInvalid": {
+   "status": "PASSED",
+   "seconds": 9.6
+  },
+  "t_gnc_mission/testT15McuFrozen": {
+   "status": "PASSED",
+   "seconds": 9.2
+  },
+  "t_gnc_mission/testT16Geofence": {
+   "status": "PASSED",
+   "seconds": 9.8
+  },
+  "t_gnc_mission/testT17Stuck": {
+   "status": "PASSED",
+   "seconds": 11.0
+  },
+  "t_gnc_mission/testT18HybridAStar": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_gnc_mission/testT20Accelerator": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_gnc_mission/testT36DriveReadyDebounce": {
+   "status": "PASSED",
+   "seconds": 12.0
+  },
+  "t_gnc_mission/testT6SprayOff": {
+   "status": "PASSED",
+   "seconds": 10.6
+  },
+  "t_gnc_mission/testT6StaticBox": {
+   "status": "PASSED",
+   "seconds": 24.2
+  },
+  "t_gnc_mission/testT7BypassNoTeb": {
+   "status": "PASSED",
+   "seconds": 24.8
+  },
+  "t_gnc_mission/testT7BypassTeb": {
+   "status": "FAILED",
+   "seconds": 44.4
+  },
+  "t_gnc_mission/testT7NavSigmaPause": {
+   "status": "PASSED",
+   "seconds": 29.0
+  },
+  "t_gnc_mission/testT7NavSigmaRule": {
+   "status": "PASSED",
+   "seconds": 5.2
+  },
+  "t_gnc_mission/testT8Greenhouse": {
+   "status": "PASSED",
+   "seconds": 147.6
+  },
+  "t_gnc_mission/testT9PalmT20": {
+   "status": "PASSED",
+   "seconds": 207.2
+  },
+  "t_gnc_mission/testTillerAndStatus": {
+   "status": "PASSED",
+   "seconds": 14.9
+  },
+  "t_gnc_tracking/testCodegenCompanion": {
+   "status": "PASSED",
+   "seconds": 0.7
+  },
+  "t_gnc_tracking/testCompilerGreenhouse": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_gnc_tracking/testCompilerPalmSolar": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_gnc_tracking/testCompilerSlopeTurn": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_gnc_tracking/testEnvelopeVmax": {
+   "status": "PASSED",
+   "seconds": 10.1
+  },
+  "t_gnc_tracking/testInterfaces": {
+   "status": "PASSED",
+   "seconds": 15.3
+  },
+  "t_gnc_tracking/testMpcDesign": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_gnc_tracking/testSsrPortContract": {
+   "status": "PASSED",
+   "seconds": 1.7
+  },
+  "t_gnc_tracking/testT1StraightRow": {
+   "status": "PASSED",
+   "seconds": 24.5
+  },
+  "t_gnc_tracking/testT2RowEntry": {
+   "status": "FAILED",
+   "seconds": 10.4
+  },
+  "t_gnc_tracking/testT3DriftMPC": {
+   "status": "FAILED",
+   "seconds": 15.3
+  },
+  "t_gnc_tracking/testT3DriftPurePursuit": {
+   "status": "PASSED",
+   "seconds": 17.8
+  },
+  "t_gnc_tracking/testT3DriftStanley": {
+   "status": "FAILED",
+   "seconds": 14.1
+  },
+  "t_gnc_tracking/testT4HeadlandTurn": {
+   "status": "FAILED",
+   "seconds": 13.7
+  },
+  "t_gnc_tracking/testT5SpeedStep": {
+   "status": "FAILED",
+   "seconds": 11.8
+  },
+  "t_gnc_tracking/testTiltOmegaLimit": {
+   "status": "PASSED",
+   "seconds": 14.1
+  },
+  "t_infra/testBuildStubsIdempotent": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_infra/testCheckInterfaces": {
+   "status": "PASSED",
+   "seconds": 14.4
+  },
+  "t_infra/testCodegenSetsRebuild": {
+   "status": "PASSED",
+   "seconds": 39.5
+  },
+  "t_infra/testConfigSets": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_infra/testMcuInFaultWordAndClock": {
+   "status": "PASSED",
+   "seconds": 37.6
+  },
+  "t_infra/testModelsUseShaddadRef": {
+   "status": "PASSED",
+   "seconds": 3.9
+  },
+  "t_infra/testPlantInMapping": {
+   "status": "PASSED",
+   "seconds": 21.3
+  },
+  "t_infra/testPlantStructure": {
+   "status": "FAILED",
+   "seconds": 35.0
+  },
+  "t_infra/testPlantVariantMatrix": {
+   "status": "PASSED",
+   "seconds": 194.5
+  },
+  "t_infra/testProjectSetup": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_infra/testRunScenarioRef": {
+   "status": "FAILED",
+   "seconds": 28.4
+  },
+  "t_infra/testScnBaseInput": {
+   "status": "PASSED",
+   "seconds": 7.0
+  },
+  "t_infra/testScnMakeInput": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_infra/testShutdownDryRun": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_infra/testSim2sProfile": {
+   "status": "PASSED",
+   "seconds": 54.6
+  },
+  "t_infra/testStartup": {
+   "status": "FAILED",
+   "seconds": 4.3
+  },
+  "t_infra/testStartupFreshProcess": {
+   "status": "FAILED",
+   "seconds": 17.1
+  },
+  "t_infra/testSystemPhase1": {
+   "status": "FAILED",
+   "seconds": 195.9
+  },
+  "t_infra/testSystemPhase2": {
+   "status": "FAILED",
+   "seconds": 187.1
+  },
+  "t_infra/testSystemStructure": {
+   "status": "PASSED",
+   "seconds": 26.1
+  },
+  "t_layout/testAdjacentExchanges": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_layout/testBuildAllOrder": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_layout/testCheckClean": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_layout/testCheckCounts": {
+   "status": "PASSED",
+   "seconds": 0.7
+  },
+  "t_layout/testCheckLibraryPorts": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_layout/testCheckLineOverlaps": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_layout/testCheckPhysicalTrees": {
+   "status": "PASSED",
+   "seconds": 1.4
+  },
+  "t_layout/testCheckThroughBlocks": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_layout/testCheckVariantPorts": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_layout/testCloseSince": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_layout/testCloseSinceWarns": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_layout/testCompareDifferent": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_layout/testCompareIdentical": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_layout/testCompareMissing": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_layout/testDashboardBindings": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_layout/testDenseNoOverlap": {
+   "status": "PASSED",
+   "seconds": 1.7
+  },
+  "t_layout/testDeterministic": {
+   "status": "PASSED",
+   "seconds": 1.2
+  },
+  "t_layout/testDomainLayout(domain=bms_int)": {
+   "status": "PASSED",
+   "seconds": 16.4
+  },
+  "t_layout/testDomainLayout(domain=drive)": {
+   "status": "PASSED",
+   "seconds": 94.8
+  },
+  "t_layout/testDomainLayout(domain=electronics)": {
+   "status": "PASSED",
+   "seconds": 50.4
+  },
+  "t_layout/testDomainLayout(domain=gnc)": {
+   "status": "PASSED",
+   "seconds": 17.8
+  },
+  "t_layout/testDomainLayout(domain=mcu)": {
+   "status": "FAILED",
+   "seconds": 178.7
+  },
+  "t_layout/testDomainLayout(domain=nav)": {
+   "status": "PASSED",
+   "seconds": 16.2
+  },
+  "t_layout/testDomainLayout(domain=power)": {
+   "status": "PASSED",
+   "seconds": 47.8
+  },
+  "t_layout/testDomainLayout(domain=rc)": {
+   "status": "PASSED",
+   "seconds": 2.8
+  },
+  "t_layout/testDomainLayout(domain=sensors)": {
+   "status": "PASSED",
+   "seconds": 10.0
+  },
+  "t_layout/testDomainLayout(domain=structure)": {
+   "status": "PASSED",
+   "seconds": 19.6
+  },
+  "t_layout/testDomainLayout(domain=top)": {
+   "status": "PASSED",
+   "seconds": 30.6
+  },
+  "t_layout/testDomainsCoverAllFiles": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_layout/testFanGuard": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_layout/testFanStraight": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_layout/testFeedbackBelow": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_layout/testFingerprintControlPorts": {
+   "status": "PASSED",
+   "seconds": 1.8
+  },
+  "t_layout/testFingerprintKeepsPortProperties": {
+   "status": "PASSED",
+   "seconds": 6.5
+  },
+  "t_layout/testFlowLeftToRight": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_layout/testHelpersNextToWhatTheyServe": {
+   "status": "PASSED",
+   "seconds": 1.5
+  },
+  "t_layout/testLabelRoom": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_layout/testLayoutDiagramError": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_layout/testLayoutKeep": {
+   "status": "PASSED",
+   "seconds": 1.4
+  },
+  "t_layout/testLoggingOverrideLong": {
+   "status": "PASSED",
+   "seconds": 1.1
+  },
+  "t_layout/testLoggingPaths": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_layout/testNoColumn": {
+   "status": "PASSED",
+   "seconds": 1.9
+  },
+  "t_layout/testPhysicalBranch": {
+   "status": "PASSED",
+   "seconds": 1.9
+  },
+  "t_layout/testPickTooTall": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_layout/testPicksNextToConsumer": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_layout/testRiserGroupMoves": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_layout/testRiserLabelRoom": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_layout/testRiserOneTrack": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_layout/testSaveKeep": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_layout/testSaveLayoutSwitch": {
+   "status": "PASSED",
+   "seconds": 5.1
+  },
+  "t_layout/testScenarioLabelRoom": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_layout/testSourceChainsNextToConsumer": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_layout/testStaircaseRisers": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_layout/testSweepNeverSaves": {
+   "status": "PASSED",
+   "seconds": 4.5
+  },
+  "t_layout/testTargetsAllowance": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_layout/testTopStructure": {
+   "status": "PASSED",
+   "seconds": 3.3
+  },
+  "t_layout/testTrunksOwnTrack": {
+   "status": "PASSED",
+   "seconds": 1.7
+  },
+  "t_layout/testVariantStack": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_mcu_control/testAutoArbitration": {
+   "status": "PASSED",
+   "seconds": 5.5
+  },
+  "t_mcu_control/testBenchLoops": {
+   "status": "PASSED",
+   "seconds": 39.3
+  },
+  "t_mcu_control/testBlocksFirst": {
+   "status": "PASSED",
+   "seconds": 7.8
+  },
+  "t_mcu_control/testFilesAndDescriptions": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_mcu_control/testImplementAuxUnit": {
+   "status": "PASSED",
+   "seconds": 14.7
+  },
+  "t_mcu_control/testModeManagerBlock": {
+   "status": "PASSED",
+   "seconds": 5.4
+  },
+  "t_mcu_control/testPortsAsT08Stubs": {
+   "status": "PASSED",
+   "seconds": 4.2
+  },
+  "t_mcu_control/testRebuildIdempotent": {
+   "status": "INCOMPLETE",
+   "seconds": 0.5
+  },
+  "t_mcu_control/testShaddadMcuUpdate": {
+   "status": "PASSED",
+   "seconds": 68.3
+  },
+  "t_mcu_control/testTEL09_Mixer": {
+   "status": "PASSED",
+   "seconds": 23.8
+  },
+  "t_mcu_control/testTEL10_Shaper": {
+   "status": "PASSED",
+   "seconds": 8.7
+  },
+  "t_mcu_control/testTEL11_TorqueLimiter": {
+   "status": "PASSED",
+   "seconds": 15.2
+  },
+  "t_mcu_control/testTEL13_FaultBits": {
+   "status": "PASSED",
+   "seconds": 45.3
+  },
+  "t_mcu_control/testTEL14_Guards": {
+   "status": "PASSED",
+   "seconds": 2.2
+  },
+  "t_mcu_control/testTEL14_NeverActiveWithoutArm": {
+   "status": "PASSED",
+   "seconds": 7.9
+  },
+  "t_mcu_control/testTEL14_Transitions": {
+   "status": "PASSED",
+   "seconds": 1.5
+  },
+  "t_mcu_control/testTEL24_ThrottleAndLatency": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_mcu_control/testTEL25_PivotAndMixer": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_mcu_control/testTEL26_Failsafe": {
+   "status": "PASSED",
+   "seconds": 21.2
+  },
+  "t_mcu_control/testTEL27_NoPulses": {
+   "status": "PASSED",
+   "seconds": 18.5
+  },
+  "t_mcu_control/testTEL28_RemoteEstop": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_mcu_control/testTEL30_31_AutoStartOverride": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_mcu_control/testTEL32_CompanionTimeout": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_mcu_control/testTEL33_Tilt": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_mcu_control/testTEL34_WatchdogStall": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_mcu_control/testTEL35_FeedbackLoss": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_mcu_control/testTEL38_Traction": {
+   "status": "PASSED",
+   "seconds": 2.7
+  },
+  "t_mcu_control/testTEL40_EstopAtPowerUp": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_mcu_control/testTEL40_PowerUp": {
+   "status": "PASSED",
+   "seconds": 212.7
+  },
+  "t_mcu_control/testTEL41_RcLossInAuto": {
+   "status": "PASSED",
+   "seconds": 20.1
+  },
+  "t_mcu_control/testTEL42_CtrlStopNoTail": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_mcu_control/testTEL43_YawPauseNoCreep": {
+   "status": "PASSED",
+   "seconds": 47.9
+  },
+  "t_mcu_control/testTEL45_PivotEstopDecel": {
+   "status": "PASSED",
+   "seconds": 17.8
+  },
+  "t_mcu_control/testTEL46_TiltHoldOnInvalidImu": {
+   "status": "PASSED",
+   "seconds": 7.4
+  },
+  "t_mcu_control/testTEL47_StuckImuFault": {
+   "status": "PASSED",
+   "seconds": 20.9
+  },
+  "t_mcu_control/testTEL48_ClassBStopParks": {
+   "status": "PASSED",
+   "seconds": 18.8
+  },
+  "t_mcu_control/testTEL49_StopNotDecelerating": {
+   "status": "PASSED",
+   "seconds": 18.3
+  },
+  "t_mcu_control/testTEL50_BrakeNeverConfirms": {
+   "status": "PASSED",
+   "seconds": 18.3
+  },
+  "t_mcu_control/testTEL51_MotionInStandby": {
+   "status": "PASSED",
+   "seconds": 17.7
+  },
+  "t_mcu_control/testTEL52_CtrlStopTimeoutV0": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_mcu_control/testTEL53_RunawayParksAtOnce": {
+   "status": "PASSED",
+   "seconds": 18.0
+  },
+  "t_mcu_control/testTiltGateAndDerate": {
+   "status": "PASSED",
+   "seconds": 3.4
+  },
+  "t_mcu_control/testWatchdogUnit": {
+   "status": "PASSED",
+   "seconds": 3.1
+  },
+  "t_mcu_control/testYawLoop": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_mcu_platform/testAdcScaling": {
+   "status": "PASSED",
+   "seconds": 1.1
+  },
+  "t_mcu_platform/testBusOffInjection": {
+   "status": "PASSED",
+   "seconds": 15.8
+  },
+  "t_mcu_platform/testD37_Latency": {
+   "status": "FAILED",
+   "seconds": 32.4
+  },
+  "t_mcu_platform/testFilesAndBuildOutputs": {
+   "status": "FAILED",
+   "seconds": 1.4
+  },
+  "t_mcu_platform/testGyroBias": {
+   "status": "PASSED",
+   "seconds": 2.4
+  },
+  "t_mcu_platform/testGyroBiasPivot": {
+   "status": "PASSED",
+   "seconds": 2.5
+  },
+  "t_mcu_platform/testHwVariantCompile": {
+   "status": "INCOMPLETE",
+   "seconds": 1.2
+  },
+  "t_mcu_platform/testInterfaces": {
+   "status": "PASSED",
+   "seconds": 5.6
+  },
+  "t_mcu_platform/testModelStructure": {
+   "status": "FAILED",
+   "seconds": 10.8
+  },
+  "t_mcu_platform/testRemoteEstopValidFramesOnly": {
+   "status": "PASSED",
+   "seconds": 2.0
+  },
+  "t_mcu_platform/testSystemUpdate": {
+   "status": "INCOMPLETE",
+   "seconds": 0.2
+  },
+  "t_mcu_platform/testTEL01_BitExact2000": {
+   "status": "PASSED",
+   "seconds": 25.9
+  },
+  "t_mcu_platform/testTEL02_PhaseDriftDrops": {
+   "status": "PASSED",
+   "seconds": 43.9
+  },
+  "t_mcu_platform/testTEL03_ByteErrors": {
+   "status": "PASSED",
+   "seconds": 3.0
+  },
+  "t_mcu_platform/testTEL04_Sbus2Footers": {
+   "status": "PASSED",
+   "seconds": 70.6
+  },
+  "t_mcu_platform/testTEL05_LinkLost": {
+   "status": "PASSED",
+   "seconds": 13.9
+  },
+  "t_mcu_platform/testTEL06_LinkQuality": {
+   "status": "PASSED",
+   "seconds": 29.4
+  },
+  "t_mcu_platform/testTEL07_Expo": {
+   "status": "PASSED",
+   "seconds": 2.3
+  },
+  "t_mcu_platform/testTEL08_Debounce": {
+   "status": "PASSED",
+   "seconds": 20.4
+  },
+  "t_mcu_platform/testTEL15_Can1RoundTrip": {
+   "status": "PASSED",
+   "seconds": 11.3
+  },
+  "t_mcu_platform/testTEL15_Can2RoundTrip": {
+   "status": "PASSED",
+   "seconds": 7.2
+  },
+  "t_mcu_platform/testTelemetryStatusFrames": {
+   "status": "FAILED",
+   "seconds": 14.0
+  },
+  "t_mcu_platform/testTiltRampAcceleration": {
+   "status": "PASSED",
+   "seconds": 3.9
+  },
+  "t_mcu_platform/testTiltStatic": {
+   "status": "PASSED",
+   "seconds": 4.8
+  },
+  "t_mcu_platform/testUpdateRatesLoops": {
+   "status": "PASSED",
+   "seconds": 54.9
+  },
+  "t_mf_equiv/testDriveEscEquivalent": {
+   "status": "PASSED",
+   "seconds": 11.9
+  },
+  "t_mf_equiv/testDriveEscUsesFunctions": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_mf_equiv/testMonitorsEquivalent": {
+   "status": "PASSED",
+   "seconds": 7.7
+  },
+  "t_mf_equiv/testMonitorsUseFunctions": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_mf_equiv/testOneGainChanged": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_mf_equiv/testSameCopies": {
+   "status": "PASSED",
+   "seconds": 2.3
+  },
+  "t_nav/tAlgebraicLoops": {
+   "status": "PASSED",
+   "seconds": 40.0
+  },
+  "t_nav/tBlocks": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_nav/tCodegenCompanion": {
+   "status": "PASSED",
+   "seconds": 10.5
+  },
+  "t_nav/tCompileMultitasking": {
+   "status": "PASSED",
+   "seconds": 18.8
+  },
+  "t_nav/tEkfSystemObjectReset": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_nav/tFilesBuilt": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_nav/tGateUnit": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_nav/tGateVelAndSmGuard": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_nav/tHwGnssAcquisition": {
+   "status": "PASSED",
+   "seconds": 192.2
+  },
+  "t_nav/tInterfaces": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_nav/tJacobians": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_nav/tModeUnit": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_nav/tModeUnitImuLoss": {
+   "status": "PASSED",
+   "seconds": 0.9
+  },
+  "t_nav/tNAV01_StaticAlignment": {
+   "status": "PASSED",
+   "seconds": 58.9
+  },
+  "t_nav/tNAV02_LawnMower": {
+   "status": "PASSED",
+   "seconds": 1077.0
+  },
+  "t_nav/tNAV03_SlipStepAndGauge": {
+   "status": "PASSED",
+   "seconds": 414.2
+  },
+  "t_nav/tNAV04_PalmRow": {
+   "status": "PASSED",
+   "seconds": 40.3
+  },
+  "t_nav/tNAV05_GnssOutageTurn": {
+   "status": "PASSED",
+   "seconds": 30.5
+  },
+  "t_nav/tNAV06_OutlierRejection": {
+   "status": "PASSED",
+   "seconds": 33.3
+  },
+  "t_nav/tNAV07_GreenhouseLidar": {
+   "status": "PASSED",
+   "seconds": 46.8
+  },
+  "t_nav/tNAV08_LatencyCompensation": {
+   "status": "PASSED",
+   "seconds": 162.5
+  },
+  "t_nav/tNAV09_NavReset": {
+   "status": "PASSED",
+   "seconds": 197.4
+  },
+  "t_nav/tNAV10_EcompassInit": {
+   "status": "PASSED",
+   "seconds": 29.1
+  },
+  "t_nav/tNAV11_Slope": {
+   "status": "PASSED",
+   "seconds": 102.6
+  },
+  "t_nav/tNAV13_ImuLoss": {
+   "status": "PASSED",
+   "seconds": 150.6
+  },
+  "t_nav/tS7OutageWetSoil": {
+   "status": "PASSED",
+   "seconds": 25.6
+  },
+  "t_nav/tSlipHoldOutageFarm": {
+   "status": "PASSED",
+   "seconds": 25.6
+  },
+  "t_pack_bms/algebraic_loops": {
+   "status": "PASSED",
+   "seconds": 28.1
+  },
+  "t_pack_bms/balancing_T12": {
+   "status": "FAILED",
+   "seconds": 3129.0
+  },
+  "t_pack_bms/bms_single_precision": {
+   "status": "PASSED",
+   "seconds": 3.0
+  },
+  "t_pack_bms/bus_units_in_database": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_pack_bms/capacity_T01": {
+   "status": "FAILED",
+   "seconds": 4.1
+  },
+  "t_pack_bms/cccv_T09": {
+   "status": "FAILED",
+   "seconds": 1.8
+  },
+  "t_pack_bms/cell_T00": {
+   "status": "PASSED",
+   "seconds": 6.6
+  },
+  "t_pack_bms/codec_round_trip": {
+   "status": "PASSED",
+   "seconds": 4.9
+  },
+  "t_pack_bms/codegen_GenARM": {
+   "status": "PASSED",
+   "seconds": 40.6
+  },
+  "t_pack_bms/energy_integrals": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_pack_bms/eol_endurance_T13_T13b_T17": {
+   "status": "FAILED",
+   "seconds": 8862.9
+  },
+  "t_pack_bms/eol_endurance_till_T13": {
+   "status": "FAILED",
+   "seconds": 706.3
+  },
+  "t_pack_bms/generated_battery_interface": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_pack_bms/hot_charge_T10": {
+   "status": "FAILED",
+   "seconds": 1.1
+  },
+  "t_pack_bms/hot_charge_T10_fans_off": {
+   "status": "PASSED",
+   "seconds": 0.7
+  },
+  "t_pack_bms/hot_charge_T10b_dock_air": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_pack_bms/hot_charge_T10c_no_dock_air": {
+   "status": "FAILED",
+   "seconds": 0.6
+  },
+  "t_pack_bms/hppc_T02": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_pack_bms/interfaces": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_pack_bms/mcu_cmd_timeout": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_pack_bms/mode_manager_table": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_pack_bms/ov_T08": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_pack_bms/ov_forced_charge": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_pack_bms/overcurrent_T07": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_pack_bms/precharge_bench": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_pack_bms/soc_estimation_T11": {
+   "status": "FAILED",
+   "seconds": 0.6
+  },
+  "t_pack_bms/speed_T19": {
+   "status": "FAILED",
+   "seconds": 870.3
+  },
+  "t_perception/tCompiledTiming": {
+   "status": "FAILED",
+   "seconds": 54.7
+  },
+  "t_perception/tFull3dCloud2Scan": {
+   "status": "FAILED",
+   "seconds": 0.0
+  },
+  "t_perception/tInterfaces": {
+   "status": "PASSED",
+   "seconds": 20.5
+  },
+  "t_perception/tObstacleTableFull": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_perception/tOccMapReference": {
+   "status": "PASSED",
+   "seconds": 8.7
+  },
+  "t_perception/tPER01_Obstacle": {
+   "status": "PASSED",
+   "seconds": 19.7
+  },
+  "t_perception/tPER02_ProtectiveField": {
+   "status": "PASSED",
+   "seconds": 5.2
+  },
+  "t_perception/tPER02b_ImplementField": {
+   "status": "PASSED",
+   "seconds": 16.7
+  },
+  "t_perception/tPER03_RowDetection": {
+   "status": "PASSED",
+   "seconds": 27.6
+  },
+  "t_perception/tPER04_LocalMap": {
+   "status": "PASSED",
+   "seconds": 5.1
+  },
+  "t_perception/tPER05_TebVfh": {
+   "status": "FAILED",
+   "seconds": 24.4
+  },
+  "t_perception/tPER07_ScanLost": {
+   "status": "PASSED",
+   "seconds": 8.9
+  },
+  "t_perception/tSM00_ScanMatchTiming": {
+   "status": "FAILED",
+   "seconds": 5.0
+  },
+  "t_perception/tSM01_AlongAisleHonesty": {
+   "status": "PASSED",
+   "seconds": 21.1
+  },
+  "t_perception/tScanFilterBitExact": {
+   "status": "PASSED",
+   "seconds": 2.5
+  },
+  "t_perception/tScanMatchGreenhouse": {
+   "status": "PASSED",
+   "seconds": 25.7
+  },
+  "t_perception/tSectorsAndObstacles": {
+   "status": "PASSED",
+   "seconds": 10.3
+  },
+  "t_power_plant/algebraic_loops": {
+   "status": "PASSED",
+   "seconds": 33.9
+  },
+  "t_power_plant/compiles_all_variants": {
+   "status": "PASSED",
+   "seconds": 95.2
+  },
+  "t_power_plant/dead_bus_T18": {
+   "status": "PASSED",
+   "seconds": 11.5
+  },
+  "t_power_plant/dead_bus_coastdown": {
+   "status": "PASSED",
+   "seconds": 38.1
+  },
+  "t_power_plant/ecu_can_timeout": {
+   "status": "PASSED",
+   "seconds": 10.9
+  },
+  "t_power_plant/energy_audit_1h": {
+   "status": "FAILED",
+   "seconds": 303.5
+  },
+  "t_power_plant/estop_T04": {
+   "status": "PASSED",
+   "seconds": 13.1
+  },
+  "t_power_plant/estop_ch2_stuck": {
+   "status": "PASSED",
+   "seconds": 17.5
+  },
+  "t_power_plant/impl_codec_round_trip": {
+   "status": "PASSED",
+   "seconds": 1.1
+  },
+  "t_power_plant/interfaces": {
+   "status": "PASSED",
+   "seconds": 5.5
+  },
+  "t_power_plant/lv_steps_T05": {
+   "status": "PASSED",
+   "seconds": 2.6
+  },
+  "t_power_plant/lv_uvlo_rail_ok": {
+   "status": "PASSED",
+   "seconds": 1.7
+  },
+  "t_power_plant/mower_T14": {
+   "status": "PASSED",
+   "seconds": 12.5
+  },
+  "t_power_plant/no_matlab_function_blocks": {
+   "status": "PASSED",
+   "seconds": 12.3
+  },
+  "t_power_plant/overload_T06b": {
+   "status": "FAILED",
+   "seconds": 106.6
+  },
+  "t_power_plant/precharge_T03": {
+   "status": "PASSED",
+   "seconds": 11.8
+  },
+  "t_power_plant/precharge_fail_T03b": {
+   "status": "PASSED",
+   "seconds": 12.9
+  },
+  "t_power_plant/rearm_blocked_by_estop": {
+   "status": "PASSED",
+   "seconds": 8.7
+  },
+  "t_power_plant/rearm_button_before_do0": {
+   "status": "PASSED",
+   "seconds": 8.9
+  },
+  "t_power_plant/rearm_powerup": {
+   "status": "PASSED",
+   "seconds": 10.9
+  },
+  "t_power_plant/shift_bench_speed": {
+   "status": "INCOMPLETE",
+   "seconds": 1.8
+  },
+  "t_power_plant/shift_cycle_T20_45C": {
+   "status": "FAILED",
+   "seconds": 204.4
+  },
+  "t_power_plant/shift_cycle_T20_50C": {
+   "status": "FAILED",
+   "seconds": 204.9
+  },
+  "t_power_plant/short_T06": {
+   "status": "PASSED",
+   "seconds": 11.4
+  },
+  "t_power_plant/sprayer_T16": {
+   "status": "PASSED",
+   "seconds": 23.0
+  },
+  "t_power_plant/tiller_T15": {
+   "status": "PASSED",
+   "seconds": 13.1
+  },
+  "t_rc_link/byte_errors": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_rc_link/bytes_per_tick": {
+   "status": "PASSED",
+   "seconds": 1.9
+  },
+  "t_rc_link/encoder_bit_exact_full_range": {
+   "status": "PASSED",
+   "seconds": 6.4
+  },
+  "t_rc_link/failsafe_modes": {
+   "status": "PASSED",
+   "seconds": 2.1
+  },
+  "t_rc_link/interface_and_structure": {
+   "status": "PASSED",
+   "seconds": 1.8
+  },
+  "t_rc_link/line_silent": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_rc_link/link_2000_random_frames": {
+   "status": "PASSED",
+   "seconds": 6.8
+  },
+  "t_rc_link/real_time_factor": {
+   "status": "PASSED",
+   "seconds": 13.1
+  },
+  "t_rc_link/ref_codec_known_vectors": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_rc_link/ref_codec_roundtrip": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_rc_link/transmitter_mapping": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_rc_link/tx_to_first_byte_latency": {
+   "status": "PASSED",
+   "seconds": 1.1
+  },
+  "t_rc_link/uart_line_unit": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_row_driver/testAbortOnFault": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_row_driver/testArmTimeout": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testArmsThenDrives": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_row_driver/testCountRows": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testCountRowsPasses": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testDefaultsNumeric": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_row_driver/testDeterministic": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_row_driver/testDryRunJob": {
+   "status": "PASSED",
+   "seconds": 2.2
+  },
+  "t_row_driver/testEndSequence": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_row_driver/testFastOptional": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_row_driver/testFieldPage": {
+   "status": "PASSED",
+   "seconds": 5.5
+  },
+  "t_row_driver/testFieldPageIncomplete": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_row_driver/testFieldPageOffset": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_row_driver/testInputValidation": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testOddRowsSecondPass": {
+   "status": "PASSED",
+   "seconds": 1.4
+  },
+  "t_row_driver/testOperatorCmdFields": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testParamsNumeric": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_row_driver/testPlotRunFieldEdge": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_row_driver/testPlotRunFolderFig": {
+   "status": "PASSED",
+   "seconds": 34.9
+  },
+  "t_row_driver/testPlotRunNote": {
+   "status": "PASSED",
+   "seconds": 3.6
+  },
+  "t_row_driver/testPlotRunSaveOnly": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_row_driver/testPrmFields": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_row_driver/testReactionDelay": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_row_driver/testRowsGeometry": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_row_driver/testSecondRunRefused": {
+   "status": "PASSED",
+   "seconds": 3.0
+  },
+  "t_row_driver/testSprayerSwitch": {
+   "status": "PASSED",
+   "seconds": 0.8
+  },
+  "t_row_driver/testStaysOnRows": {
+   "status": "PASSED",
+   "seconds": 2.3
+  },
+  "t_row_driver/testSteerTableLookups": {
+   "status": "PASSED",
+   "seconds": 0.3
+  },
+  "t_row_driver/testStickRate": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_row_driver/testStickTables": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_row_driver/testSummaryBits": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testSummaryEmptyLog": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testSummaryEndReason": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_row_driver/testSummaryFields": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testSummaryFigures": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_row_driver/testSummaryNoArming": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testSummaryRows": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testSummaryText": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testTankEmptyPumpOff": {
+   "status": "PASSED",
+   "seconds": 1.5
+  },
+  "t_row_driver/testTankFullAsBefore": {
+   "status": "PASSED",
+   "seconds": 1.4
+  },
+  "t_row_driver/testTankSprayerOff": {
+   "status": "PASSED",
+   "seconds": 1.0
+  },
+  "t_row_driver/testTankStepRule": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_row_driver/testTimeEnd": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_row_driver/testUTurns": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_row_driver/testWindow": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_row_driver/testWobble": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_row_driver/testWorkerError": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_row_driver/testWorld7Contract": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_row_test_system/testFastPreset": {
+   "status": "PASSED",
+   "seconds": 95.4
+  },
+  "t_row_test_system/testShortRun": {
+   "status": "PASSED",
+   "seconds": 200.4
+  },
+  "t_row_test_system/testTankEmpty": {
+   "status": "PASSED",
+   "seconds": 89.9
+  },
+  "t_sensors/tAlgebraicLoops": {
+   "status": "PASSED",
+   "seconds": 3.8
+  },
+  "t_sensors/tCodegenAcq": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_sensors/tDynamicObstacle": {
+   "status": "PASSED",
+   "seconds": 14.9
+  },
+  "t_sensors/tImuFaults": {
+   "status": "PASSED",
+   "seconds": 14.4
+  },
+  "t_sensors/tInterfaces": {
+   "status": "PASSED",
+   "seconds": 31.3
+  },
+  "t_sensors/tOdometry": {
+   "status": "PASSED",
+   "seconds": 14.4
+  },
+  "t_sensors/tSEN01_ImuStaticLevel": {
+   "status": "PASSED",
+   "seconds": 61.3
+  },
+  "t_sensors/tSEN02_SignConvention": {
+   "status": "PASSED",
+   "seconds": 36.5
+  },
+  "t_sensors/tSEN03_LeverArm": {
+   "status": "FAILED",
+   "seconds": 16.4
+  },
+  "t_sensors/tSEN04_TemperatureRamp": {
+   "status": "PASSED",
+   "seconds": 17.5
+  },
+  "t_sensors/tSEN05_GnssOpenSky": {
+   "status": "PASSED",
+   "seconds": 30.6
+  },
+  "t_sensors/tSEN06_GnssLatency": {
+   "status": "PASSED",
+   "seconds": 14.9
+  },
+  "t_sensors/tSEN07_PalmRow": {
+   "status": "INCOMPLETE",
+   "seconds": 22.6
+  },
+  "t_sensors/tSEN08_Greenhouse": {
+   "status": "PASSED",
+   "seconds": 14.3
+  },
+  "t_sensors/tSEN11_LidarGeometry": {
+   "status": "PASSED",
+   "seconds": 13.9
+  },
+  "t_sensors/tSEN12_GreenhouseFilm": {
+   "status": "PASSED",
+   "seconds": 14.7
+  },
+  "t_sensors/tSEN13_Fast2dVsFull3d": {
+   "status": "FAILED",
+   "seconds": 14.3
+  },
+  "t_sensors/tSEN14_Performance": {
+   "status": "FAILED",
+   "seconds": 80.1
+  },
+  "t_sensors/tSprayVision": {
+   "status": "PASSED",
+   "seconds": 34.9
+  },
+  "t_structure/T10_steady_turn": {
+   "status": "FAILED",
+   "seconds": 4.2
+  },
+  "t_structure/T12_mower": {
+   "status": "PASSED",
+   "seconds": 4.1
+  },
+  "t_structure/T12_sprayer": {
+   "status": "PASSED",
+   "seconds": 45.5
+  },
+  "t_structure/T16_frames": {
+   "status": "PASSED",
+   "seconds": 17.3
+  },
+  "t_structure/T16_frames_slope": {
+   "status": "PASSED",
+   "seconds": 8.2
+  },
+  "t_structure/T18_hifi_vs_lofi": {
+   "status": "PASSED",
+   "seconds": 146.4
+  },
+  "t_structure/T18b_closed_loop": {
+   "status": "PASSED",
+   "seconds": 129.2
+  },
+  "t_structure/T19_performance": {
+   "status": "FAILED",
+   "seconds": 34.8
+  },
+  "t_structure/T1_mass_properties": {
+   "status": "PASSED",
+   "seconds": 0.4
+  },
+  "t_structure/T1b_initial_state": {
+   "status": "PASSED",
+   "seconds": 1.3
+  },
+  "t_structure/T2_static_settle_asphalt": {
+   "status": "PASSED",
+   "seconds": 3.1
+  },
+  "t_structure/T4_straight_slip": {
+   "status": "PASSED",
+   "seconds": 14.2
+  },
+  "t_structure/T5_torque_step": {
+   "status": "PASSED",
+   "seconds": 2.1
+  },
+  "t_structure/T7_climb_20deg": {
+   "status": "PASSED",
+   "seconds": 4.1
+  },
+  "t_structure/T7b_turn_on_slopes": {
+   "status": "PASSED",
+   "seconds": 17.3
+  },
+  "t_structure/T8_parking": {
+   "status": "PASSED",
+   "seconds": 20.3
+  },
+  "t_structure/T9_spot_turn": {
+   "status": "PASSED",
+   "seconds": 2.5
+  },
+  "t_structure/interfaces": {
+   "status": "PASSED",
+   "seconds": 4.9
+  },
+  "t_structure/mf_bodies_current": {
+   "status": "PASSED",
+   "seconds": 0.7
+  },
+  "t_structure/variants_loops_rates": {
+   "status": "PASSED",
+   "seconds": 52.0
+  },
+  "t_targets/testDesignEstimate": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_targets/testFdcanRatesConsistent": {
+   "status": "PASSED",
+   "seconds": 1.6
+  },
+  "t_targets/testG474": {
+   "status": "PASSED",
+   "seconds": 0.5
+  },
+  "t_targets/testH743Fdcan": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_targets/testH743I2cAdc": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_targets/testH743Sbus": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_targets/testH743TimersGpioWatchdog": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_targets/testHwBringupDoc": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_targets/testIocGenerated": {
+   "status": "PASSED",
+   "seconds": 8.2
+  },
+  "t_targets/testIocStructure": {
+   "status": "PASSED",
+   "seconds": 2.0
+  },
+  "t_targets/testPeripheralsPlan": {
+   "status": "PASSED",
+   "seconds": 17.5
+  },
+  "t_targets/testPreflightBMS": {
+   "status": "INCOMPLETE",
+   "seconds": 0.5
+  },
+  "t_targets/testPreflightCompanion": {
+   "status": "INCOMPLETE",
+   "seconds": 2.8
+  },
+  "t_targets/testPreflightMCU": {
+   "status": "INCOMPLETE",
+   "seconds": 0.7
+  },
+  "t_targets/testProducts": {
+   "status": "PASSED",
+   "seconds": 1.5
+  },
+  "t_targets/testRegisterSetupPlan": {
+   "status": "PASSED",
+   "seconds": 287.5
+  },
+  "t_targets/testTargetSets": {
+   "status": "PASSED",
+   "seconds": 8.7
+  },
+  "t_world/testBenchCanopyAndSoil": {
+   "status": "PASSED",
+   "seconds": 1.8
+  },
+  "t_world/testBenchConstantTamb": {
+   "status": "PASSED",
+   "seconds": 7.0
+  },
+  "t_world/testBenchDiurnal": {
+   "status": "PASSED",
+   "seconds": 4.7
+  },
+  "t_world/testBenchDock": {
+   "status": "PASSED",
+   "seconds": 3.5
+  },
+  "t_world/testBenchLoopsAndRates": {
+   "status": "PASSED",
+   "seconds": 0.7
+  },
+  "t_world/testBenchOverride": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_world/testBuildTime": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_world/testDeterministic": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_world/testGreenhouse": {
+   "status": "PASSED",
+   "seconds": 0.1
+  },
+  "t_world/testPalmFarm": {
+   "status": "PASSED",
+   "seconds": 0.2
+  },
+  "t_world/testParamsAssemblyAllWorlds": {
+   "status": "PASSED",
+   "seconds": 0.6
+  },
+  "t_world/testPlot": {
+   "status": "PASSED",
+   "seconds": 5.1
+  },
+  "t_world/testSingleSourceWithSensors": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_world/testSoilBlending": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_world/testSoilStrips": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_world/testSolarFarm": {
+   "status": "PASSED",
+   "seconds": 0.0
+  },
+  "t_world/testWorldCheckAllIds": {
+   "status": "PASSED",
+   "seconds": 0.3
+  }
+ }
+}

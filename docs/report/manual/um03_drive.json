@@ -1,0 +1,114 @@
+{
+ "id": "um03_drive",
+ "title": "Drive the Robot with phase1_test_drive",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "`phase1_test_drive` drives the robot with the simulated RC transmitter from a simple plan, then prints a summary, shows a results figure and plays a bird's-eye replay. It switches the transmitter on, arms the robot and puts it in MANUAL mode automatically."
+  },
+  {
+   "type": "h2",
+   "text": "The plan"
+  },
+  {
+   "type": "p",
+   "text": "A plan is an N x 3 matrix `[t v w]`: from time `t` [s], hold forward speed `v` [m/s] and yaw rate `w` [rad/s] until the next row. Positive `v` is forward, positive `w` is a **left** turn. Limits: |v| <= 2.0 m/s and |w| <= 1.0 rad/s (larger values are clipped)."
+  },
+  {
+   "type": "table",
+   "id": "tab_plan",
+   "caption": "Default demo plan",
+   "header": [
+    "t [s]",
+    "v [m/s]",
+    "w [rad/s]",
+    "Maneuver"
+   ],
+   "widths": [
+    14,
+    14,
+    16,
+    56
+   ],
+   "rows": [
+    [
+     "0",
+     "0",
+     "0",
+     "Power-up, arm at 2 s"
+    ],
+    [
+     "4",
+     "0.8",
+     "0",
+     "Straight ahead"
+    ],
+    [
+     "14",
+     "0.8",
+     "0.3",
+     "Left arc"
+    ],
+    [
+     "24",
+     "1.2",
+     "0",
+     "Faster straight"
+    ],
+    [
+     "34",
+     "0.5",
+     "-0.4",
+     "Right arc"
+    ],
+    [
+     "44",
+     "0",
+     "0.5",
+     "Pivot turn in place"
+    ],
+    [
+     "50",
+     "-0.4",
+     "0",
+     "Reverse"
+    ],
+    [
+     "56",
+     "0",
+     "0",
+     "Stop (run ends at 64 s)"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Examples"
+  },
+  {
+   "type": "code",
+   "text": "res = phase1_test_drive();                                  % default demo\nplan = [0 0 0;  4 1.0 0;  15 1.0 0.4;  25 0 0];\nres = phase1_test_drive('Plan', plan);                      % your own drive\nres = phase1_test_drive('EStopAt', 20, 'ResetAt', 25);      % remote E-stop, then reset\nres = phase1_test_drive('RCLoss', [20 23]);                 % radio link lost 20-23 s\nres = phase1_test_drive('Implement', 1);                    % with the mower (2 tiller, 3 sprayer)\nres = phase1_test_drive('Plan', plan, 'StopTime', 40, 'Replay', false);"
+  },
+  {
+   "type": "p",
+   "text": "For the E-stop and RC-loss options the script also performs the operator recovery: it centres the sticks, presses reset and cycles the arm switch, so the plan resumes afterwards."
+  },
+  {
+   "type": "h2",
+   "text": "Reading the output"
+  },
+  {
+   "type": "p",
+   "text": "The printed summary gives the MCU mode sequence (expected: BOOT -> SELFTEST -> STANDBY -> MANUAL at about 2 s), the distance and maximum speed, the battery use, the SBUS frame counts (rejected frames should be 0) and collisions. The figure ({fig:F23_d1_dashboard.png}) shows command vs actual speed and yaw rate, the path, the left/right track speeds, and the battery current with the MCU mode."
+  },
+  {
+   "type": "figure",
+   "file": "F23_d1_dashboard.png",
+   "caption": "Results figure of the default demo: speed and yaw rate follow the RC commands within about 0.02 m/s and 0.01 rad/s; 34.8 m driven, 0 rejected SBUS frames."
+  },
+  {
+   "type": "p",
+   "text": "The run log is saved in `work/results/D1_<date>_<time>.mat` (path in `res.file`). The default 64 s drive takes about 4-6 min, because the simulation runs at about 0.3-0.5 times real time."
+  }
+ ]
+}

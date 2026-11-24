@@ -1,0 +1,374 @@
+{
+ "about": "The Shaddad document map and index (NASL-EMS-HBK-001 section 8.5, Appendix A). The existing documents keep their content and get a document type and number (the owner's choice of 2026-11-15, \"Closed cards + doc map\"). New controlled documents carry their header and are listed by: python tools/reports/build_document.py --index.",
+ "updated": "2026-11-23",
+ "documents": [
+  {
+   "doc_no": "NASL-EMS-HBK-001",
+   "type": "HBK",
+   "title": "Engineering Handbook",
+   "source": "framework/handbook/engineering_handbook.md",
+   "status": "Approved (v1.1)",
+   "note": "company level"
+  },
+  {
+   "doc_no": "NASL-EMS-PRO-001",
+   "type": "PRO",
+   "title": "Procedure: making an engineering report",
+   "source": "framework/procedures/engineering_report_procedure.md",
+   "status": "Issued (v1.0)",
+   "note": "company level; the owner's request of 2026-11-16; the PRO type joins the handbook at v1.2 (G1-09)"
+  },
+  {
+   "doc_no": "NASL-SHD-CHR-001",
+   "type": "CHR",
+   "title": "Project charter",
+   "source": "docs/project/charter.md",
+   "status": "Approved (v1.5)",
+   "note": "locked at G0 (D76); supersedes docs/architecture.md section 1 for the scope until G1-01; v1.4 of 2026-11-18 by CR-004 (the planned 1 kW motors, D95; the mission energy, D101); v1.5 of 2026-11-18, editorial: card G1-01 re-baselined the requirements (D110)"
+  },
+  {
+   "doc_no": "NASL-SHD-PMP-001",
+   "type": "PMP",
+   "title": "Project management plan",
+   "source": "docs/project/project_plan.md",
+   "status": "Approved (v1.5)",
+   "note": "v1.5 of 2026-11-18: SHD-SC3 by D101 (CR-004) and the regulators row by D103"
+  },
+  {
+   "doc_no": "NASL-SHD-PLN-001",
+   "type": "PLN",
+   "title": "Project task cards (the WBS dictionary)",
+   "source": "tools/dashboard/project_cards.json",
+   "status": "Issued (v1.6)",
+   "note": "generated"
+  },
+  {
+   "doc_no": "NASL-SHD-GRR-001-RC",
+   "type": "GRR",
+   "title": "Gate G0 readiness checklist",
+   "source": "docs/gates/G0_readiness_checklist.md",
+   "status": "Approved (v1.1)",
+   "note": "with the answers to the RIDs of the assessment and the delta re-review"
+  },
+  {
+   "doc_no": "NASL-SHD-GRR-001",
+   "type": "GRR",
+   "title": "Gate G0 review report",
+   "source": "docs/gates/G0_gate_review_report.md",
+   "status": "Released (v1.0)",
+   "note": "the G0 decision: go with actions (D77)"
+  },
+  {
+   "doc_no": "NASL-SHD-PLN-002",
+   "type": "PLN",
+   "title": "Simulation model build plan, T01-T17",
+   "source": "docs/build_plan.md",
+   "status": "Released (heritage)",
+   "note": "heritage, kept as is"
+  },
+  {
+   "doc_no": "NASL-SHD-CON-001",
+   "type": "CON",
+   "title": "Scope, operating concept and architecture, with the decision log",
+   "source": "docs/architecture.md",
+   "status": "Released (heritage)",
+   "note": "heritage; its decisions table is the decision log; its section 1 (scope) is superseded by NASL-SHD-CHR-001 until G1-01"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-001",
+   "type": "REQ",
+   "title": "Structure and world specification",
+   "source": "docs/specs/structure.md",
+   "status": "Released (heritage)",
+   "note": "to be regenerated from the register (G1-01, G1-02)"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-002",
+   "type": "REQ",
+   "title": "Power and BMS specification",
+   "source": "docs/specs/power.md",
+   "status": "Released (heritage)",
+   "note": "register: docs/requirements/power.yaml"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-003",
+   "type": "REQ",
+   "title": "Drive specification",
+   "source": "docs/specs/drive.md",
+   "status": "Released (heritage)",
+   "note": "to be regenerated from the register"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-004",
+   "type": "REQ",
+   "title": "MCU firmware and electronics specification",
+   "source": "docs/specs/electronics.md",
+   "status": "Released (heritage)",
+   "note": "to be regenerated from the register"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-005",
+   "type": "REQ",
+   "title": "Sensors and navigation specification",
+   "source": "docs/specs/sensors.md",
+   "status": "Released (heritage)",
+   "note": "to be regenerated from the register"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-006",
+   "type": "REQ",
+   "title": "GNC specification",
+   "source": "docs/specs/gnc.md",
+   "status": "Released (heritage)",
+   "note": "to be regenerated from the register"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-007",
+   "type": "REQ",
+   "title": "Integration specification",
+   "source": "docs/specs/integration.md",
+   "status": "Released (heritage)",
+   "note": "to be regenerated from the register"
+  },
+  {
+   "doc_no": "NASL-SHD-REQ-008",
+   "type": "REQ",
+   "title": "System requirements specification",
+   "source": "work/reports/requirements/NASL_REQ-008_Shaddad_System_Requirements_2026-11-18_v2.0.pdf",
+   "status": "Approved (v2.0)",
+   "note": "the functional and technical requirements (card G1-01, both parts); generated from docs/requirements/system.yaml by tools/reports/build_requirements_spec.py; 210 requirements (121 functional, 89 technical, 114 safety); v1.0 approved 2026-11-17 (\"Approve part 1 (Recommended)\"), v2.0 approved 2026-11-18 (\"Approve part 2 (Recommended)\"; D110); the decisions D84 to D113"
+  },
+  {
+   "doc_no": "NASL-SHD-ICD-001",
+   "type": "ICD",
+   "title": "Interface control document",
+   "source": "docs/icd.md (static parts: docs/icd_static_sections.md)",
+   "status": "Released (heritage)",
+   "note": "generated by shaddad_icd_report()"
+  },
+  {
+   "doc_no": "NASL-SHD-SDD-001",
+   "type": "SDD",
+   "title": "System design description: how the robot and the model work",
+   "source": "(card G1-06)",
+   "status": "Planned",
+   "note": "new"
+  },
+  {
+   "doc_no": "NASL-SHD-SDD-002",
+   "type": "SDD",
+   "title": "Embedded software design description",
+   "source": "work/reports/design/NASL_SDD-002_Shaddad_Embedded_Software_Design_2026-11-23_v1.0.pdf",
+   "status": "Approved (v1.0)",
+   "note": "card T-07; generated from the models and the C by tools/reports/build_sw_design.py; the C it cites is archived in work/team/t07/code/; approved 2026-11-23 at the T-07 review (\"Approve both (Recommended)\")"
+  },
+  {
+   "doc_no": "NASL-SHD-TP-001",
+   "type": "TP",
+   "title": "RC row test",
+   "source": "docs/row_test.md",
+   "status": "Released (heritage)",
+   "note": "heritage procedure"
+  },
+  {
+   "doc_no": "NASL-SHD-TP-002",
+   "type": "TP",
+   "title": "Live RC drive",
+   "source": "docs/live_rc_drive.md",
+   "status": "Released (heritage)",
+   "note": "heritage procedure"
+  },
+  {
+   "doc_no": "NASL-SHD-TP-003",
+   "type": "TP",
+   "title": "Hardware bring-up",
+   "source": "docs/hw_bringup.md",
+   "status": "Released (heritage)",
+   "note": "heritage procedure"
+  },
+  {
+   "doc_no": "NASL-SHD-RSK-001",
+   "type": "RSK",
+   "title": "Risk and issue register",
+   "source": "docs/registers/risks.json",
+   "status": "Open",
+   "note": "new; docs/STATUS.md open problems folded in by G1-01"
+  },
+  {
+   "doc_no": "NASL-SHD-DEC-001",
+   "type": "DEC",
+   "title": "Decision log index",
+   "source": "docs/registers/decisions.json",
+   "status": "Open",
+   "note": "the decisions table of docs/architecture.md; index docs/registers/decisions.json, generated by framework/tools/index_decisions.py"
+  },
+  {
+   "doc_no": "NASL-SHD-CR-000",
+   "type": "CR",
+   "title": "Change request and nonconformance logs",
+   "source": "docs/registers/changes.json",
+   "status": "Open",
+   "note": "CR-001 approved 2026-11-15; CR-002 and CR-003 approved 2026-11-16; CR-004 approved 2026-11-18"
+  },
+  {
+   "doc_no": "NASL-SHD-STS-001",
+   "type": "STS",
+   "title": "Project status and open problems (heritage)",
+   "source": "docs/STATUS.md",
+   "status": "Released (heritage)",
+   "note": "superseded step by step by the cards, the risk register and the dashboard"
+  },
+  {
+   "doc_no": "NASL-SHD-LCY-001",
+   "type": "PLN",
+   "title": "Tailored life cycle (first note)",
+   "source": "docs/lifecycle.md",
+   "status": "Superseded",
+   "note": "by NASL-EMS-HBK-001 and NASL-SHD-PMP-001"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-001",
+   "type": "ER",
+   "title": "S4 fixes",
+   "source": "work/reports/engineering/NASL_ER-001_Shaddad_S4_Fixes_2026-11-16_v1.1.pdf",
+   "status": "Released (v1.1)",
+   "note": "v1.1 of 2026-11-16: the team named by its roles; v1.0 in work/reports/engineering/superseded/"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-002",
+   "type": "ER",
+   "title": "MATLAB Function conversion",
+   "source": "work/reports/engineering/NASL_ER-002_Shaddad_MATLAB_Function_Conversion_2026-11-16_v1.1.pdf",
+   "status": "Released (v1.1)",
+   "note": "v1.1 of 2026-11-16: the team named by its roles; v1.0 in work/reports/engineering/superseded/"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-003",
+   "type": "ER",
+   "title": "Review phase",
+   "source": "work/reports/engineering/NASL_ER-003_Shaddad_Review_Phase_2026-11-16_v1.1.pdf",
+   "status": "Released (v1.1)",
+   "note": "v1.1 of 2026-11-16: the team named by its roles; v1.0 in work/reports/engineering/superseded/"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-004",
+   "type": "ER",
+   "title": "Critical fixes R-01 to R-05",
+   "source": "work/reports/engineering/NASL_ER-004_Shaddad_Critical_Fixes_2026-11-16_v1.1.pdf",
+   "status": "Released (v1.1)",
+   "note": "v1.1 of 2026-11-16: the team named by its roles; v1.0 in work/reports/engineering/superseded/"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-005",
+   "type": "ER",
+   "title": "Downhill speed cap",
+   "source": "work/reports/engineering/NASL_ER-005_Shaddad_Downhill_Speed_Cap_2026-11-16_v1.1.pdf",
+   "status": "Released (v1.1)",
+   "note": "card G2-DSC, the downhill speed cap; v1.1 of 2026-11-16: the approver named by its role and the step states from the final records; v1.0 in work/reports/engineering/superseded/"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-006",
+   "type": "ER",
+   "title": "Re-baselined system requirements",
+   "source": "work/reports/engineering/NASL_ER-006_Shaddad_Requirements_Baseline_2026-11-18_v1.0.pdf",
+   "status": "Issued for review (v1.0)",
+   "note": "card G1-01, both parts: the functional requirements (NASL-SHD-REQ-008 v1.0, approved 2026-11-17) and the technical requirements and values (v2.0, issued for approval); the checks, the decisions D84 to D110, the open items for G1-05 and the effort in engineering passes; source in work/reports/engineering/ER-006_g1-01/"
+  },
+  {
+   "doc_no": "NASL-SHD-ER-007",
+   "type": "ER",
+   "title": "Embedded software verification",
+   "source": "work/reports/engineering/NASL_ER-007_Shaddad_Embedded_Software_Verification_2026-11-23_v1.0.pdf",
+   "status": "Approved (v1.0)",
+   "note": "card T-07, the campaign's test report; approved 2026-11-23 at the T-07 review (\"Approve both (Recommended)\"), with the six decisions of its section 10 taken as recommended (D117 to D122)"
+  },
+  {
+   "doc_no": "NASL-SHD-ANR-001",
+   "type": "ANR",
+   "title": "Review report: the 87 improvement areas",
+   "source": "work/reports/review_20261115/NASL_Report_Shaddad_Review_2026-11-16_v1.1.pdf",
+   "status": "Released (v1.1)",
+   "note": "v1.1 of 2026-11-16: the team named by its roles; v1.0 stays beside it (NASL-SHD-ER-003 cites it)"
+  },
+  {
+   "doc_no": "NASL-SHD-MAN-001",
+   "type": "MAN",
+   "title": "User manual, Phase 1 (v1.2)",
+   "source": "docs/report/NASL_UserManual_Shaddad_Phase1_2026-10-27_v1.2.pdf",
+   "status": "Released (heritage)",
+   "note": "the owner's folder: never edited by the team"
+  },
+  {
+   "doc_no": "NASL-SHD-ANR-002",
+   "type": "ANR",
+   "title": "Real robot and MBD report (v1.1)",
+   "source": "docs/report/NASL_Report_Shaddad_RealRobot_MBD_2026-10-27_v1.1.pdf",
+   "status": "Released (heritage)",
+   "note": "the owner's folder: never edited by the team"
+  },
+  {
+   "doc_no": "NASL-SHD-ANR-003",
+   "type": "ANR",
+   "title": "Phase 1 demo report",
+   "source": "docs/report/NASL_Report_Shaddad_Phase1_Demo_2026-10-23_v1.pdf",
+   "status": "Released (heritage)",
+   "note": "the owner's folder: never edited by the team"
+  },
+  {
+   "doc_no": "NASL-SHD-SAF-001",
+   "type": "SAF",
+   "title": "Safety plan",
+   "source": "docs/safety/safety_plan.md",
+   "status": "Approved (v1.2)",
+   "note": "planned by CR-002"
+  },
+  {
+   "doc_no": "NASL-SHD-HAZ-001",
+   "type": "HAZ",
+   "title": "Hazard log",
+   "source": "docs/safety/hazard_log.md (record docs/safety/hazard_log.json)",
+   "status": "Approved (v1.2)",
+   "note": "planned by CR-002"
+  },
+  {
+   "doc_no": "NASL-SHD-FSC-001",
+   "type": "FSC",
+   "title": "Functional safety concept",
+   "source": "docs/safety/",
+   "status": "Planned (card G2-FSC)",
+   "note": "planned by CR-002"
+  },
+  {
+   "doc_no": "NASL-SHD-FMA-001",
+   "type": "FMA",
+   "title": "FMEA and fault trees",
+   "source": "docs/safety/",
+   "status": "Planned (card G3-FME)",
+   "note": "planned by CR-002"
+  },
+  {
+   "doc_no": "NASL-SHD-SCS-001",
+   "type": "SCS",
+   "title": "Safety case",
+   "source": "docs/safety/",
+   "status": "Planned (card V-05)",
+   "note": "planned by CR-002"
+  },
+  {
+   "doc_no": "NASL-SHD-MVP-001",
+   "type": "MVP",
+   "title": "Model validation plan",
+   "source": "docs/project/",
+   "status": "Planned (card G2-VAL)",
+   "note": "planned by CR-002"
+  },
+  {
+   "doc_no": "NASL-SHD-PRM-001",
+   "type": "PRM",
+   "title": "Estimated-parameter register",
+   "source": "docs/registers/parameters.json",
+   "status": "Planned (card G2-VAL)",
+   "note": "planned by CR-002"
+  }
+ ]
+}

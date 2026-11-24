@@ -1,0 +1,1954 @@
+{
+ "about": "The Shaddad risk and issue register (NASL-EMS-HBK-001 section 8.3; template framework/templates/risk_register.json). Created on 2026-11-15 from the risks of the open task cards; each entry names the cards that carry its mitigation. Reviewed at every gate and whenever a card starts. The open problems of docs/STATUS.md are folded in by card G1-01. Since 2026-11-16 the register holds issues too (type issue): risks that have happened (RID-G0-08); cause, effect and a review date were added at the G1 register review of 2026-11-18 (RID-G0-08), with the review date set by rating: High one week, Medium three weeks, Low six weeks, and at every gate.",
+ "updated": "2026-11-18",
+ "risks": [
+  {
+   "id": "RSK-001",
+   "type": "risk",
+   "title": "Open decisions leave the baseline partial",
+   "cause": "All 20 review decisions are settled (the last three on 2026-11-21, D114 to D116), but D96, D101 and D103 leave values provisional, as owned TBDs, or not yet confirmed against the standards.",
+   "effect": "G1-05 would lock a baseline with provisional ICD sections 4 and 6, owned energy TBDs and four unconfirmed safety values, so later answers can reach it only through change control.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the configuration and documentation engineer",
+   "response": "mitigate",
+   "mitigation": "Lock with the TBDs listed as RIDs, closed at G1-05",
+   "cards": [
+    "G1-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; 17 of the 20 review decisions are now settled (D84 to D102), but D96, D101 and D103 keep part of the baseline provisional; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-21: the last review decisions settled (D114 to D116): the cause no longer counts open review decisions."
+   ]
+  },
+  {
+   "id": "RSK-002",
+   "type": "risk",
+   "title": "Requirements that a simulation cannot verify",
+   "cause": "The requirements aim at the delivered BMS, charger, ESCs and board (D96), which the twin does not model yet, while docking exists only in the twin (D97) and cool charging only as a procedure on the robot (D94).",
+   "effect": "Those requirements cannot be closed in simulation alone, so they need the bench or field campaigns (V-02, V-03) or stay verified in the twin only, and the matrix reaches G5 with deviations.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "Assign the method and the campaign (bench or field)",
+   "cards": [
+    "G1-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added from D94, D96 and D97, which add requirements of this kind; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-003",
+   "type": "risk",
+   "title": "Open decisions block G1",
+   "cause": "Review decisions 14 (the test expectations), 17 (the simplified vehicle model) and 19 (the layout allowance) are still open, and CR-004, which brings the charter in line with D95 and D101, awaits the change board.",
+   "effect": "G1-03 cannot close and G1-05 cannot lock the baseline until they are answered, so G1 slips.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the project owner",
+   "response": "mitigate",
+   "mitigation": "Ask in small batches, recommended option first",
+   "cards": [
+    "G1-03"
+   ],
+   "status": "closed (every review decision is settled: the last three on 2026-11-21, D114 to D116; CR-004 approved on 2026-11-18)",
+   "raised": "2026-11-15",
+   "review_by": "closed",
+   "source": "card G1-03",
+   "history": [
+    "2026-11-18: G1 register review: likelihood H to M, since the project owner answered 17 of the 20 review decisions and E-07 between 2026-11-15 and 2026-11-18 in small batches; impact H to M, since a blocked gate is a gate that slips (Table 20); rating High to Medium; CR-004 added to the cause. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-21: the last review decisions settled (D114 to D116): closed: no review decision or change request blocks G1-03 or G1-05 any more."
+   ]
+  },
+  {
+   "id": "RSK-004",
+   "type": "risk",
+   "title": "The supplier cannot or does not provide the data",
+   "cause": "XMachines may not hold, or may not release, the ESC protocol, the BMS frame layout, the board's chip and the data of the E-stop buttons, the safety relay and the STO wiring.",
+   "effect": "The drive, BMS and firmware models would stay assumptions, and the provisional values of D96 and D98, on which at least eleven safety requirements rest, could not be confirmed.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the project owner",
+   "response": "mitigate",
+   "mitigation": "Measure on the bench instead (CAN capture)",
+   "cards": [
+    "G1-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-04",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; the supplier request was drafted on 2026-11-18 under D96 for the project owner to send; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-005",
+   "type": "risk",
+   "title": "The data arrive late",
+   "cause": "The request for the supplier's data was only drafted on 2026-11-18 and has not been sent, and the supplier's answer time is unknown.",
+   "effect": "The provisional values of D94, D96 and D98 would stay in the baseline, and G2-DRV, G2-PWR and G2-MCU, which need the final choice of the electronics before they start (D96), would slip.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the project owner",
+   "response": "mitigate",
+   "mitigation": "The model keeps its [EST] values with the risk recorded; under D96 each unknown carries a provisional value with its margin, ICD sections 4 and 6 are marked provisional, and the request goes out now",
+   "cards": [
+    "G1-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-04",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; mitigation brought in line with D96 (provisional values with margins, the request sent now); rating and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-006",
+   "type": "risk",
+   "title": "The ESC protocol differs from the assumed one",
+   "cause": "The CAN protocol of the robot's two dual-channel ESCs, the meaning of their per-channel command and their protections are assumed, because the supplier's manual has not arrived (R-14).",
+   "effect": "The drive model, ICD section 4 and the firmware's drive commands may not match the real ESCs, so enabling, parking and the safe torque off could behave differently on the robot, and limits meant per side but applied per channel would double the torque and current.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the drive engineer",
+   "response": "mitigate",
+   "mitigation": "Wait for the manual, or capture the CAN traffic; ICD section 4 stays provisional (D96) until G2-DRV models the delivered ESCs from the manual",
+   "cards": [
+    "G2-DRV"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-DRV",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; mitigation notes D96's provisional ICD section 4 and G2-DRV's new exit criterion; rating and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-007",
+   "type": "risk",
+   "title": "The brake feedback only echoes the command (STATUS 27)",
+   "cause": "The brake confirmation follows the ESC's coil command in the twin (esc_sm.m), and what the real ESC's brake feedback reports is unknown until its manual arrives (STATUS 27, R-14).",
+   "effect": "A stuck or worn spring brake would not be found before the robot moves, so it could reach STANDBY and then fail to hold on a slope, where the motion check cuts the torque only after 0.2 s.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the drive engineer",
+   "response": "mitigate",
+   "mitigation": "Add a mechanical brake check",
+   "cards": [
+    "G2-DRV"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-DRV",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-008",
+   "type": "issue",
+   "title": "The cap blocks the 20° design ramp (found 2026-11-15)",
+   "cause": "The first descent cap gave the full-tank sprayer (316 kg) no usable speed on the 20 deg design ramp, because a brakes-locked stop at speed there can tip it over its front (S2c).",
+   "effect": "The robot could not work the design slope with the sprayer until the envelope or the design changed.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the lead systems engineer",
+   "response": "dispositioned by CR-001 (the sprayer limited to about 18.5 deg); fixed on card G2-DSC",
+   "mitigation": "Done: the table re-tabulated by the pitch the robot measures (D74, D83) and the sprayer limited to about 18.5 deg (CR-001, D75); the slope limit per implement in mission planning stays on G2-GNC, and G2-BRK, a later phase, could win the 20 deg slope back for the sprayer",
+   "cards": [
+    "G2-DSC"
+   ],
+   "status": "closed (dispositioned by CR-001, the sprayer limited to about 18.5 deg (D75), and fixed on card G2-DSC, done on 2026-11-16 with NASL-SHD-ER-005: the no-implement descent on the 20 deg slope passes and every brakes-locked stop meets the park criterion (D82))",
+   "raised": "2026-11-15",
+   "review_by": "closed",
+   "source": "card G2-DSC",
+   "history": [
+    "2026-11-16: became an issue (it has happened), RID-G0-08",
+    "2026-11-18: G1 register review: cause and effect added; closed, since G2-DSC closed on 2026-11-16 with the descent passing on the design slope and the sprayer's limit accepted by CR-001. Review by closed (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-009",
+   "type": "risk",
+   "title": "The tip speeds rest on estimated contact data",
+   "cause": "The tip-over speeds behind the descent cap rest on an estimated contact stiffness, damping and locked-skid friction, which set the tip speed only to within about +/-50 % (STATUS 35).",
+   "effect": "Every safe stop is now measured by the park criterion built on these speeds (D82), so wrong estimates could let a stop on a slope tip the robot, or cap it lower than it needs.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "A brake test on a slope that calibrates the contact values: specified as an identification test by G2-VAL, written into the procedures by T-04 and run in the field campaign; until then the table keeps its margins, the 0.75 deg IMU bound included (D83)",
+   "cards": [
+    "T-04",
+    "G2-VAL"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-DSC",
+   "history": [
+    "2026-11-18: G1 register review: impact M to H, since D82 made the park criterion, which rests on these speeds, the measure of a safe stop; G2-DSC is done, so the cards move to T-04 and G2-VAL, which carry the slope brake test; rating stays High. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-010",
+   "type": "risk",
+   "title": "The cost passes the estimate",
+   "cause": "The descent work grew while it ran: the pitch-over check, the table re-tabulated by the measured pitch, CR-001, CR-003 and the reruns on the 0.75 deg table.",
+   "effect": "G2-DSC needed about 5.25 M against its approved 4.7 M, and the project owner had to approve about 0.5 M more to finish it.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "The project owner decides each extra budget (done for G2-DSC)",
+   "cards": [
+    "G2-DSC"
+   ],
+   "status": "closed (it occurred: G2-DSC passed its approved budget, the project owner decided on 2026-11-16 to finish it, 'Finish; trip to G2-MCU (Recommended)', and the card closed the same day; the same pattern on G1-01 part 2 is proposed as a new entry)",
+   "raised": "2026-11-15",
+   "review_by": "closed",
+   "source": "card G2-DSC",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; closed as occurred and dispositioned; 'the user' replaced by the project owner, as on the card. Review by closed (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-011",
+   "type": "risk",
+   "title": "The deck footprint makes the wall lanes impassable",
+   "cause": "The mower deck reaches 1.20 m ahead of the robot, so on the greenhouse wall lanes a resume pivot with the deck would hit the post line (a margin of about -0.61 m, R-06), and the turn planner does not know the deck yet.",
+   "effect": "With the deck in the checks the robot holds on the wall lanes instead of pivoting (D87), and S4 with the mower already holds at the lane-end walls (STATUS 18), so the greenhouse mission cannot finish without the operator.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "D87: the resume pivot only on lanes that the mission compiler flags as wide enough for the footprint with the implement, a hold when a pivot is blocked, and one footprint per implement for the planner, the bypass, the corridor and a second monitor (R-06), so that the turns keep the deck clear of walls and posts; until the wall holds are fixed, S4 is scored with scripted operator resumes (D100)",
+   "cards": [
+    "G2-GNC"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-GNC",
+   "history": [
+    "2026-11-18: G1 register review: likelihood M to H, since the deck's margin on the wall lanes is negative (R-06) and S4 with the mower already holds at the lane-end walls (STATUS 18), as D100 records; mitigation moves from decision 12 to D87 and D100; rating stays High. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-012",
+   "type": "risk",
+   "title": "S3 is too long to run often",
+   "cause": "S3 has never run (R-20), and under D101 it mows at the pack's end of life to the return threshold and returns, about 1.2 h of palm mowing, which still takes hours of wall time at the system's real-time factor of about 0.45 to 0.5 (STATUS 14).",
+   "effect": "The energy budget and the low-charge return that D101 requires are checked only in rare overnight runs, so a change that breaks them is seen late.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "An overnight batch, once the simplified drive is calibrated and the simplified vehicle model's speed gain is measured and the model retired or calibrated (D115, card G2-STR)",
+   "cards": [
+    "G2-INT"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-INT",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; S3 re-scoped by D101, shorter but still hours long; mitigation notes decision 17; rating and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-21: the last review decisions settled (D114 to D116): the mitigation follows D115 (measure first, then decide)."
+   ]
+  },
+  {
+   "id": "RSK-013",
+   "type": "issue",
+   "title": "The robot's controller is not an STM32H743",
+   "cause": "The firmware model targets an STM32H743 board that the robot does not have (R-59), and the chip of the supplier's controller board is unknown until the supplier's data arrive.",
+   "effect": "No firmware generated from the twin can go on the robot until the code generation is re-targeted, and D96 settles the board only after the safety concept's architecture (E-05), which holds G2-MCU and the flashing.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "Re-target the code generation to the real board: under D96 the H743 stays the development target until the board is settled from the supplier's data (G1-04) and the safety concept's architecture (E-05, G2-FSC); then G2-MCU re-targets it, with the embedded toolchain of B-00",
+   "cards": [
+    "G2-MCU",
+    "B-00"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-MCU",
+   "history": [
+    "2026-11-18: G1 register review: becomes an issue, since the robot does not have the H743 board (R-59), as RSK-022 became one for its build; mitigation brought in line with D96; B-00 added, whose own card risk (the board differs from the one the model targets) this entry covers; rating unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: G1 register review: it has happened, so it is an issue: the robot does not have the STM32H743 board that the firmware targets (R-59; the G2-MCU card)"
+   ]
+  },
+  {
+   "id": "RSK-014",
+   "type": "risk",
+   "title": "Real-time overruns on the real board",
+   "cause": "The firmware's task timing has been checked only in the twin, never on the robot's board, which D96 has not settled yet.",
+   "effect": "A task that overruns on the real board would delay the safety supervisor and the stop chain on the robot.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "PIL timing (T-EL-42) before flashing",
+   "cards": [
+    "G2-MCU"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-MCU",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-015",
+   "type": "risk",
+   "title": "The zone in front of the body needs extra hardware",
+   "cause": "The LiDAR cannot see the near zone in front of the body (about 0.05 to 0.45 m) or the sides of the deck, and the person fields of D72 start at the implement's front.",
+   "effect": "If the operator's resume of D84 proves too frequent or too weak for PL d, the safety concept (G2-FSC) needs a near-zone sensor, a hardware change only the project owner can approve.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the sensors and navigation engineer",
+   "response": "mitigate",
+   "mitigation": "D84: after a person stop the near zone counts as occupied until the operator's deliberate resume, which meets SG-02 without new hardware; a near-zone sensor stays a candidate for G2-FSC if person stops prove frequent",
+   "cards": [
+    "G2-NAV",
+    "G2-FSC"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-NAV",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; decision 2 settled as D84, so the mitigation reads D84 and G2-FSC is added for the candidate sensor; rating unchanged, since false person stops at walls are already frequent in S4 (STATUS 18). Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-016",
+   "type": "risk",
+   "title": "The hardware clocks differ from the model",
+   "cause": "The twin's latency compensations assume one clock (R-22), while the robot's companion computer, LiDAR and GNSS receiver are not yet chosen or recorded, so their clocks and time stamps are unknown.",
+   "effect": "Navigation would fuse measurements at the wrong times on the robot, so its position and the guidance gates that rest on it (D69, D89) would be worse than in the twin.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the sensors and navigation engineer",
+   "response": "mitigate",
+   "mitigation": "The R-22 fix on the companion",
+   "cards": [
+    "G2-NAV"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-NAV",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-017",
+   "type": "issue",
+   "title": "The sealed pack cannot be cooled passively (R-04, confirmed)",
+   "cause": "The robot's pack is sealed, with no fan path or dock air, and in the sealed run of 2026-11-15 it charged only from SOC 0.10 to 0.254 in 5 h at 45 deg C in full sun (R-04).",
+   "effect": "On hot days the pack can be charged only when it is cool, which means overnight, and above 50 deg C it takes no charge and no regeneration, which the stops and the descent rely on.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the power and BMS engineer",
+   "response": "mitigate",
+   "mitigation": "D94: no cooling hardware in this phase; the pack is parked, stored and charged in the shade, within the supplier's 55 deg C label, and charged only while cool (start at 40 deg C or less on the hottest cell, stop above 45 deg C), under a charging procedure the project owner approves, until the bought BMS reports its cell temperatures; the BMS cut-off stays the safety function (SF-17); in the twin the sealed pack with the fixed 20 A charger is the default and the charging window an automatic gate (G2-PWR); HAZ-028 and SG-10 assessed with the procedure (G2-FSC)",
+   "cards": [
+    "G2-PWR",
+    "G2-FSC"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-PWR",
+   "history": [
+    "2026-11-16: became an issue (it has happened), RID-G0-08",
+    "2026-11-18: G1 register review: cause and effect added; decision 4 settled as D94, so the mitigation reads D94 and G2-FSC is added; the charging procedure itself has no card yet; rating unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-018",
+   "type": "risk",
+   "title": "The BMS data are not available",
+   "cause": "The frame layout and thresholds of the robot's bought BMS are not on file, while D94 and D96 now rest on it: its cell temperatures for the charging window and its live charge and discharge limits for the drive (D65).",
+   "effect": "The charging window would stay a manual procedure, and if the BMS cuts charge without telling the drive, regeneration could push the bus above the 13-cell limits (R-15).",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the power and BMS engineer",
+   "response": "mitigate",
+   "mitigation": "Measure on the bench: a CAN log of the bought BMS, at 45 deg C or more for the charge and discharge limits",
+   "cards": [
+    "G2-PWR",
+    "G1-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-PWR",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; under D96 the bought BMS is mapped from the supplier's frame layout, so G1-04 is added; rating unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-019",
+   "type": "risk",
+   "title": "No turning data from the robot",
+   "cause": "The turning coefficient chi and the turning model are fitted in the twin only, and the robot has never been measured turning (R-18).",
+   "effect": "Turn rates, the headland turns and the slope-turn slide check rest on an unvalidated model and may not hold on the robot.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the structure engineer",
+   "response": "mitigate",
+   "mitigation": "A turning test in the field campaign, on G2-STR's plan; until then chi re-identified on T10 with a 1 % self-check and the gap to Wong an accepted deviation (D100)",
+   "cards": [
+    "G2-STR"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-STR",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; mitigation adds D100's interim (chi re-identified on T10, the gap to Wong accepted until the field test); rating and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-020",
+   "type": "issue",
+   "title": "Hardware-variant defects (STATUS 16)",
+   "cause": "The preflight of task T17 found defects that only the hardware build shows: the BMS's CAN read order and a missing selector, the MCU's CAN read port order, the companion's algebraic loop, and register placeholders at library defaults (STATUS 16).",
+   "effect": "Firmware built for the robot would read its CAN frames in the wrong order or fail to build, so none can be flashed until they are fixed.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "Fix them before flashing",
+   "cards": [
+    "B-01"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card B-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; becomes an issue, since the defects already exist (STATUS 16), as RSK-022 became one; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: G1 register review: it has happened, so it is an issue: the defects are known and listed in STATUS 16"
+   ]
+  },
+  {
+   "id": "RSK-021",
+   "type": "risk",
+   "title": "The toolchain or the board differs",
+   "cause": "The embedded toolchain for the STM32 board is not installed (B-00), so the generated firmware has never been compiled for a board, and the board itself is not settled (D96).",
+   "effect": "Code that runs in the twin may not compile, or may run differently, on the robot's board, and that would show only at flashing.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "PIL early",
+   "cards": [
+    "B-01",
+    "B-00"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card B-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; B-00, the toolchain card added by CR-002, is added, since PIL needs its tools; rating unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-022",
+   "type": "issue",
+   "title": "HybridAStar does not generate code",
+   "cause": "The HybridAStar planner in the GNC's global replanner does not generate code, so the companion build fails (build_targets('Companion')).",
+   "effect": "Navigation, perception and guidance cannot run on the robot's companion, and B-02, G3-MF4 and the field campaign wait.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "Replace it with a supported planner",
+   "cards": [
+    "B-02"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card B-02",
+   "history": [
+    "2026-11-16: became an issue (it has happened), RID-G0-08",
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-023",
+   "type": "issue",
+   "title": "Environment failures (Windows Code Integrity, STATUS 20)",
+   "cause": "Windows Code Integrity on the project's PC blocks unsigned MEX files, which already makes tPER05_TebVfh fail and can stop any accelerator-mode run (STATUS 20).",
+   "effect": "Tests fail for the PC rather than the model, and the faster run modes stay closed, which hurts T-02's full run and long runs such as S3.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "The project owner decides the setting (a security setting, not changed); the tests it blocks are marked",
+   "cards": [
+    "T-02"
+   ],
+   "status": "closed (the project owner turned Smart App Control off on 2026-11-22; SIL and accelerator runs work, and tPER05_TebVfh passes in the full run of 2026-11-23; STATUS 20 closed by card T-07)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card T-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; becomes an issue, since the block already fails a test (STATUS 20); 'the user' replaced by the project owner, as on the card; rating and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: G1 register review: it has happened, so it is an issue: the setting already blocks an unsigned test binary, so tPER05_TebVfh fails on this PC (STATUS 20)",
+    "2026-11-23: closed by card T-07: Smart App Control has been off since about 23:09 on 2026-11-22 (the owner); the SIL programs and accelerator runs start, and t_perception/tPER05_TebVfh passes in the full run (work/team/t07/logs/full/t_perception.log)"
+   ]
+  },
+  {
+   "id": "RSK-024",
+   "type": "risk",
+   "title": "A \"stale\" expectation is a real defect",
+   "cause": "T-03 re-derives the stale test expectations under D114: a consistency check from the parameters, a check that judges a requirement from the register; the part-2 sweep found 354 differences between the specs and the parameters, and the parameters miss two agreed requirements today.",
+   "effect": "Where a parameter is itself wrong, a test re-derived from it would pass a real defect.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "Each change checked by its owner and the reviewer",
+   "cards": [
+    "T-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card T-03",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-21: the last review decisions settled (D114 to D116): the cause follows D114, which keeps requirement checks on the register."
+   ]
+  },
+  {
+   "id": "RSK-025",
+   "type": "risk",
+   "title": "A slope brake test can tip the robot",
+   "cause": "The slope brake test that calibrates the descent cap stops the robot hard on a steep slope, where its tip speed is known only to about +/-50 % (STATUS 35).",
+   "effect": "The robot could tip over during the test, be damaged, or hurt the people present.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "A tether, low speeds first, a soft run-out zone",
+   "cards": [
+    "T-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card T-04",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-026",
+   "type": "risk",
+   "title": "A requirement fails late",
+   "cause": "The simulation campaign (V-01) is the first time every scenario is scored against the decided criteria (D100) on the build-to baseline.",
+   "effect": "A failure found then needs a fix under configuration control or a deviation, after the CDRs.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "A deviation, or a fix under configuration control",
+   "cards": [
+    "V-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card V-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-027",
+   "type": "risk",
+   "title": "Safety in the field",
+   "cause": "Field tests put the robot on slopes, between walls and palms and in 45 to 50 deg C heat, with the project owner as the only operator and with safety functions not yet shown to meet PL d on the robot (E-01).",
+   "effect": "A field test could injure a person or damage the robot.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "The procedures and the safety plan of T-04",
+   "cards": [
+    "V-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card V-03",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-028",
+   "type": "risk",
+   "title": "The robot differs from the model",
+   "cause": "By D95, D96 and D97 the twin's defaults differ from the robot on purpose: the 1 kW motor against its 750 W motors, the twin's own BMS, charger and STM32H743 against the delivered ones, and a dock the robot does not have.",
+   "effect": "Field results compared with default runs would differ, so a real fault could be put down to a known difference unless each comparison runs the as-built options.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "Feed the differences to P-01; every comparison with the robot runs the as-built options, the 750 W motor until the upgrade is fitted, and each result records its motor (D95, G2-DRV, CR-004)",
+   "cards": [
+    "V-03",
+    "G2-DRV",
+    "P-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card V-03",
+   "history": [
+    "2026-11-18: G1 register review: likelihood M to H, since D95 to D97 make the twin's defaults differ from the robot by decision; mitigation adds the as-built options for every comparison; G2-DRV and P-01 added; rating stays High. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-029",
+   "type": "risk",
+   "title": "Requirements not met",
+   "cause": "Some requirements may not be met at the FCA (V-04), for example those that rest on safety hardware the robot lacks (E-01).",
+   "effect": "The robot could be accepted for its full scope only with waivers that the project owner must take.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the lead systems engineer (chair)",
+   "response": "mitigate",
+   "mitigation": "Waivers decided by the project owner",
+   "cards": [
+    "V-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card V-04",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-030",
+   "type": "risk",
+   "title": "The framework is too heavy for a small team",
+   "cause": "The framework asks a small team for entry and exit criteria, independent reviews and PDF reports on every card, and since D102 a scripted checklist on every documentation task.",
+   "effect": "Process work takes effort from the engineering, so cards run past their estimates and gates slip.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Tailoring rules in the handbook; the project plan states each one",
+   "cards": [
+    "G1-09"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G0-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; G0-01 is done, so the card moves to G1-09, the handbook v1.2, which carries the tailoring and D102's checklist; rating unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-031",
+   "type": "risk",
+   "title": "Old values stay in places nobody checks",
+   "cause": "The part-2 sweep of every spec number against the parameters classes 2,241 quantities as CANDIDATE, only 25 % right, and 2,687 as NONE, a quarter of which miss their parameter, and it cannot see expressions, differences under 1 % or combinations of options.",
+   "effect": "Old values, like the charger's 56.8 V that the sweep missed and a check by hand found, can stay in the baselined specs and mislead a design, a test or a review after G1.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the configuration and documentation engineer",
+   "response": "mitigate",
+   "mitigation": "The scripted sweep of every spec number against P, with every CANDIDATE and NONE row classed by its owner and re-checked independently (the project owner's 'Full plan'); from D102 every documentation task runs the cross-document search and the sweep as a delta, and the independent reviewer checks every documentation pass",
+   "cards": [
+    "G1-01",
+    "G1-09"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-01",
+   "history": [
+    "2026-11-18: G1 register review: likelihood M to H, since the sweep's own check found its CANDIDATE and NONE classes weak and an old value already missed; rating Medium to High; mitigation brought in line with the owner's full plan and D102; G1-09 added. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-032",
+   "type": "risk",
+   "title": "The matrix goes stale as tests change",
+   "cause": "The verification matrix (G1-02) names a test for each requirement, while T-01 to T-03 change the tests and the G2 cards add new ones.",
+   "effect": "Requirements could look verified by tests that changed or no longer run, and the FCA would find it late.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "Generate the coverage from the tests' tags, not by hand",
+   "cards": [
+    "G1-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G1-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-033",
+   "type": "issue",
+   "title": "A decision taken without data",
+   "cause": "D94, D96 and D98 were decided before the supplier's data and are provisional, and D95 keeps estimated values for a 1 kW unit not yet chosen, because the ESC manual, the BMS frames and the board data are still missing (G1-04).",
+   "effect": "The G1 baseline carries provisional values on at least eleven safety requirements and in ICD sections 4 and 6, and any value the data contradict must change through change control before G2-DRV, G2-PWR and G2-MCU start.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the project owner",
+   "response": "mitigate",
+   "mitigation": "Mark it provisional and revisit when the data arrive: done in D94, D96 and D98 (each unknown has a provisional value with its margin; ICD sections 4 and 6 marked provisional); the request goes out now (G1-04), and the final choice and the values are confirmed from the data before G2-DRV, G2-PWR and G2-MCU start (D96)",
+   "cards": [
+    "G1-04",
+    "G2-DRV",
+    "G2-PWR",
+    "G2-MCU"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-03",
+   "history": [
+    "2026-11-18: G1 register review: becomes an issue, since D94, D96 and D98 were decided without the supplier's data; likelihood M to H and impact M to H, since safety requirements and the ICD rest on the provisional values; rating Medium to High; cards move from G1-03 to G1-04 and the three G2 cards that confirm the values under D96. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: G1 register review: it has happened, so it is an issue: on 2026-11-18 D94, D96 and D98 were taken without the supplier's data, as the risk foresaw"
+   ]
+  },
+  {
+   "id": "RSK-034",
+   "type": "risk",
+   "title": "The review finds the baseline incomplete",
+   "cause": "The G1 baseline will hold provisional values (D96), owned energy TBDs (D101), four safety values not yet confirmed against the standards (D103) and three open decisions, and G1-02, G1-06, G1-08 and G1-10 have not started.",
+   "effect": "The SRR/SFR review would find the baseline incomplete, and G1 would pass only with actions or after a delta review, as G0 did.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the lead systems engineer (chair)",
+   "response": "mitigate",
+   "mitigation": "Pass with actions (RIDs) rather than a full re-review",
+   "cards": [
+    "G1-05"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G1-05",
+   "history": [
+    "2026-11-18: G1 register review: likelihood M to H, since G0 needed a delta review and the G1 baseline will hold provisional and unconfirmed values by decision; rating Medium to High. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-035",
+   "type": "risk",
+   "title": "The description goes stale as the model changes",
+   "cause": "The system design description (G1-06) explains each subsystem while the G2 cards keep changing them.",
+   "effect": "Engineers joining the project and the reviewers would work from an out-of-date description.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Each card that changes a subsystem updates its chapter (definition of done)",
+   "cards": [
+    "G1-06"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G1-06",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-036",
+   "type": "risk",
+   "title": "No data on the real RC link losses",
+   "cause": "The RC set on the robot is not in the as-built record, and the twin's radio cannot produce a link loss (R-12).",
+   "effect": "The RC link-loss stop is verified only against assumed losses, so its timing may not hold on the real link.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "A field log (B-03)",
+   "cards": [
+    "G2-COM"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G2-COM",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-037",
+   "type": "risk",
+   "title": "CAN2 jitter on the companion",
+   "cause": "The companion computer is not yet chosen for the robot, and the twin's CAN2 input drops frames silently (R-48).",
+   "effect": "Jitter or lost frames between the MCU and the companion could delay guidance commands or trip the MCU's time-outs on the robot.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "Measure it on the bench",
+   "cards": [
+    "G2-COM"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G2-COM",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-038",
+   "type": "issue",
+   "title": "The default bypass fails T7 (TEB)",
+   "cause": "TEB, still the model's default bypass (VC_TEB 1), has failed T7 in every run since 2026-11-14 (a 0.427 m cross-track error against 0.10 m), while VFH passes it on the bench but has never run in S5.",
+   "effect": "Until G2-GNC switches the default, S5 and every system run with a bypass use the failing method, and VFH's behaviour in the palm scenario is unknown.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "D99: VFH the default bypass (VC_TEB 0) and TEB a development option, kept out of system runs until it passes T7; G2-GNC makes the switch and reruns S5 with VFH",
+   "cards": [
+    "G2-GNC"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card G2-GNC",
+   "history": [
+    "2026-11-18: G1 register review: becomes an issue, since the default (TEB) already fails T7; decision 11 settled as D99, which dispositions it; likelihood M to H, rating Medium to High until G2-GNC makes the switch. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: G1 register review: it has happened, so it is an issue: the default fails T7 today (testT7BypassTeb, a known failure); dispositioned by D99 and fixed on G2-GNC"
+   ]
+  },
+  {
+   "id": "RSK-039",
+   "type": "risk",
+   "title": "The tiller data never arrive",
+   "cause": "The tiller (85 kg, 0.90 m behind the centre) is estimated, and in the full vehicle model the raised tiller falls over backward at rest (STATUS 36).",
+   "effect": "Without real data the tiller cannot be used, which in this phase only delays the tillage mission of a later phase (D76, G2-TIL).",
+   "likelihood": "M",
+   "impact": "L",
+   "rating": "Low",
+   "owner": "the structure engineer",
+   "response": "mitigate",
+   "mitigation": "Keep the tiller out of use; D76 puts tillage in a later phase on G2-TIL, which needs real tiller data first",
+   "cards": [
+    "G2-STR",
+    "G2-TIL"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-30",
+   "source": "card G2-STR",
+   "history": [
+    "2026-11-18: G1 register review: impact M to L, since D76 puts tillage in a later phase, so missing tiller data no longer hurt this one; rating Medium to Low; G2-TIL added. Review by 2026-12-30 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-040",
+   "type": "risk",
+   "title": "Review items still open at the CDR",
+   "cause": "Each subsystem's High and Mid review items, from the 87 ranked areas of the review phase, must be closed or waived at its CDR.",
+   "effect": "Items still open at a CDR leave known defects in the build-to baseline, or waivers the safety case must carry.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "Waive with reasons, recorded as RIDs",
+   "cards": [
+    "G3-COM",
+    "G3-DRV",
+    "G3-GNC",
+    "G3-INT",
+    "G3-MCU",
+    "G3-NAV",
+    "G3-PWR",
+    "G3-STR"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G3-COM",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and cards unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-041",
+   "type": "risk",
+   "title": "Changes after the CDR",
+   "cause": "The supplier's data (G1-04), the safety concept (G2-FSC) and field results can arrive after a subsystem's CDR.",
+   "effect": "A change to a build-to baseline then needs a change request, regenerated code and re-run tests, and the build cards slip.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "Configuration control: a decision row, a tag per gate under version control (G1-08, in place of the manual snapshots) and the test baseline",
+   "cards": [
+    "G3-COM",
+    "G3-DRV",
+    "G3-GNC",
+    "G3-INT",
+    "G3-MCU",
+    "G3-NAV",
+    "G3-PWR",
+    "G3-STR"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G3-COM",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; mitigation names version control with a tag per gate (G1-08, CR-002) in place of the manual snapshots; rating and cards unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-042",
+   "type": "risk",
+   "title": "Code-generation limits of MATLAB Functions",
+   "cause": "The two GNC managers of Task 4 (gnc_ImplementManager, gnc_PathServer) must convert bit-identically and also build for the companion, whose build fails today.",
+   "effect": "Parts that do not convert would stay block networks, or the companion's code would differ from the twin's.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "Keep the parts that do not convert as they are",
+   "cards": [
+    "G3-MF4"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G3-MF4",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-043",
+   "type": "issue",
+   "title": "The algebraic loop through companion_io_ros2",
+   "cause": "The companion built for the robot (VC_TARGET 1) has an algebraic loop through companion_io_ros2 (STATUS 16).",
+   "effect": "The companion code cannot run on the robot as designed until the loop is broken, so B-02 and the field campaign wait.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "Break it with a unit delay at the IO",
+   "cards": [
+    "B-02"
+   ],
+   "status": "open (issue)",
+   "raised": "2026-11-15",
+   "review_by": "2026-11-25",
+   "source": "card B-02",
+   "history": [
+    "2026-11-18: G1 register review: becomes an issue, since the loop already exists in the hardware build (STATUS 16), as RSK-022 became one; likelihood M to H, rating Medium to High. Review by 2026-11-25 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: G1 register review: it has happened, so it is an issue: the loop is a known defect of the hardware build (STATUS 16)"
+   ]
+  },
+  {
+   "id": "RSK-044",
+   "type": "risk",
+   "title": "No reference for some channels (scan match ground truth)",
+   "cause": "The scan match and the position need a ground truth on the test site, which has no survey markers yet.",
+   "effect": "The field campaign could not verify the navigation accuracy that the matrix names (D68, D69, D89).",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "Survey markers on the test site",
+   "cards": [
+    "B-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card B-03",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-045",
+   "type": "risk",
+   "title": "Signatures too strict, so known failures look new",
+   "cause": "T-01 gives each known failure a signature, and one that matches the exact number treats a known failure whose value moves a little as new.",
+   "effect": "Every change would raise false new failures, which slows the reviews and hides the real ones.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "Match on the failing check and the value band",
+   "cards": [
+    "T-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card T-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-046",
+   "type": "risk",
+   "title": "The PC sleeps during the run",
+   "cause": "The project's PC slept during long runs many times between 2026-11-04 and 2026-11-14, for 0.3 to 25 h, and its batch runs freeze while it sleeps.",
+   "effect": "T-02's full test run would take longer, or lose its last checks and need a rerun, as on 2026-11-06.",
+   "likelihood": "H",
+   "impact": "L",
+   "rating": "Medium",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "Keep the PC awake",
+   "cards": [
+    "T-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card T-02",
+   "history": [
+    "2026-11-18: G1 register review: likelihood M to H, since it is already seen many times; impact M to L, since the runs freeze and resume, at worst a rerun; rating stays Medium. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-047",
+   "type": "risk",
+   "title": "No suitable slope",
+   "cause": "The slope brake test needs a slope near 20 deg with a soft run-out, and no such site is known yet.",
+   "effect": "The descent cap's tip margins would stay uncalibrated (RSK-009), or a ramp must be built for the test.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "A ramp built for the test",
+   "cards": [
+    "T-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card T-04",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-048",
+   "type": "risk",
+   "title": "A campaign starts with known failures open",
+   "cause": "The test baseline still has known failures (66 of 528 tests not passing after the critical fixes), and each campaign's TRR must judge them.",
+   "effect": "A campaign that starts with them open can hide a new failure, or give results that must be rerun.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the lead systems engineer (chair)",
+   "response": "mitigate",
+   "mitigation": "RIDs with an owner and a date",
+   "cards": [
+    "T-05"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card T-05",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-049",
+   "type": "risk",
+   "title": "Bench hardware not available",
+   "cause": "The bench needs the robot's controller board, ESCs and BMS, which D96 settles only when the supplier's data arrive.",
+   "effect": "The bench and HIL rows of the matrix (V-02) would slip.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "Book it with the campaign plan",
+   "cards": [
+    "V-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card V-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-050",
+   "type": "risk",
+   "title": "Damage to the hardware",
+   "cause": "Bench tests drive the real board, ESCs and pack to their limits, through faults and E-stops.",
+   "effect": "A test that goes wrong could damage the board, an ESC or the pack and stop both the bench and the field campaigns.",
+   "likelihood": "L",
+   "impact": "H",
+   "rating": "Medium",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "Current limits and a safety review of each test",
+   "cards": [
+    "V-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card V-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-051",
+   "type": "risk",
+   "title": "Weather or the site not available",
+   "cause": "Field tests depend on the owner's sites and the Saudi climate, where summer heat of 45 to 50 deg C allows charging only in cool hours (D94).",
+   "effect": "Field days are lost and the field campaign (V-03) slips.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "Spare days in the plan",
+   "cards": [
+    "V-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card V-03",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-052",
+   "type": "risk",
+   "title": "Hidden differences",
+   "cause": "Some differences between the robot and the model are in no parameter or document, such as wiring, supplier settings or firmware versions.",
+   "effect": "The as-built audit (P-01) could miss them, and the final baseline would not describe the robot.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "A checklist generated from the parameters",
+   "cards": [
+    "P-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card P-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-053",
+   "type": "risk",
+   "title": "Cost beyond the 1-1.5 M estimate",
+   "cause": "Building the framework and the project plan (G0-01) was estimated at 1 to 1.5 M.",
+   "effect": "An overrun would have cost budget without changing any result.",
+   "likelihood": "M",
+   "impact": "L",
+   "rating": "Low",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Report the actual at the end (not done: the card gives no figure)",
+   "cards": [
+    "G0-01"
+   ],
+   "status": "closed (card G0-01 was done on 2026-11-16, so no overrun can arise on it any more; the card records its effort only as the lead systems engineer's own work, so the actual figure that the mitigation asked for is not on record)",
+   "raised": "2026-11-15",
+   "review_by": "closed",
+   "source": "card G0-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; closed, since G0-01 is done; the actual cost was not reported. Review by closed (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-054",
+   "type": "risk",
+   "title": "A retrospective gate hides gaps",
+   "cause": "G0 was held after much of its content already existed, as a retrospective gate.",
+   "effect": "Gaps in the charter, the plan or the register could have passed unseen into G1.",
+   "likelihood": "L",
+   "impact": "M",
+   "rating": "Low",
+   "owner": "the lead systems engineer (chair)",
+   "response": "mitigate",
+   "mitigation": "Score each criterion on evidence, as for any gate (done at G0)",
+   "cards": [
+    "G0-02"
+   ],
+   "status": "closed (G0 passed with actions on 2026-11-16 after an independent assessment that scored each criterion on its evidence, raised 9 RIDs (3 Critical) and was followed by a delta re-review: the gaps were found, not hidden)",
+   "raised": "2026-11-15",
+   "review_by": "closed",
+   "source": "card G0-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; closed, since the gate was scored on evidence and found its gaps (NASL-SHD-GRR-001). Review by closed (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-055",
+   "type": "risk",
+   "title": "The review costs too much",
+   "cause": "The SRR/SFR review (G1-05) covers the 114 functional and the new technical requirements, seven specs, the ICD, the hazard log and the safety plan, and this project's review and research work has run past its estimates before (G1-00, G1-01 part 2).",
+   "effect": "The review would cost more than planned, though its result and the gate need not slip.",
+   "likelihood": "H",
+   "impact": "L",
+   "rating": "Medium",
+   "owner": "the lead systems engineer (chair)",
+   "response": "mitigate",
+   "mitigation": "A scoped checklist per gate",
+   "cards": [
+    "G1-05"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-09",
+   "source": "card G1-05",
+   "history": [
+    "2026-11-18: G1 register review: likelihood M to H, since the review phase (G1-00: 6.8 M against 3-5 M) and the part-2 decision research (about 7.3 M against about 9 M for part 2) both overran; rating Low to Medium. Review by 2026-12-09 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-056",
+   "type": "risk",
+   "title": "The layout allowance is a hand-kept ratchet",
+   "cause": "The layout check's crossing allowance per diagram has been raised by hand with reasons (D68, D69); D116 replaces it with a generated baseline on card G2-INT, not yet built.",
+   "effect": "Diagrams can grow harder to read without the check failing. STATUS 23 was closed on 2026-11-18 with fw_safety_supervisor's allowance set to its 646 crossings and the reason recorded, so the ratchet is visible but still kept by hand.",
+   "likelihood": "M",
+   "impact": "L",
+   "rating": "Low",
+   "owner": "the integration engineer",
+   "response": "mitigate",
+   "mitigation": "D116: a generated baseline, any increase failing until reviewed, slack and stale rows printed (card G2-INT)",
+   "cards": [
+    "G2-INT"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-30",
+   "source": "card G2-INT",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-30 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate).",
+    "2026-11-18: effect updated after STATUS 23 closed with its 646-crossing allowance (G1-01 part 2, lead point 44).",
+    "2026-11-21: the last review decisions settled (D114 to D116): the mitigation is D116."
+   ]
+  },
+  {
+   "id": "RSK-057",
+   "type": "risk",
+   "title": "The logging loads the companion",
+   "cause": "B-03 logs on the companion every channel that the verification matrix names.",
+   "effect": "The extra load could slow the guidance and navigation tasks on the robot.",
+   "likelihood": "L",
+   "impact": "M",
+   "rating": "Low",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "Lower the log rates",
+   "cards": [
+    "B-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-30",
+   "source": "card B-03",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-30 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-058",
+   "type": "risk",
+   "title": "Fast tests too slow",
+   "cause": "T-01 adds two to five Fast tests per domain, and a test of a whole subsystem takes minutes.",
+   "effect": "The Fast tier would stop being run on every change.",
+   "likelihood": "M",
+   "impact": "L",
+   "rating": "Low",
+   "owner": "the test engineer",
+   "response": "mitigate",
+   "mitigation": "Bench-level tests only",
+   "cards": [
+    "T-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-30",
+   "source": "card T-01",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-30 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-059",
+   "type": "risk",
+   "title": "Docs drift again during the audit",
+   "cause": "The model keeps changing while P-02 compares the specs, the ICD, the decisions and STATUS with it.",
+   "effect": "The audit would close on documents that are already stale.",
+   "likelihood": "M",
+   "impact": "L",
+   "rating": "Low",
+   "owner": "the configuration and documentation engineer",
+   "response": "mitigate",
+   "mitigation": "Freeze the model during the audit",
+   "cards": [
+    "P-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-30",
+   "source": "card P-02",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-30 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-060",
+   "type": "risk",
+   "title": "The baseline is not signed",
+   "cause": "The final product baseline needs the project owner's signature at the PCA (P-03).",
+   "effect": "Without it G7 cannot pass and the project cannot close.",
+   "likelihood": "L",
+   "impact": "M",
+   "rating": "Low",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Hold the review with the project owner present",
+   "cards": [
+    "P-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-15",
+   "review_by": "2026-12-30",
+   "source": "card P-03",
+   "history": [
+    "2026-11-18: G1 register review: cause and effect added; rating, mitigation and card unchanged. Review by 2026-12-30 (the G1 rule: High one week, Medium three weeks, Low six weeks, and at every gate)."
+   ]
+  },
+  {
+   "id": "RSK-061",
+   "type": "risk",
+   "title": "Product certification in the Kingdom has no plan",
+   "cause": "Under D103 the SASO machinery regulation (TR 01-08-21-180) binds the robot: whoever places it on the market needs a notified body's certificate, a technical file with a risk assessment, and labels and manuals in Arabic, and its radios need approval, yet the safety plan leaves certification out and no card carries it.",
+   "effect": "The robot could not go into the owner's fleet service or on sale in the Kingdom when the phase ends, and the technical file, the labels and the manuals would be made late, perhaps with design changes.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the project owner",
+   "response": "mitigate",
+   "mitigation": "The project owner decides the scope, prepared by the lead systems engineer: certification in this phase by a change request and a card (the conformity route through a SASO body, the certificate, the technical file, Arabic labels and manuals, the radio approvals), or the robot stays a test article with no Saudi certification in this phase; meanwhile G2-FSC sets the machine's classification and its mower standard, and V-06 writes the manuals in Arabic and English",
+   "cards": [
+    "G2-FSC",
+    "V-06",
+    "V-07"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D103 (2026-11-18), docs/architecture.md:169; docs/safety/safety_plan.md:80, :86, :89, :284-286; work/team/g1-03/p2/research_E07.md:164, :172-173",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25.",
+    "2026-11-18: mitigation card V-07 added at the owner's word (D113: \"Add a card, later phase (Recommended)\")."
+   ]
+  },
+  {
+   "id": "RSK-062",
+   "type": "risk",
+   "title": "Safety values set before the standards are chosen and read",
+   "cause": "Under D103 no standard's text is bought, so the test object, the blades' reach zone and their run-down time (REQ-SYS-033, -046, -048 and -098) are set by risk assessment, while the machine's class and its mower standard wait for G2-FSC because ISO 5395 does not cover a battery robot mower.",
+   "effect": "Once the standard is chosen and read, a stricter value (one summary gives 2 s for the blade stop, against the twin's 3.0 s test) or another rating basis could change approved safety requirements, their tests and the mower design after G1.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the functional safety engineer",
+   "response": "mitigate",
+   "mitigation": "Each of the four values carries its margin and the mark 'not yet confirmed against the standards' (D103); G2-FSC chooses the classification and the mower standard and checks the hazard log's basis against it; the purchase of the texts goes back to the project owner before G2-FSC can close, since its exit asks for the check against them",
+   "cards": [
+    "G2-FSC"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D103 (2026-11-18, 'Buy none now'), docs/architecture.md:169; docs/safety/safety_plan.md:76-79; tools/dashboard/project_cards.json:5090 (G2-FSC exit); work/team/g1-03/p2/research_E07.md:156",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-063",
+   "type": "risk",
+   "title": "A cited standard changes its edition",
+   "cause": "D103 dates every standard, and several are being revised now: ISO 12100, ISO 13849-2, ISO 13850, ISO 13857, ISO 14982, ISO 25119-1 and -2, IEC 60204-1, IEC 61496-1, IEC 61508 and IEC 62133-2 (the safety plan's watch list).",
+   "effect": "A new edition that changes a rating rule or a safety value would mean rating the hazard log again and changing safety requirements or their verification after G1.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the functional safety engineer",
+   "response": "mitigate",
+   "mitigation": "The register reviews the safety plan's watch list at each gate and when a card starts; a new edition that changes a rule enters through change control, and the hazard log is rated again at its next issue (safety plan section 3)",
+   "cards": [
+    "G1-05",
+    "G2-FSC"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "decision D103 (2026-11-18); docs/safety/safety_plan.md:124-133 (the watch list, to be reviewed by the risk register at each gate)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-064",
+   "type": "risk",
+   "title": "The planned 1 kW motor is not chosen yet",
+   "cause": "Under D95 the baseline values are the 1 kW unit's, but no unit has been chosen and its purchase lies outside this phase (CR-004), so its torque, resistance, inertia and the ESC current it needs (54 A continuous in the model, against 40 A for the 750 W) are estimates.",
+   "effect": "When a unit is chosen, its datasheet can move the drive values, the firmware's limits and the hot-day and energy results built on the estimates, and the delivered ESCs, whose ratings are unknown, may not carry its current.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the drive engineer",
+   "response": "mitigate",
+   "mitigation": "Both motors stay selectable and each result records its motor (D95, G2-DRV); the 1 kW values stay marked as estimates until the unit is chosen and its datasheet arrives (G1-04); the choice goes to the project owner with a check that the delivered ESCs can drive it; CR-004 brings the charter in line",
+   "cards": [
+    "G2-DRV",
+    "G1-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D95 (2026-11-18), docs/architecture.md:161; docs/changes/CR-004_charter_after_part2_decisions.md:47, :55; work/team/g1-01/p2/integration/report_step3.md:69-76, :196 (the motor-dependent values)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-065",
+   "type": "risk",
+   "title": "Firmware with the 1 kW torque limits reaches the 750 W robot",
+   "cause": "The twin's default motor is the 1 kW unit (D95), so firmware built from the defaults carries 19.1 N m per side, a third more than the 14.32 N m the robot's 750 W motors can give, and only a written condition keeps it off the robot.",
+   "effect": "Flashed onto today's robot it would ask the motors for torque they cannot give, so the speed and yaw loops, the hill start, the stops and the motor temperatures would not behave as verified in the twin.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "D95's flashing condition, an exit criterion of G2-MCU and, under CR-004, a constraint of the charter: before the project owner flashes the board, the generated torque limits are checked against the motors fitted (B-00, B-01), and each build records its motor",
+   "cards": [
+    "G2-MCU",
+    "B-00",
+    "B-01"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D95 (2026-11-18), docs/architecture.md:161; tools/dashboard/project_cards.json:2320 (G2-MCU exit); docs/changes/CR-004_charter_after_part2_decisions.md:46; work/agentic/review/ranked.md:29 (R-13)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-066",
+   "type": "risk",
+   "title": "Blocked lanes stop palm missions until the bypass knows the implement",
+   "cause": "Under D99 no automatic bypass starts with the mower fitted until G2-GNC puts its footprint in the bypass checks (the deck's corner is 1.31 m from the centre, against VFH's 0.634 m radius), nor after a hold in which a person was seen or the scans were lost.",
+   "effect": "Every lane blocked by a frond, a box or a standing person stops a palm-grove mowing mission until the operator comes, so mowing missions are not autonomous around obstacles until the footprint is in.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "G2-GNC adds the footprint per implement to the bypass checks (D87, R-06), with D99's switch and gates, and reruns S5 with the mower; until then a blocked lane holds, pauses and alerts the operator (D99), and palm missions are planned with the operator at hand",
+   "cards": [
+    "G2-GNC"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D99 (2026-11-18), docs/architecture.md:165; tools/dashboard/project_cards.json:2132, :2135 (G2-GNC exit); work/team/g1-03/p2/research_D11.md:23",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-067",
+   "type": "risk",
+   "title": "A coasting stop sits at the edge of the stop bounds",
+   "cause": "When the BMS allows no charge current (CCL 0, a full or hot pack) the drive cannot brake by regeneration, so a stop coasts at about 0.9 m/s2, the bottom of S6's decided band of 1.0 +/- 0.1 m/s2 (D100) and under the stop monitor's 1.0 m/s2 bound (STATUS 39).",
+   "effect": "A remote E-stop on flat ground with a full battery can trip STOP_FAIL and open the high voltage, and S6 can fail its band, a point that D100 leaves to confirm and no card carries.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the MCU firmware engineer",
+   "response": "mitigate",
+   "mitigation": "Confirm S6's band against a coasting stop when its scripts change (D100, G2-INT), and decide the stop monitor's bound for a stop without regeneration on G2-MCU (STATUS 39)",
+   "cards": [
+    "G2-INT",
+    "G2-MCU"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "decision D100 (2026-11-18), docs/architecture.md:166; docs/STATUS.md:173 (item 39)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-068",
+   "type": "risk",
+   "title": "The safety concept needs hardware the robot does not have",
+   "cause": "The hazard log finds no safety goal shown met on the robot as built, whose stops and interlocks run in one MCU (PL b at most) against PL d, and under D96 the final board waits for the safety concept's architecture (E-05).",
+   "effect": "G2-FSC may need a second channel, a safety controller, safety-rated person sensing or a blade brake, a hardware change outside the charter that only the project owner can approve, and the board and G2-MCU would wait for it.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the functional safety engineer",
+   "response": "mitigate",
+   "mitigation": "G2-FSC answers each class-1 escalation (E-01 to E-06 and E-08) with an architecture that meets its goal at PL d, or a change request for new hardware (the owner's decision); G3-FME checks the stop path for single points of failure; G1-04 brings the data of the E-stop buttons, the safety relay and the STO wiring the robot has (D80); the board is settled after E-05 (D96)",
+   "cards": [
+    "G2-FSC",
+    "G3-FME",
+    "G1-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D96 (2026-11-18), docs/architecture.md:162; docs/safety/hazard_log.md:940, :944-945, :947; the risks of cards G1-07, G2-FSC and G3-FME (tools/dashboard/project_cards.json:5053, :5328)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-069",
+   "type": "risk",
+   "title": "G1-01 part 2 runs past its budget",
+   "cause": "The research for the part-2 decisions took about 7.3 M against about 9 M for all of part 2, the project owner kept the full plan at about 17 M, and D102 adds the checklist and the higher capability level to every documentation task.",
+   "effect": "Part 2 may need more budget again, as G1-00 and G2-DSC did, and G1-05 would slip while the owner decides.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Track each part-2 step's effort against the plan and put an expected overrun to the project owner before the budget runs out, as on G2-DSC; calibrate the later estimates on the cards done (G1-10)",
+   "cards": [
+    "G1-01",
+    "G1-10"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D102 (2026-11-18), docs/architecture.md:168; tools/dashboard/journal.jsonl:1183 (the owner's 'Full plan'), :1046-1047 (G2-DSC); tools/dashboard/project_cards.json:1017 (G1-00)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-070",
+   "type": "risk",
+   "title": "The low-charge return comes too late at the pack's end of life",
+   "cause": "The GNC sets its return threshold from 0.12 Wh/m, against 0.158 measured and roughly 0.19 to 0.20 Wh/m estimated with the mower, and from the new pack's 2,948 Wh at any age, while D101 asks the robot to arrive home with the 0.20 reserve at the pack's end of life.",
+   "effect": "At end of life a 500 m return needs about 0.047 of the charge where the threshold leaves 0.037, so the robot can arrive below the reserve or stop on the way back (HAZ-040), and the re-scoped S3 would fail until G2-GNC changes the return.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the GNC engineer",
+   "response": "mitigate",
+   "mitigation": "G2-GNC plans the return on the energy per metre of the phase-2 budget, with the return energy scaled by the pack's learned capacity (D101); G2-PWR derives that energy from a phase-2 mowing energy run; S3 checks the arrival with the reserve at end of life (G2-INT)",
+   "cards": [
+    "G2-GNC",
+    "G2-PWR",
+    "G2-INT"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "decision D101 (2026-11-18), docs/architecture.md:167; work/team/g1-03/p2/research_D16.md:17, :162; docs/safety/hazard_log.md:187 (HAZ-040); tools/dashboard/project_cards.json:2136 (G2-GNC exit), :2504 (G2-PWR exit)",
+   "history": [
+    "2026-11-18: raised at the G1 register review (G1-01 part 2). Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-071",
+   "type": "risk",
+   "title": "A hazard is missed because the operating concept is incomplete",
+   "cause": "The hazard analysis walks through the operating concept, and a mode or abnormal case that the concept leaves out is never analysed.",
+   "effect": "An unanalysed hazard has no safety goal or requirement, so the robot could meet every requirement and still hurt someone.",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the functional safety engineer",
+   "response": "mitigate",
+   "mitigation": "A walk-through of every mode and abnormal case of the charter; the operator's and the maintainer's view at the review",
+   "cards": [
+    "G1-07",
+    "G2-FSC"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "card G1-07",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G1-07. Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-072",
+   "type": "risk",
+   "title": "Thin field evidence, because only the owner runs the robot",
+   "cause": "Only the project owner may act on the real robot (the charter's safety constraint), so field runs are few.",
+   "effect": "The twin is verified against the robot on little data, and claims about the field rest on simulation.",
+   "likelihood": "H",
+   "impact": "M",
+   "rating": "High",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Plan the field tests early (T-04, V-03); bound the claims by the evidence",
+   "cards": [
+    "V-05",
+    "T-04",
+    "V-03"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "card V-05",
+   "history": [
+    "2026-11-18: added at the G1 register review from card V-05. Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-073",
+   "type": "risk",
+   "title": "The drive cannot absorb the energy at CCL 0",
+   "cause": "A full or hot pack sets the charge limit to 0 (D65, D94), and the robot then has no regenerative braking on a descent.",
+   "effect": "The descent relies on stop-go parks at the cap, and the sprayer cannot use the 20 deg design slope (CR-001).",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the drive engineer",
+   "response": "mitigate",
+   "mitigation": "A braking resistor (hardware: the owner's), in a later phase",
+   "cards": [
+    "G2-BRK"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "card G2-BRK",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G2-BRK. Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-074",
+   "type": "risk",
+   "title": "The raised tiller, as estimated, falls over backward at rest",
+   "cause": "The tiller as estimated (85 kg, 0.90 m behind the centre) moves the centre of gravity behind the rear contact when raised.",
+   "effect": "Tillage would be unsafe on any slope until the real tiller data change the design.",
+   "likelihood": "H",
+   "impact": "H",
+   "rating": "High",
+   "owner": "the structure engineer",
+   "response": "avoid",
+   "mitigation": "Real tiller data, then front ballast or a rear wheel; no tiller use until then (the charter)",
+   "cards": [
+    "G2-TIL"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-11-25",
+   "source": "card G2-TIL",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G2-TIL. Review by 2026-11-25."
+   ]
+  },
+  {
+   "id": "RSK-075",
+   "type": "risk",
+   "title": "The repository grows too big from results and logs",
+   "cause": "Simulation results, logs and generated files are large and are produced on every run.",
+   "effect": "Version control becomes slow and the history hard to use.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the configuration and documentation engineer",
+   "response": "mitigate",
+   "mitigation": "Ignore the results and logs; LFS for the binaries that are kept",
+   "cards": [
+    "G1-08"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "card G1-08",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G1-08. Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-076",
+   "type": "risk",
+   "title": "Git and the MATLAB project disagree on the files",
+   "cause": "Files are added to one of them and not the other.",
+   "effect": "A checkout misses files the project needs, or the project lists files that are not kept.",
+   "likelihood": "L",
+   "impact": "M",
+   "rating": "Low",
+   "owner": "the configuration and documentation engineer",
+   "response": "mitigate",
+   "mitigation": "The project's source control integration; the restore test",
+   "cards": [
+    "G1-08"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-30",
+   "source": "card G1-08",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G1-08. Review by 2026-12-30."
+   ]
+  },
+  {
+   "id": "RSK-077",
+   "type": "risk",
+   "title": "The handbook drifts from the project's practice",
+   "cause": "The project changes how it works (for example the documentation checklist of D102) without a new handbook issue.",
+   "effect": "The baseline for future projects describes a process the project no longer follows.",
+   "likelihood": "M",
+   "impact": "L",
+   "rating": "Low",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Change the project and the handbook in the same issue",
+   "cards": [
+    "G1-09"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-30",
+   "source": "card G1-09",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G1-09. Review by 2026-12-30."
+   ]
+  },
+  {
+   "id": "RSK-078",
+   "type": "risk",
+   "title": "Durations from the size alone are rough",
+   "cause": "Card sizes are set before the work is known, and the effort of research and checks varies widely (G1-01 part 2).",
+   "effect": "The schedule and the effort estimates miss, and gates slip.",
+   "likelihood": "H",
+   "impact": "L",
+   "rating": "Medium",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Calibrate on the cards done; re-project at every gate",
+   "cards": [
+    "G1-10"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "card G1-10",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G1-10. Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-079",
+   "type": "risk",
+   "title": "A key estimate cannot be measured on the robot",
+   "cause": "Some twin values (thermal, contact, losses) need test rigs or data the project does not have.",
+   "effect": "The twin keeps estimates where the robot differs, and its results carry that error.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the lead systems engineer",
+   "response": "mitigate",
+   "mitigation": "Supplier data (G1-04) or a conservative bound, recorded",
+   "cards": [
+    "G2-VAL",
+    "G1-04"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "card G2-VAL",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G2-VAL. Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-080",
+   "type": "risk",
+   "title": "A protection needs new hardware or a supplier change",
+   "cause": "The radio links and the controllers are the supplier's, used as delivered (N-17).",
+   "effect": "A security measure the assessment calls for may not be possible without the supplier.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the electronics and comms engineer",
+   "response": "mitigate",
+   "mitigation": "Escalate to the owner",
+   "cards": [
+    "G2-CYB"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "card G2-CYB",
+   "history": [
+    "2026-11-18: added at the G1 register review from card G2-CYB. Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-081",
+   "type": "risk",
+   "title": "A fault the model cannot represent",
+   "cause": "Some hardware faults have no counterpart in the twin's models.",
+   "effect": "The fault-injection campaign misses them, and the safety analysis rests on an incomplete set.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the functional safety engineer",
+   "response": "mitigate",
+   "mitigation": "Cover it on the bench (V-02) or by analysis",
+   "cards": [
+    "T-06",
+    "V-02"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "card T-06",
+   "history": [
+    "2026-11-18: added at the G1 register review from card T-06. Review by 2026-12-09."
+   ]
+  },
+  {
+   "id": "RSK-082",
+   "type": "risk",
+   "title": "The fault-analysis licence is not decided (OP-01)",
+   "cause": "The fault-analysis toolbox is installed but not licensed, and the decision is the project owner's (by 2026-11-23).",
+   "effect": "The FMEA and fault trees (G3-FME) and the fault-injection campaign (T-06) stay as structured files, without the tool's analyses.",
+   "likelihood": "M",
+   "impact": "M",
+   "rating": "Medium",
+   "owner": "the project owner",
+   "response": "mitigate",
+   "mitigation": "The owner decides by 2026-11-23; without the licence the records stay as structured files with their PDFs",
+   "cards": [
+    "G3-FME",
+    "T-06"
+   ],
+   "status": "open",
+   "raised": "2026-11-18",
+   "review_by": "2026-12-09",
+   "source": "the open point OP-01",
+   "history": [
+    "2026-11-18: added at the G1 register review from the open point OP-01. Review by 2026-12-09."
+   ]
+  }
+ ]
+}

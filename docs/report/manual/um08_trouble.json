@@ -1,0 +1,114 @@
+{
+ "id": "um08_trouble",
+ "title": "Troubleshooting",
+ "blocks": [
+  {
+   "type": "table",
+   "id": "tab_trouble",
+   "caption": "Common problems",
+   "header": [
+    "Symptom",
+    "Action"
+   ],
+   "widths": [
+    40,
+    60
+   ],
+   "rows": [
+    [
+     "Simulation becomes very slow",
+     "Check `memory`; restart MATLAB and reopen the project"
+    ],
+    [
+     "Accelerator mode fails when the MEX file loads",
+     "Windows Application Control blocks it on this PC; use Normal mode (default)"
+    ],
+    [
+     "`Stateflow:Assertion o != nullptr` on the first compile",
+     "Run again (`run_scenario` retries automatically)"
+    ],
+    [
+     "Robot does not move",
+     "Check `S.telem.mode` = 3 (MANUAL); arm after STANDBY with sticks at 0 and the transmitter on; after an E-stop or RC loss, reset and cycle the arm switch"
+    ],
+    [
+     "RC link lost in the first 0.5 s",
+     "Normal: the transmitter switches on at 0.5 s"
+    ],
+    [
+     "HV_Ready never rises in a direct model run",
+     "Run `P = scn_integration_overrides(P)` first"
+    ],
+    [
+     "Code generation BLOCKED",
+     "Install Simulink Coder, then `shaddad_configsets('codegen')`"
+    ],
+    [
+     "A run ends with `ok=0`",
+     "Read `r.msg` for the error text"
+    ],
+    [
+     "`No USB controller found`",
+     "Connect the PS5 controller or the transmitter (USB Joystick mode); check with `phase1_joystick_check`"
+    ],
+    [
+     "Nothing happens after `Controller found`",
+     "The model is compiling (2-3 min the first time); wait for the 3-D window"
+    ],
+    [
+     "Live drive: robot does not arm",
+     "Sticks centred, then Cross (PS5) or CH6 (RC); after an E-stop first Triangle / CH9 reset"
+    ],
+    [
+     "Live drive: steering or throttle reversed",
+     "Flip the sign in `scen.joy.pad.inv_*` (PS5) or `scen.joy.inv` (RC), run `shaddad_params`"
+    ],
+    [
+     "`plot_run`: a tile says `not logged in this run`",
+     "Normal for parts the model variant does not run (for example navigation in Phase 1); see {sec:um06_results}"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Document sign-off"
+  },
+  {
+   "type": "table",
+   "id": "tab_signoff",
+   "caption": "Sign-off",
+   "header": [
+    "Name",
+    "Role",
+    "Signature",
+    "Date"
+   ],
+   "widths": [
+    32,
+    20,
+    28,
+    20
+   ],
+   "rows": [
+    [
+     "[TBD - author]",
+     "Author",
+     "",
+     ""
+    ],
+    [
+     "[TBD - reviewer]",
+     "Reviewer",
+     "",
+     ""
+    ],
+    [
+     "[TBD - approver]",
+     "Approver",
+     "",
+     ""
+    ]
+   ]
+  }
+ ]
+}

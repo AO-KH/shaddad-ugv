@@ -1,0 +1,119 @@
+{
+ "about": "The Shaddad change request (CR) and nonconformance (NCR) logs (NASL-EMS-HBK-001 sections 8.1 and 8.4; templates framework/templates/change_request.md and nonconformance_report.md). Opened on 2026-11-15. A class 1 change goes to the change board (the owner); a class 2 change stays inside its card and is recorded there.",
+ "updated": "2026-11-18",
+ "change_requests": [
+  {
+   "id": "CR-001",
+   "title": "The descent envelope of the full-tank sprayer (the 20 deg design slope)",
+   "class": 1,
+   "raised": "2026-11-15",
+   "by": "the lead, from card G2-DSC",
+   "status": "implemented and verified: card G2-DSC closed 2026-11-16 (NASL-SHD-ER-005)",
+   "decision": "2026-11-15, the owner: \"Limit sprayer to ~18.5° (Recommended)\" (option 1)",
+   "cards": [
+    "G2-DSC"
+   ],
+   "document": "docs/changes/CR-001_sprayer_descent_envelope.md"
+  },
+  {
+   "id": "CR-002",
+   "title": "The plan after G0: a safety programme, version control, model credibility and a schedule",
+   "class": 1,
+   "raised": "2026-11-16",
+   "by": "the lead, after G0, at the owner's request",
+   "status": "approved: implemented in the task cards v1.4 and the plan v1.3",
+   "decision": "2026-11-16, the owner: \"Approve option 1\" (option 1)",
+   "cards": [
+    "G1-07",
+    "G1-08",
+    "G1-09",
+    "G1-10",
+    "G2-FSC",
+    "G2-VAL",
+    "G3-FME",
+    "T-06",
+    "V-05",
+    "B-00",
+    "G2-BRK",
+    "G2-CYB",
+    "V-06",
+    "G1-01",
+    "G1-02",
+    "G1-05",
+    "T-01",
+    "T-02",
+    "T-03",
+    "T-04",
+    "T-05",
+    "G2-GNC",
+    "G2-NAV",
+    "G2-STR",
+    "G3-MCU",
+    "G3-PWR",
+    "G3-DRV",
+    "G3-NAV",
+    "G3-GNC",
+    "V-01",
+    "V-04",
+    "B-01",
+    "P-01"
+   ],
+   "document": "docs/changes/CR-002_plan_after_g0.md"
+  },
+  {
+   "id": "CR-003",
+   "title": "The measure of safe stops: goal 3 of the charter and SHD-SC2 stated by the park criterion",
+   "class": 1,
+   "raised": "2026-11-16",
+   "by": "the lead, from card G2-DSC (review RID-DSC-01)",
+   "status": "approved: implemented in the charter v1.3 and the plan v1.4",
+   "decision": "2026-11-16, the owner: \"Restate by the safe-stop rule (Recommended)\" (option 1)",
+   "cards": [
+    "G2-DSC",
+    "G2-MCU"
+   ],
+   "document": "docs/changes/CR-003_measure_of_safe_stops.md"
+  },
+  {
+   "id": "CR-004",
+   "title": "The charter after the part-2 decisions: the planned 1 kW motors (D95) and the mission energy (D101)",
+   "class": 1,
+   "raised": "2026-11-18",
+   "by": "the lead, from card G1-01 part 2 (review decisions 6 and 16)",
+   "status": "approved: implemented in the charter v1.4 and the plan v1.5; N-16 at the register merge (G1-01 part 2, step 13)",
+   "decision": "2026-11-18, the owner: \"Option 1: both (Recommended)\" (option 1)",
+   "cards": [
+    "G1-01",
+    "G1-03",
+    "G2-MCU",
+    "B-00"
+   ],
+   "document": "docs/changes/CR-004_charter_after_part2_decisions.md"
+  }
+ ],
+ "nonconformances": [],
+ "fields": {
+  "change_requests": [
+   "id",
+   "title",
+   "class",
+   "raised",
+   "by",
+   "status",
+   "decision",
+   "cards",
+   "document"
+  ],
+  "nonconformances": [
+   "id",
+   "title",
+   "item",
+   "requirement",
+   "found",
+   "disposition",
+   "status",
+   "cards",
+   "document"
+  ]
+ }
+}

@@ -1,0 +1,283 @@
+component Shaddad_Pack
+    % Shaddad_Pack:2
+    % Module Block
+    %    Model resolution: Grouped
+    %    Number of parallel assemblies: 13
+    %    Number of cells per parallel assembly: 15
+    %    Series grouping simulation strategy: [1  1  1  1  1  1  1  1  1  1  1  1  1]
+    %    Parallel grouping simulation strategy: [1  1  1  1  1  1  1  1  1  1  1  1  1]
+    %
+    %    MATLAB version: 26.2
+    %    Simscape Battery version: 26.2
+    %    Simscape code generated on: 27-Oct-2026 12:18:13
+
+    parameters
+        BatteryCapacityCell = {27,'A*hr'}; % Battery capacity
+        BatteryCapacityCellPercentDeviation = zeros([13 1]); % Percent deviation for BatteryCapacityCell
+        ExtrapolationMethodCell = {simscape.enum.extrapolation.nearest,'1'}; % Extrapolation method for all tables
+        SOCBreakpointsCell = {[0, .1, .25, .5, .75, .9, 1],'1'}; % State of charge breakpoints, SOC
+        SOCBreakpointsCellPercentDeviation = zeros([13 1]); % Percent deviation for SOCBreakpointsCell
+        TemperatureBreakpointsCell = {[278, 293, 313],'K'}; % Temperature breakpoints, T
+        TemperatureBreakpointsCellPercentDeviation = zeros([13 1]); % Percent deviation for TemperatureBreakpointsCell
+        OpenCircuitVoltageThermalCell = {[3.49, 3.5, 3.51; 3.55, 3.57, 3.56; 3.62, 3.63, 3.64; 3.71, 3.71, 3.72; 3.91, 3.93, 3.94; 4.07, 4.08, 4.08; 4.19, 4.19, 4.19],'V'}; % Open-circuit voltage, OCV(SOC,T)
+        OpenCircuitVoltageThermalCellPercentDeviation = zeros([13 1]); % Percent deviation for OpenCircuitVoltageThermalCell
+        VoltageRangeCell = {[0, inf],'V'}; % Terminal voltage operating range, [Min Max]
+        VoltageRangeCellPercentDeviation = zeros([13 1]); % Percent deviation for VoltageRangeCell
+        ResistanceSOCBreakpointsCell = {[0, .1, .25, .5, .75, .9, 1],'1'}; % State of charge breakpoints for resistance, SOC
+        ResistanceSOCBreakpointsCellPercentDeviation = zeros([13 1]); % Percent deviation for ResistanceSOCBreakpointsCell
+        ResistanceTemperatureBreakpointsCell = {[278, 293, 313],'K'}; % Temperature breakpoints for resistance, T
+        ResistanceTemperatureBreakpointsCellPercentDeviation = zeros([13 1]); % Percent deviation for ResistanceTemperatureBreakpointsCell
+        R0ThermalCell = {[.0117, .0085, .009; .011, .0085, .009; .0114, .0087, .0092; .0107, .0082, .0088; .0107, .0083, .0091; .0113, .0085, .0089; .0116, .0085, .0089],'Ohm'}; % Instantaneous resistance, R0(SOC,T)
+        R0ThermalCellPercentDeviation = zeros([13 1]); % Percent deviation for R0ThermalCell
+        R1ThermalCell = {[.0109, .0029, .0013; .0069, .0024, .0012; .0047, .0026, .0013; .0034, .0016, .001; .0033, .0023, .0014; .0033, .0018, .0011; .0028, .0017, .0011],'Ohm'}; % First polarization resistance, R1(SOC,T)
+        R1ThermalCellPercentDeviation = zeros([13 1]); % Percent deviation for R1ThermalCell
+        Tau1ThermalCell = {[20, 36, 39; 31, 45, 39; 109, 105, 61; 36, 29, 26; 59, 77, 67; 40, 33, 29; 25, 39, 33],'s'}; % First time constant, Tau1(SOC,T)
+        Tau1ThermalCellPercentDeviation = zeros([13 1]); % Percent deviation for Tau1ThermalCell
+        BatteryThermalMassCell = {100,'J/K'}; % Battery thermal mass
+        BatteryThermalMassCellPercentDeviation = zeros([13 1]); % Percent deviation for BatteryThermalMassCell
+        NonCellElectricalResistance = {1/1000,'Ohm'}; % Non-cell electrical resistance
+        CellBalancingClosedResistance = {0.01,'Ohm'}; % Cell balancing switch closed resistance
+        CellBalancingOpenConductance = {1e-8,'1/Ohm'}; % Cell balancing switch open conductance
+        CellBalancingThreshold = {0.5,'1'}; % Cell balancing switch operation threshold
+        CellBalancingResistance = {4,'Ohm'}; % Cell balancing shunt resistance
+        AmbientResistance = {25,'K/W'}; % Cell level ambient thermal path resistance
+    end
+
+    parameters(Access=private,ExternalAccess=none)
+        P = 15; % Batteries in Parallel
+        S = 13; % Batteries in Series
+        SeriesGrouping = [1 1 1 1 1 1 1 1 1 1 1 1 1]; % Series grouping simulation strategy
+        ParallelGrouping = [1 1 1 1 1 1 1 1 1 1 1 1 1]; % Parallel grouping simulation strategy
+    end
+
+    parameters(Access=private)
+        CumNumModules = cumsum(SeriesGrouping); % Cumulative number of modules
+        TotalNumModels = sum(ParallelGrouping); % Total number of cell models
+        ModelToLumpMapping = [1 2 3 4 5 6 7 8 9 10 11 12 13]; % Mapping of models to lumps
+        SeriesConnections = find(diff(ModelToLumpMapping)) + 1; % Series connections
+        ParallelConnections = find(~diff(ModelToLumpMapping)) + 1; % Parallel connections
+        AmbientResistanceScaled = AmbientResistance .* repmat(ParallelGrouping(ModelToLumpMapping) ./ (P .* SeriesGrouping(ModelToLumpMapping)),NumCellThermalNodeElements,1) * NumCellThermalNodeElements / size(AmbientResistance,1); % Scaled cell level ambient thermal path resistance
+    end
+
+    parameters(ExternalAccess=none)
+        NumCellThermalNodeElements = size(Cell1(1).H,1); % NumCellThermalNodeElements
+    end
+
+    inputs
+        enableCellBalancing = {repmat(0,S,1),'1'}; % CB
+    end
+
+    nodes
+        p = foundation.electrical.electrical; % +
+        n = foundation.electrical.electrical; % -
+        AmbH = foundation.thermal.thermal; % AmbH
+    end
+
+    variables
+        socCell = {value={repmat(1,13,1),'1'},priority=priority.high}; % Cell state of charge
+        batteryVoltage = {repmat(0,13,1),'V'}; % Terminal voltage
+        batteryCurrent = {repmat(0,13,1),'A'}; % Current (positive in)
+        numCycles = {value={repmat(0,13,1),'1'},priority=priority.high}; % Discharge cycles
+        batteryTemperature = {value={repmat(298.15,13,1),'K'},priority=priority.high}; % Temperature
+        vParallelAssembly = {value={repmat(0,13,1),'V'},priority=priority.none}; % Parallel Assembly Voltage
+        socParallelAssembly = {value={repmat(1,13,1),'1'},priority=priority.none}; % Parallel Assembly state of charge
+    end
+
+    intermediates
+        power_dissipated = sum([Cell1(:).power_dissipated].*((P./ParallelGrouping(ModelToLumpMapping).*SeriesGrouping(ModelToLumpMapping))-1)); % Power dissipated by grouped cells
+        powerStoredChemical = sum([Cell1(:).powerStoredChemical].*((P./ParallelGrouping(ModelToLumpMapping).*SeriesGrouping(ModelToLumpMapping))-1)); % Power from stored chemical energy by grouped cells
+        powerStoredThermal = sum([Cell1(:).powerStoredThermal].*((P./ParallelGrouping(ModelToLumpMapping).*SeriesGrouping(ModelToLumpMapping))-1)); % Stored heat by grouped cells
+        powerExternalThermal = sum([Cell1(:).powerExternalThermal].*((P./ParallelGrouping(ModelToLumpMapping).*SeriesGrouping(ModelToLumpMapping))-1)); % Heat accumulated by grouped cells
+    end
+
+    equations
+        assert(length(socCell) == TotalNumModels);
+        assert(length(batteryVoltage) == TotalNumModels);
+        assert(length(batteryCurrent) == TotalNumModels);
+        assert(length(numCycles) == TotalNumModels);
+        assert(length(batteryTemperature) == TotalNumModels);
+        assert(length(vParallelAssembly) == S);
+        assert(length(socParallelAssembly) == S);
+        assert(isequal(size(AmbientResistance),[1,1]) || isequal(size(AmbientResistance),[NumCellThermalNodeElements,TotalNumModels]),...
+            'Cell level ambient thermal path resistance must be scalar or an M-by-N array, where M is the number of elements of the cell thermal node and N is total number of cell models.');
+        assert(isValidPercentDeviationSize(BatteryCapacityCellPercentDeviation,BatteryCapacityCell,TotalNumModels),...
+            'Percent deviation for BatteryCapacityCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(SOCBreakpointsCellPercentDeviation,SOCBreakpointsCell,TotalNumModels),...
+            'Percent deviation for SOCBreakpointsCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(TemperatureBreakpointsCellPercentDeviation,TemperatureBreakpointsCell,TotalNumModels),...
+            'Percent deviation for TemperatureBreakpointsCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(OpenCircuitVoltageThermalCellPercentDeviation,OpenCircuitVoltageThermalCell,TotalNumModels),...
+            'Percent deviation for OpenCircuitVoltageThermalCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(VoltageRangeCellPercentDeviation,VoltageRangeCell,TotalNumModels),...
+            'Percent deviation for VoltageRangeCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(ResistanceSOCBreakpointsCellPercentDeviation,ResistanceSOCBreakpointsCell,TotalNumModels),...
+            'Percent deviation for ResistanceSOCBreakpointsCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(ResistanceTemperatureBreakpointsCellPercentDeviation,ResistanceTemperatureBreakpointsCell,TotalNumModels),...
+            'Percent deviation for ResistanceTemperatureBreakpointsCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(R0ThermalCellPercentDeviation,R0ThermalCell,TotalNumModels),...
+            'Percent deviation for R0ThermalCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(R1ThermalCellPercentDeviation,R1ThermalCell,TotalNumModels),...
+            'Percent deviation for R1ThermalCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(Tau1ThermalCellPercentDeviation,Tau1ThermalCell,TotalNumModels),...
+            'Percent deviation for Tau1ThermalCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+        assert(isValidPercentDeviationSize(BatteryThermalMassCellPercentDeviation,BatteryThermalMassCell,TotalNumModels),...
+            'Percent deviation for BatteryThermalMassCell must contain a number of vertically concatenated elements equal to the number of cell models. Each element must be a scalar or equal to the size of the underlying parameter.');
+    end
+
+    components(ExternalAccess=observe)
+        nonCellResistor = foundation.electrical.elements.resistor(R = NonCellElectricalResistance);
+    end
+
+    connections
+        connect(p,nonCellResistor.p);
+        connect(nonCellResistor.n,PositiveAdapter(1).LumpedNode);
+        connect(n,NegativeAdapter(TotalNumModels).LumpedNode);
+    end
+
+    annotations
+        [p] : Side=top;
+        [n] : Side=bottom;
+        UILayout = [UIGroup("Main",BatteryCapacityCell,BatteryCapacityCellPercentDeviation,ExtrapolationMethodCell),...
+            UIGroup("Open Circuit Voltage",SOCBreakpointsCell,SOCBreakpointsCellPercentDeviation,TemperatureBreakpointsCell,TemperatureBreakpointsCellPercentDeviation,OpenCircuitVoltageThermalCell,OpenCircuitVoltageThermalCellPercentDeviation,VoltageRangeCell,VoltageRangeCellPercentDeviation),...
+            UIGroup("Overpotential",ResistanceSOCBreakpointsCell,ResistanceSOCBreakpointsCellPercentDeviation,ResistanceTemperatureBreakpointsCell,ResistanceTemperatureBreakpointsCellPercentDeviation,R0ThermalCell,R0ThermalCellPercentDeviation,R1ThermalCell,R1ThermalCellPercentDeviation,Tau1ThermalCell,Tau1ThermalCellPercentDeviation),...
+            UIGroup("Thermal",BatteryThermalMassCell,BatteryThermalMassCellPercentDeviation,AmbientResistance),...
+            UIGroup("Module",NonCellElectricalResistance),...
+            UIGroup("Cell Balancing",CellBalancingClosedResistance,CellBalancingOpenConductance,CellBalancingThreshold,CellBalancingResistance)];
+        Icon = 'module.svg';
+    end
+
+    for modelIdx = 1:TotalNumModels
+        components(ExternalAccess=observe,CompileReuse=true)
+            Cell1(modelIdx) = batt.cells.batteryEquivalentCircuit(BatteryCapacity = applyParameterDeviation(BatteryCapacityCell,BatteryCapacityCellPercentDeviation,TotalNumModels,modelIdx),...
+                ExtrapolationMethod = ExtrapolationMethodCell,...
+                SOCBreakpoints = applyParameterDeviation(SOCBreakpointsCell,SOCBreakpointsCellPercentDeviation,TotalNumModels,modelIdx),...
+                TemperatureBreakpoints = applyParameterDeviation(TemperatureBreakpointsCell,TemperatureBreakpointsCellPercentDeviation,TotalNumModels,modelIdx),...
+                OpenCircuitVoltageThermal = applyParameterDeviation(OpenCircuitVoltageThermalCell,OpenCircuitVoltageThermalCellPercentDeviation,TotalNumModels,modelIdx),...
+                VoltageRange = applyParameterDeviation(VoltageRangeCell,VoltageRangeCellPercentDeviation,TotalNumModels,modelIdx),...
+                ResistanceSOCBreakpoints = applyParameterDeviation(ResistanceSOCBreakpointsCell,ResistanceSOCBreakpointsCellPercentDeviation,TotalNumModels,modelIdx),...
+                ResistanceTemperatureBreakpoints = applyParameterDeviation(ResistanceTemperatureBreakpointsCell,ResistanceTemperatureBreakpointsCellPercentDeviation,TotalNumModels,modelIdx),...
+                R0Thermal = applyParameterDeviation(R0ThermalCell,R0ThermalCellPercentDeviation,TotalNumModels,modelIdx),...
+                R1Thermal = applyParameterDeviation(R1ThermalCell,R1ThermalCellPercentDeviation,TotalNumModels,modelIdx),...
+                Tau1Thermal = applyParameterDeviation(Tau1ThermalCell,Tau1ThermalCellPercentDeviation,TotalNumModels,modelIdx),...
+                BatteryThermalMass = applyParameterDeviation(BatteryThermalMassCell,BatteryThermalMassCellPercentDeviation,TotalNumModels,modelIdx),...
+                CurrentDependence = simscape.battery.enum.cells.CurrentDependence.Disabled,...
+                SelfDischargeResistor = simscape.battery.enum.cells.BatteryEnable.Disabled,...
+                RCPairs = simscape.battery.enum.cells.RCPairs.rc1,...
+                CyclingAgingMethod = simscape.battery.enum.cells.CyclingAgingMethod.disabled,...
+                CalendarAgeResistance = simscape.battery.enum.cells.BatteryEnable.Disabled,...
+                CalendarAgeCapacity = simscape.battery.enum.cells.BatteryEnable.Disabled,...
+                ThermalModel = simscape.battery.enum.cells.BatteryThermalModel.LumpedThermalMass,...
+                HysteresisModel = simscape.battery.enum.cells.HysteresisModel.none,...
+                ReversibleHeatModel = simscape.battery.enum.cells.ReversibleHeatModel.Disabled,...
+                CalendarAgingMethod = simscape.battery.enum.cells.CalendarAgingMethod.equation,...
+                StorageVariable = simscape.battery.enum.cells.StorageVariable.OCV,...
+                stateOfCharge.priority = priority.none,...
+                batteryVoltage.priority = priority.none,batteryCurrent.priority = priority.none,...
+                numCycles.priority = priority.none,batteryTemperature.priority = priority.none);
+        end
+
+        components(Access=private)
+            PositiveAdapter(modelIdx) = Shaddad_BatteryLumpingAdapters.ElectricalLumpingAdapter(...
+                CellsInParallel = P/ParallelGrouping(ModelToLumpMapping(modelIdx)),CellsInSeries = SeriesGrouping(ModelToLumpMapping(modelIdx)));
+            NegativeAdapter(modelIdx) = Shaddad_BatteryLumpingAdapters.ElectricalLumpingAdapter(...
+                CellsInParallel = P/ParallelGrouping(ModelToLumpMapping(modelIdx)),CellsInSeries = SeriesGrouping(ModelToLumpMapping(modelIdx)));
+        end
+
+        connections
+            connect(NegativeAdapter(modelIdx).CellNode,Cell1(modelIdx).n);
+            connect(PositiveAdapter(modelIdx).CellNode,Cell1(modelIdx).p);
+        end
+
+        for thermalNodeElementIdx = 1:NumCellThermalNodeElements
+            components(Access=private)
+                ThermalAdapter(thermalNodeElementIdx,modelIdx) = Shaddad_BatteryLumpingAdapters.ThermalLumpingAdapter(...
+                    CellsInParallel = SeriesGrouping(ModelToLumpMapping(modelIdx))*P/ParallelGrouping(ModelToLumpMapping(modelIdx)));
+            end
+
+            connections
+                connect([ThermalAdapter(:,modelIdx).CellNode],[Cell1(modelIdx).H(:,1)]');
+            end
+        end
+    end
+
+    for parallelConnectionsIdx = ParallelConnections
+        connections
+            connect(PositiveAdapter(parallelConnectionsIdx-1).LumpedNode,PositiveAdapter(parallelConnectionsIdx).LumpedNode);
+            connect(NegativeAdapter(parallelConnectionsIdx-1).LumpedNode,NegativeAdapter(parallelConnectionsIdx).LumpedNode);
+        end
+    end
+
+    for seriesConnectionsIdx = SeriesConnections
+        connections
+            connect(NegativeAdapter(seriesConnectionsIdx-1).LumpedNode,PositiveAdapter(seriesConnectionsIdx).LumpedNode);
+        end
+    end
+
+    for lumpIdx = 1:length(SeriesGrouping)
+        components(ExternalAccess=observe)
+            balancingSwitch(lumpIdx) = foundation.electrical.elements.controlled_switch(...
+                R_closed = CellBalancingClosedResistance*SeriesGrouping(lumpIdx),...
+                G_open = CellBalancingOpenConductance,...
+                Threshold = CellBalancingThreshold);
+            balancingResistor(lumpIdx) = foundation.electrical.elements.resistor(R = CellBalancingResistance*SeriesGrouping(lumpIdx));
+        end
+
+        connections
+            connect(Cell1(find(lumpIdx==ModelToLumpMapping)).p,balancingSwitch(lumpIdx).p);
+            connect(balancingSwitch(lumpIdx).n,balancingResistor(lumpIdx).p);
+            connect(balancingResistor(lumpIdx).n,Cell1(find(lumpIdx==ModelToLumpMapping)).n);
+            connect(enableCellBalancing(CumNumModules(lumpIdx)-SeriesGrouping(lumpIdx)+1),balancingSwitch(lumpIdx).vT);
+        end
+    end
+
+    for lumpIdx = 1:length(SeriesGrouping)
+        equations
+            vParallelAssembly((CumNumModules(lumpIdx)-SeriesGrouping(lumpIdx)+1):CumNumModules(lumpIdx)) == ...
+                (Cell1(find(lumpIdx==ModelToLumpMapping,1)).p.v - Cell1(find(lumpIdx==ModelToLumpMapping,1)).n.v) .* ones(SeriesGrouping(lumpIdx),1);
+            socParallelAssembly((CumNumModules(lumpIdx)-SeriesGrouping(lumpIdx)+1):CumNumModules(lumpIdx)) == ...
+                (sum([Cell1(find(lumpIdx==ModelToLumpMapping)).stateOfCharge]) / ParallelGrouping(lumpIdx)) * ones(SeriesGrouping(lumpIdx),1);
+        end
+    end
+
+    for modelIdx = 1:TotalNumModels
+        equations
+            socCell(modelIdx) == Cell1(modelIdx).stateOfCharge;
+            batteryVoltage(modelIdx) == Cell1(modelIdx).batteryVoltage;
+            batteryCurrent(modelIdx) == Cell1(modelIdx).batteryCurrent;
+            numCycles(modelIdx) == Cell1(modelIdx).numCycles;
+            batteryTemperature(modelIdx) == Cell1(modelIdx).batteryTemperature;
+        end
+    end
+
+    for thermalNodeElementIdx = 1:NumCellThermalNodeElements
+        for modelIdx = 1:TotalNumModels
+            components(ExternalAccess=observe)
+                AmbientResistor(thermalNodeElementIdx,modelIdx) = foundation.thermal.elements.resistance(...
+                    resistance = AmbientResistanceScaled(thermalNodeElementIdx,modelIdx));
+            end
+
+            connections
+                connect(ThermalAdapter(thermalNodeElementIdx,modelIdx).LumpedNode,AmbientResistor(thermalNodeElementIdx,modelIdx).A);
+                connect(AmbientResistor(thermalNodeElementIdx,modelIdx).B,AmbH);
+            end
+        end
+    end
+end
+
+function cellParameter = applyParameterDeviation(parameter,parameterDeviation,totalNumModels,modelIdx)
+    definitions
+        parameterDeviationSize=size(parameterDeviation);
+        indexedParameterDeviation=parameterDeviation(parameterDeviationSize(1) / totalNumModels * (modelIdx - 1) + 1 : parameterDeviationSize(1) / totalNumModels * modelIdx,:);
+        cellParameter=(1 + reshape(indexedParameterDeviation,[parameterDeviationSize(1) / totalNumModels,parameterDeviationSize(2:end)]) ./ 100) .* parameter;
+    end
+end
+
+function isValidSize = isValidPercentDeviationSize(percentDeviation,parameter,totalNumModels)
+    definitions
+        percentDeviationSize=size(percentDeviation);
+        parameterSize=size(parameter);
+        isScalarPercentDeviation=isequal(percentDeviationSize,[totalNumModels,1]);
+        isTrueToSizePercentDeviation=isequal(percentDeviationSize,[parameterSize(1) * totalNumModels,parameterSize(2:end)]);
+        isValidSize=isScalarPercentDeviation||isTrueToSizePercentDeviation;
+    end
+end

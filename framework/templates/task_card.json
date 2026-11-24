@@ -1,0 +1,39 @@
+{
+ "about": "One task card with every field (NASL-EMS-HBK-001 section 5.2). A project keeps all its cards in one file: {about, updated, gates: [...], cards: [...]} (for Shaddad tools/dashboard/project_cards.json). Successors are not written: every tool derives them from the predecessors.",
+ "card": {
+  "id": "G2-PWR",
+  "title": "Power and BMS: preliminary design",
+  "wbs": "3.2",
+  "gate": "G2",
+  "lead": "the power and BMS engineer",
+  "support": ["the drive engineer (regen, energy)", "the integration engineer (S3)"],
+  "status": "todo",
+  "priority": "later",
+  "purpose": "A pack, BMS and power design that meets the energy, thermal and safety requirements with the real pack",
+  "description": "What the task is, the work it involves, how it is done and what it delivers, in three to six sentences for someone new to the project. A list may follow a blank line: one item per line, each starting with '- '.",
+  "entry": {"gate": "G1 passed", "criteria": ["G1-05 passed", "Decisions 4, 8, 9 and 16 settled", "The BMS frame layout in (G1-04)"]},
+  "exit": {"gate": "G2 PDR for power passed (feeds G3-PWR)", "criteria": ["The energy budget closes with the margin of the project plan", "The PDR report (PDF)"]},
+  "predecessors": ["G1-05"],
+  "inputs": ["Pack and BMS data", "Review items R-04, R-09"],
+  "outputs": ["The power design", "The energy and thermal budgets", "The PDR report"],
+  "verification": "Analysis (budgets) and Test (power benches)",
+  "size": "L",
+  "effort": null,
+  "risks": [{"risk": "The sealed pack cannot be cooled passively", "likelihood": "H", "impact": "H", "mitigation": "Shade, a charging limit or active cooling (decision 4)"}],
+  "escalation": [{"when": "A cooling or charging limit that changes the operating concept", "to": "the owner"}],
+  "decisions": ["4", "8", "9", "16"],
+  "links": ["R-04", "R-09"],
+  "report": null,
+  "task": null,
+  "note": null
+ },
+ "rules": {
+  "status": ["proposed", "planned", "todo (= planned, kept for older files)", "ready", "in progress", "in review", "needs you", "blocked", "done", "cancelled"],
+  "priority": ["now", "next", "later", "done"],
+  "size": {"S": "one engineer, one pass", "M": "two or three engineers, or two passes", "L": "several engineers and system runs", "XL": "every subsystem or several safety chains (split it if you can)"},
+  "likelihood_impact": ["L", "M", "H"],
+  "entry_criteria": "facts a person can check: true or false",
+  "exit_criteria": "measurable; together they are the card's acceptance",
+  "outputs": "named files, documents or records"
+ }
+}

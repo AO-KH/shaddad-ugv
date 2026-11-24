@@ -1,0 +1,32 @@
+{
+ "about": "The project's risk and issue register (NASL-EMS-HBK-001 section 8.3). One entry per risk or issue. Rating = likelihood x impact by Table 20. Every High risk needs a mitigation card. Review it at every gate and whenever a card starts.",
+ "updated": "<YYYY-MM-DD>",
+ "risks": [
+  {
+   "id": "RSK-001",
+   "type": "risk",
+   "title": "<short title>",
+   "cause": "<what could cause it>",
+   "effect": "<what it would do to the project or the product>",
+   "likelihood": "M",
+   "impact": "H",
+   "rating": "High",
+   "owner": "<role>",
+   "response": "mitigate",
+   "mitigation": "<the action>",
+   "cards": ["<card id that carries the mitigation>"],
+   "status": "open",
+   "raised": "<YYYY-MM-DD>",
+   "review_by": "<YYYY-MM-DD or a gate>",
+   "source": "<card, review item, test, analysis>",
+   "history": ["<YYYY-MM-DD: what changed>"]
+  }
+ ],
+ "rules": {
+  "type": ["risk (may happen)", "issue (has happened)"],
+  "likelihood_impact": ["L", "M", "H"],
+  "rating": "H x H, H x M, M x H = High; H x L, M x M, L x H = Medium; else Low",
+  "response": ["avoid", "mitigate", "transfer", "accept"],
+  "status": ["open", "closed (with the reason)", "occurred (became an issue)"]
+ }
+}

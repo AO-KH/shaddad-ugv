@@ -1,0 +1,195 @@
+{
+ "id": "mb05_battery",
+ "title": "Battery, BMS and Power System",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The battery is a 13S15P pack of Molicel P42A 21700 cells: 15 cells in parallel make a 63 Ah group, and 13 groups in series give 46.8 V nominal and 54.6 V full, about 2.95 kWh. It sits in the XMachines aluminium box of drawing XMT-P1-E01-000 ({fig:M10_battery_box_drawing.png}) with the BMS, the SB120 main connector, the SB50 charge connector and a GX-12 CAN connector."
+  },
+  {
+   "type": "figure",
+   "file": "M10_battery_box_drawing.png",
+   "caption": "Battery box drawing XMT-P1-E01-000 (source PDF): 393 x 358.5 x 87 mm, 3 mm aluminium sheet."
+  },
+  {
+   "type": "table",
+   "id": "tab_battery",
+   "caption": "Battery and charging: real robot and model",
+   "header": [
+    "Item",
+    "Real robot",
+    "Model value",
+    "Tag"
+   ],
+   "widths": [
+    22,
+    33,
+    31,
+    14
+   ],
+   "rows": [
+    [
+     "Cells",
+     "Molicel P42A 21700, 195 cells, 13S15P",
+     "batteryCell (cylindrical 21 x 70 mm), 1 RC pair, lumped thermal mass",
+     "[DATA]"
+    ],
+    [
+     "Capacity, energy",
+     "63 Ah, 46.8 V, about 3.0 kWh",
+     "63.0 Ah, 2948 Wh",
+     "[DATA]"
+    ],
+    [
+     "Voltage range",
+     "54.6 V full; cell 2.5-4.2 V",
+     "39.0-54.6 V in operation; BMS cell limits 2.80 / 4.25 V",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Cell resistance",
+     "-",
+     "14-16 mOhm DC at 25 degC; pack R0 about 12.1 mOhm at 50 % SOC",
+     "[EST]"
+    ],
+    [
+     "Pack mass",
+     "-",
+     "18.5 kg (cells 13.7 kg, box 3.3 kg, BMS and busbars 1.5 kg)",
+     "[EST]"
+    ],
+    [
+     "BMS current",
+     "120-150 A cont., 200-300 A peak",
+     "150 A cont., 250 A peak discharge; 30 A charge",
+     "[DATA]"
+    ],
+    [
+     "BMS interface",
+     "CAN 500 kbit/s on GX-12 (pin 1 CANH, 2 CANL)",
+     "BMS frames on CAN1 to the MCU",
+     "[DATA]"
+    ],
+    [
+     "Charger",
+     "54.6 V, 20 A, 100-240 VAC, PFC, IP54",
+     "CC-CV 20 A to 54.6 V, 1200 W, over-voltage trip 55.9 V",
+     "[DATA]"
+    ],
+    [
+     "Connectors",
+     "SB120 main, SB50 charge, GX-12 CAN",
+     "PDU main and charge paths",
+     "[DATA]"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Cell and pack model"
+  },
+  {
+   "type": "p",
+   "text": "The cell model uses open-circuit voltage and resistance tables over the state of charge at three temperatures, with one RC pair for the polarisation (time constant 30 s). The tables follow the NMC chemistry of the P42A; the resistance values are typical for this cell and marked [EST] ({fig:M23_cell_pack_model.png})."
+  },
+  {
+   "type": "figure",
+   "file": "M23_cell_pack_model.png",
+   "caption": "Cell model of the Molicel P42A: (a) open-circuit voltage at 0, 25 and 45 degC and terminal voltage at 1C; (b) resistances of the 1-RC model and the resulting pack values."
+  },
+  {
+   "type": "p",
+   "text": "`build_shaddad_battery` builds the module with Simscape Battery (Battery Builder) from the same cell: 15 cells per parallel assembly and 13 assemblies in series. In the Grouped variant each parallel assembly is one cell model, so the pack has 13 cell models with their own state of charge, temperature and parameter spread; the Lumped variant uses one model for long runs. {fig:M30_battery_module_chart.png} shows the module with its cells laid out as in the real box, 13 rows of 15."
+  },
+  {
+   "type": "figure",
+   "file": "M30_battery_module_chart.png",
+   "caption": "The 13S15P module object drawn with batteryChart: 195 cells in 13 rows of 15, each orange box one of the 13 grouped cell models."
+  },
+  {
+   "type": "figure",
+   "file": "M31_pack_grouped.png",
+   "caption": "Pack_Grouped model: the generated module block with its balancing input, ambient thermal port and probes for the cell voltages, states of charge and temperatures."
+  },
+  {
+   "type": "h2",
+   "text": "BMS model"
+  },
+  {
+   "type": "p",
+   "text": "`Shaddad_BMS` models the firmware of the 13S BMS: it measures the 13 group voltages, the temperatures and the pack current, estimates the state of charge with an extended Kalman filter, computes the discharge and charge current limits (DCL / CCL), balances the groups passively and controls the contactors and the charge. It sends its state to the MCU over CAN."
+  },
+  {
+   "type": "table",
+   "id": "tab_bms",
+   "caption": "BMS thresholds and limits in the model",
+   "header": [
+    "Quantity",
+    "Warning",
+    "Limit / fault",
+    "Tag"
+   ],
+   "widths": [
+    34,
+    22,
+    30,
+    14
+   ],
+   "rows": [
+    [
+     "Cell over-voltage",
+     "4.22 V",
+     "4.25 V",
+     "[EST]"
+    ],
+    [
+     "Cell under-voltage",
+     "3.00 V",
+     "2.80 V",
+     "[EST]"
+    ],
+    [
+     "Charge voltage (CV)",
+     "-",
+     "4.20 V per cell, 54.6 V pack",
+     "[DATA]"
+    ],
+    [
+     "Discharge current",
+     "-",
+     "150 A continuous, 250 A peak",
+     "[DATA]"
+    ],
+    [
+     "Charge current",
+     "-",
+     "30 A (charger delivers 20 A)",
+     "[EST]"
+    ],
+    [
+     "Cell temperature",
+     "-",
+     "over 60 degC, under -20 degC",
+     "[EST]"
+    ]
+   ]
+  },
+  {
+   "type": "figure",
+   "file": "F14_bms_top.png",
+   "caption": "Shaddad_BMS model: measurement, state estimation, limits, balancing, contactor and charge control."
+  },
+  {
+   "type": "h2",
+   "text": "Power distribution and energy budget"
+  },
+  {
+   "type": "p",
+   "text": "The power plant connects the pack through the PDU (fuses, current shunt, main contactors K1 / K2 with precharge, implement contactor K3 and charge contactor K4) to the two dual-channel ESCs (one 125 A traction fuse per side), the implement and the low-voltage DC/DC converters (24, 12, 5 and 3.3 V). The photos show an LM2596 buck module ({sec:mb06_electronics}); its 40 V input limit means it is fed from a lower rail, not from the 48 V bus. The safety chain (E-stops, bumpers, wireless E-stop, safety relay) removes the torque of both ESCs through STO and opens the contactors."
+  },
+  {
+   "type": "p",
+   "text": "With the sprayer working at 1.0 m/s the model draws about 520 W (traction 320 W, pump 75 W, nozzles 64 W, electronics 60 W) and about 380 W in transit. A 3-hour shift with 70 % spraying then ends at 32 % state of charge for a pack at its end of life (80 % capacity), above the BMS reserve."
+  }
+ ]
+}

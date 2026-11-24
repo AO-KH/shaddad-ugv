@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "shaddad-dashboard",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tools/dashboard/server.py", "--port", "8765"],
+      "port": 8765
+    }
+  ]
+}

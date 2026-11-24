@@ -1,0 +1,272 @@
+{
+ "id": "mb04_drive",
+ "title": "Traction Drive",
+ "blocks": [
+  {
+   "type": "p",
+   "text": "The robot has **four traction motors**, two per track: one drives the front sprocket and one the rear sprocket, each through its own gearbox. One dual-channel motor controller (ESC) per side drives the two motors of that side with the same command. The nameplate ({fig:M02_motor_nameplate.jpg}) gives the rated point of the installed motors: 48 V DC, 750 W, 3000 rpm. The gear ratio is not marked; 20:1 gives the robot its known top speed of about 5 km/h with the 0.090 m sprockets."
+  },
+  {
+   "type": "figure",
+   "file": "M02_motor_nameplate.jpg",
+   "caption": "Nameplate of the installed traction motor: Movematic, S/N CFH0136, P/N 080-240-0x, 48 Vdc, 750 W, 3000 rpm."
+  },
+  {
+   "type": "h2",
+   "text": "Motor sizing for the application"
+  },
+  {
+   "type": "p",
+   "text": "`scripts/motor_sizing.m` computes the torque each motor needs at the duty points of a spraying shift on a hilly farm: a 316 kg robot with a full tank, the farm-soil motion resistance measured in the model (0.107 of the weight), skid-steer turns, and 20 deg slopes ({tab:tab_sizing}). Weighted over the cycle, the RMS torque per motor is 1.45 N m on farm soil and 1.81 N m on wet loam."
+  },
+  {
+   "type": "table",
+   "id": "tab_sizing",
+   "caption": "Torque per motor at the duty points (four motors, 316 kg)",
+   "header": [
+    "Duty point",
+    "Speed",
+    "Farm soil",
+    "Wet loam",
+    "Share of the cycle"
+   ],
+   "widths": [
+    36,
+    14,
+    16,
+    16,
+    18
+   ],
+   "rows": [
+    [
+     "flat spraying",
+     "1.0 m/s",
+     "0.41 N m",
+     "0.77 N m",
+     "50 %"
+    ],
+    [
+     "20 deg climb",
+     "1.0 m/s",
+     "1.71 N m",
+     "2.05 N m",
+     "25 %"
+    ],
+    [
+     "20 deg climb + 0.8 m/s² acceleration",
+     "0.5 m/s",
+     "2.03 N m",
+     "2.36 N m",
+     "5 %"
+    ],
+    [
+     "pivot turn on flat ground",
+     "0.3 m/s",
+     "1.62 N m",
+     "2.22 N m",
+     "10 %"
+    ],
+    [
+     "turn on the 20 deg slope",
+     "0.5 m/s",
+     "2.85 N m",
+     "3.41 N m",
+     "10 %"
+    ],
+    [
+     "RMS of the cycle",
+     "",
+     "1.45 N m",
+     "1.81 N m",
+     ""
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "In the 45 degC summer heat the 750 W motor gives about 2.15 N m continuously. That leaves an RMS margin of 1.19 on wet loam, and every turn on a slope runs above the motor's continuous rating. The model therefore uses a **1.0 kW, 48 V, 3000 rpm** unit (3.18 N m continuous, 9.55 N m peak), which raises the margin to 1.58 and covers the slope turns on farm soil within its continuous rating ({fig:M21_motor_sizing.png}). It keeps the 48 V bus, the 20:1 gear and the 5 km/h top speed, and its currents stay within the 150 / 250 A BMS; a 1.5 kW unit would need a larger BMS. The installed 750 W motor stays available as a model option (`shaddad_params('Motor','movematic750')`)."
+  },
+  {
+   "type": "figure",
+   "file": "M21_motor_sizing.png",
+   "caption": "Motor sizing per unit: peak and continuous torque (25 degC and 45 degC) of the installed 750 W motor and the proposed 1.0 kW unit, with the duty points on farm soil and wet loam and the RMS torque of the wet-loam cycle."
+  },
+  {
+   "type": "table",
+   "id": "tab_drive",
+   "caption": "Traction drive per motor: installed and proposed (the model uses the 1.0 kW unit)",
+   "header": [
+    "Item",
+    "Installed (Movematic)",
+    "Proposed 1.0 kW unit",
+    "Tag"
+   ],
+   "widths": [
+    24,
+    30,
+    32,
+    14
+   ],
+   "rows": [
+    [
+     "Rated point",
+     "48 V, 750 W, 3000 rpm, 2.39 N m",
+     "48 V, 1.0 kW, 3000 rpm, 3.18 N m",
+     "[DATA] / [EST]"
+    ],
+    [
+     "Peak torque",
+     "7.16 N m (3 x rated)",
+     "9.55 N m (3 x rated)",
+     "[EST]"
+    ],
+    [
+     "No-load / max speed",
+     "3600 rpm at 48 V / 4000 rpm",
+     "same",
+     "[EST]"
+    ],
+    [
+     "Flux, resistance, inductance",
+     "0.0184 Wb, 64 mOhm, 0.25 mH",
+     "0.0184 Wb, 48 mOhm, 0.19 mH",
+     "[EST]"
+    ],
+    [
+     "Rotor inertia, motor mass",
+     "2.0e-4 kg m², 3.5 kg",
+     "2.8e-4 kg m², 4.5 kg",
+     "[EST]"
+    ],
+    [
+     "Gearbox (one per motor)",
+     "20:1, efficiency 0.90, T2B 140 N m",
+     "20:1, efficiency 0.90, T2B 180 N m",
+     "[EST]"
+    ],
+    [
+     "ESC channel (two per dual ESC)",
+     "20 A rms cont., 50 A rms peak, 40 A DC",
+     "27 A rms cont., 65 A rms peak, 55 A DC",
+     "[EST]"
+    ],
+    [
+     "Holding brake",
+     "5 N m per motor",
+     "5 N m per motor",
+     "[EST]"
+    ],
+    [
+     "Thermal limits",
+     "winding derate 140 degC, fault 165 degC",
+     "same",
+     "[EST]"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Drive model"
+  },
+  {
+   "type": "p",
+   "text": "The two motors of a side drive the same track, so they turn at the same speed and get the same command from the dual ESC. The model represents each side by **one equivalent drive of two units in parallel**: torque, power, current limits, rotor inertia, iron losses, brake torque and thermal capacity are doubled, and the winding resistance and inductance are halved, at the same speed and voltage. Per side, the drive model chains the ESC (CAN command, speed PI loop, current and power limits, voltage and temperature derating, fault logic), the motor (electrical and thermal model), the spring-applied brake and the gearbox with its losses and backlash, ending at the sprocket that drives the track model ({fig:F07_drive_side_overview.png}). The ESC ramp follows from the gear ratio, so the acceleration limits stay the same in track-speed terms."
+  },
+  {
+   "type": "figure",
+   "file": "F07_drive_side_overview.png",
+   "caption": "Drive model of one side: ESC, motor, brake and gearbox (subsystem references); with four motors each block is the equivalent of the side's two units."
+  },
+  {
+   "type": "h2",
+   "text": "Speed loop and holding brake with two motors per side"
+  },
+  {
+   "type": "p",
+   "text": "Two motors per side change the drive's dynamics, so the ESC speed loop was checked again on the two-mass model of decision D50: the motor side (rotors, gearboxes, sprocket and belt) and the vehicle half-mass are coupled by the shear stiffness of the track on the ground (40-540 kN/m). Scaling the original D50 gains with the reflected inertia gave a peak sensitivity Ms of 1.65 on soft soil, above the 1.6 bound of test T21 (with one motor per side it had been 2.25). The loop was therefore re-tuned (decision D64) to **Kp 0.030 N m/(rad/s) and Ki 0.090 N m/rad**, the D50 ratio Ki/Kp = 3 ({tab:tab_speedloop}): the resonance peak drops below the D50 design target of 1.43 on every soil stiffness ({fig:M24_speed_loop.png}). A first re-tune with Ki 0.060 met every margin, but after a controlled stop its integrator still held about 0.2 N m per motor, so the robot crept at 0.02 m/s and reached standstill only 1.63 s after a radio loss (S6a, limit 1.5 s). The MCU's shaped reference and torque feed-forward carry normal driving, so the lower gains change the tracking little: the T1 ramp to 1.0 m/s overshoots 0.01 %, and the 2 m/s² stop profile is followed within 0.04 m/s."
+  },
+  {
+   "type": "table",
+   "id": "tab_speedloop",
+   "keep": true,
+   "caption": "ESC speed loop of the four-motor drive: worst case over the shear stiffness (40 / 61 / 540 kN/m) and the side mass (113 / 158 kg)",
+   "header": [
+    "Quantity",
+    "D50 gains scaled with the inertia",
+    "Re-tuned (D64)",
+    "Target / bound"
+   ],
+   "widths": [
+    28,
+    25,
+    20,
+    27
+   ],
+   "rows": [
+    [
+     "Kp / Ki",
+     "0.048 / 0.144",
+     "0.030 / 0.090",
+     "-"
+    ],
+    [
+     "Rigid crossover",
+     "12.8 rad/s",
+     "8.0 rad/s",
+     "-"
+    ],
+    [
+     "Phase margin",
+     "57 deg",
+     "62 deg",
+     ">= 63 deg (D50)"
+    ],
+    [
+     "Gain margin",
+     "10.9 dB",
+     "15.0 dB",
+     ">= 14.6 dB (D50)"
+    ],
+    [
+     "Peak sensitivity Ms",
+     "1.65",
+     "1.37",
+     "<= 1.43 (D50), <= 1.6 (T21)"
+    ],
+    [
+     "Closed-loop damping",
+     "0.44",
+     "0.57",
+     ">= 0.43 (D50), >= 0.35 (T21)"
+    ]
+   ]
+  },
+  {
+   "type": "figure",
+   "file": "M24_speed_loop.png",
+   "caption": "ESC speed loop of the four-motor drive on the two-mass model (40 kN/m shear stiffness, 158 kg per side): (a) sensitivity |S| with the D50 gains scaled by the inertia and with the re-tuned gains (D64); (b) a 5 rad/s motor-speed step on the two-mass bench (solid) and in the linear model (dashed)."
+  },
+  {
+   "type": "p",
+   "text": "The second effect is numerical. Each side now has two 5 N m spring brakes. The former brake model, a friction element whose torque changes direction within a breakaway velocity of 0.02 rad/s, does not settle into sticking at the plant's fixed 1 ms step: an engaged brake changes the sign of its torque at every step. With one brake per side this stayed a bounded ripple of about ±90 N m at the sprocket. With two it grew into spikes of up to 3500 N m on the T10 bench, and in the full system it diverged: in S8a the right motor spun up to 3400 rad/s while the robot stood in ESTOP with both brakes engaged, which latched an overspeed fault, so the robot could not resume after the reset ({fig:M29_brake_estop.png}a). Decision D64 therefore replaces the friction element by an **elasto-plastic brake**, a Simscape component written for this model (`shaddad_drive.elastoplastic_brake`). A bristle state holds the shaft like a stiff torsional spring (25 N m/rad per brake) while the torque stays below the static capacity, and lets it slide with the Stribeck curve above it; the torque scales with the engagement, so a released brake transmits nothing. The brake now holds without ripple and without creep (test T8: 0.0004 m/h over 600 s on 20 deg), and the stop from top speed loads the gearbox with at most 164 N m (T9)."
+  },
+  {
+   "type": "figure",
+   "file": "M29_brake_estop.png",
+   "caption": "S8a in the full system (front hardware E-stop at 10 s, ESTOP with STO and both brakes engaged until the reset at 17 s): motor speeds of both drives (a) with the former friction element, whose stick-slip spins the right motor up to 3400 rad/s and ends the run in FAULT, and (b) with the elasto-plastic brake (D64)."
+  },
+  {
+   "type": "h2",
+   "text": "Efficiency and operating points"
+  },
+  {
+   "type": "p",
+   "text": "In test drive D1 (run `D1_20261027_212927`, chapter 8) the motors run between about 460 and 2550 rpm at 0.16-1.05 N m each (5-95 % of the run), a third of the 3.18 N m continuous rating or less ({fig:M22_motor_efficiency.png}). At these light loads the motor and its ESC channel turn 82 % of the electrical energy into shaft work (loss map, energy-weighted mean); the 85-90 % region starts above about 1 N m. The drive is sized for slopes and wet soil, not for flat spraying."
+  },
+  {
+   "type": "figure",
+   "file": "M22_motor_efficiency.png",
+   "caption": "Efficiency of one 1.0 kW motor with its ESC channel (model loss map, [EST]) and the operating points of test drive D1_20261027_212927, per motor."
+  }
+ ]
+}
